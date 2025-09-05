@@ -1,1 +1,49 @@
-<p>login works!</p>,
+<div class="flex justify-center items-center h-screen bg-gray-100">
+    <div class="tabs w-xl" id="demo-tabs-with-panels">
+        <div role="tabpanel" id="demo-tabs-with-panels-panel-1" aria-labelledby="demo-tabs-with-panels-tab-1" tabindex="-1" aria-selected="true">
+        <div class="card">
+
+        <header class="flex flex-col gap-y-4 justify-center items-center">
+            <img
+                width="200"
+                src="assets/icons/staff.svg"
+                alt="Person login icon" 
+                srcset="Person login icon">
+            <h2 class="text-4xl">Bienvenido de vuelta</h2>
+            <p class="text-xl">Inicia sesión con tu cuenta</p>
+        </header>
+
+        <section>
+            <form class="form grid gap-6">
+                <div class="grid gap-3">
+                    <label for="demo-tabs-account-name">Correo</label>
+                    <input type="text" id="demo-tabs-account-name" placeholder="Ingresa tu correo"/>
+                </div>
+                <div class="grid gap-3">
+                    <label for="demo-tabs-account-username">Contraseña</label>
+                    <input type="text" id="demo-tabs-account-username" placeholder="Ingresa tu correo"/>
+                </div>
+            </form>
+        </section>
+
+        <footer class="flex justify-center items-center w-full">
+            <div class="flex flex-col w-full">
+                <div class="flex my-4">
+                    <label class="label gap-3">
+                    <input type="checkbox" class="input"> Recordarme
+                    </label>
+                </div>
+                <div class="flex justify-center mt-6">
+                    <button type="button" class="btn w-96 h-12 text-xl">
+                        Iniciar sesión
+                    </button>
+                </div>
+                <div class="underline text-gray-400 mt-6 flex justify-center cursor-pointer">
+                    <p>¿Aún no tienes cuenta?, Creala aquí</p>
+                </div>
+            </div>
+        </footer>
+        </div>
+    </div>
+    </div>
+</div>

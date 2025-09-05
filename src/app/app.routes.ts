@@ -11,7 +11,7 @@ export const routes: Routes = [
         loadComponent: () => import('./features/auth/register/presentation/pages/register/register.component'),
     },
 
-  // Rutas de la aplicación (home)
+    // Rutas de la aplicación (home)
     { 
         path: 'home/dashboard',
         loadComponent: () => import('./features/dashboards/presentation/pages/dashboard/dashboard.component')
@@ -33,7 +33,7 @@ export const routes: Routes = [
         loadComponent: () => import('./features/logs/presentation/pages/logs/logs.component'),
     },
 
-  // Ruta por defecto (opcional)
+    // Ruta por defecto (opcional)
     { 
         path: '**',
         loadComponent: () => import('./features/auth/login/presentation/pages/login/login.component'),
