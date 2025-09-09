@@ -36,6 +36,6 @@ export const routes: Routes = [
     // Ruta por defecto (opcional)
     { 
         path: '**',
-        loadComponent: () => import('./features/auth/login/presentation/pages/login/login.component'),
+        redirectTo: 'auth/login',
     },
 ];

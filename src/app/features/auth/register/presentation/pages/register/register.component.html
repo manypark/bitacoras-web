@@ -1,1 +1,66 @@
-<p>register works!</p>,
+<div class="overflow-hidden">
+    <div class="flex justify-center items-center h-screen bg-gray-100" animate.enter="enter-animation">
+        <div class="tabs w-xl" id="demo-tabs-with-panels">
+            <div role="tabpanel" id="demo-tabs-with-panels-panel-1" aria-labelledby="demo-tabs-with-panels-tab-1" tabindex="-1" aria-selected="true">
+            <div class="card">
+    
+            <header class="flex flex-col gap-y-4 justify-center items-center">
+                <img
+                    width="200"
+                    src="assets/icons/user_profile.svg"
+                    alt="Person login icon">
+                <h2 class="text-4xl">Crea una cuenta</h2>
+                <p class="text-xl">Unetenos hoy y comienza</p>
+            </header>
+    
+            <section>
+                <form class="form grid gap-6">
+                    <div class="grid gap-3">
+                        <label for="demo-tabs-account-name">Nombre(s)</label>
+                        <input type="text" id="demo-tabs-account-name" placeholder="Ingresa tu nombre(s)"/>
+                    </div>
+                    <div class="grid gap-3">
+                        <label for="demo-tabs-account-name">Apellidos</label>
+                        <input type="text" id="demo-tabs-account-name" placeholder="Ingresa tus apellidos"/>
+                    </div>
+                    <div class="grid gap-3">
+                        <label for="demo-tabs-account-name">Correo</label>
+                        <input type="text" id="demo-tabs-account-name" placeholder="Ingresa tu correo"/>
+                    </div>
+                    <div class="grid gap-3 relative">
+    
+                        <label for="demo-tabs-account-username">Contraseña</label>
+                        <input [type]="showPassword ? 'text' : 'password'" id="demo-tabs-account-username" placeholder="Ingresa tu contraseña"/>
+                        
+                        <button
+                            type="button"
+                            (click)="togglePassword()"
+                            class="absolute right-3 top-3/4 -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                            @if (!showPassword) {
+                                <img width="25" src="assets/icons/eye-line.svg" alt="visible">
+                            }
+                            @if (showPassword) {
+                                <img width="25" src="assets/icons/eye-off-line.svg" alt="visible">
+                            }
+                        </button>
+                    </div>
+                </form>
+            </section>
+    
+            <footer class="flex justify-center items-center w-full">
+                <div class="flex flex-col w-full">
+                    <div class="flex justify-center mt-6">
+                        <button type="button" class="btn w-96 h-12 text-xl">
+                            Registrate
+                        </button>
+                    </div>
+                    <div class="underline text-gray-400 mt-6 flex justify-center cursor-pointer">
+                        <a routerLink="/auth/login">¿Ya tienes cuenta?, Inicia sesión aquí</a>
+                    </div>
+                </div>
+            </footer>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
