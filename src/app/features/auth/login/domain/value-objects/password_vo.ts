@@ -11,8 +11,7 @@ export class PasswordVO {
     }
 
     // Debe contener: minúscula, mayúscula, número y signo
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
 
     if (!passwordRegex.test(value)) {
       throw new Error(
@@ -28,6 +27,6 @@ export class PasswordVO {
   }
 
   toString(): string {
-    return '********'; // nunca expongas la real
+    return '********';
   }
 }
