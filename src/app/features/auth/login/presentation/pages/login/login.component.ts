@@ -1,16 +1,17 @@
-import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, resource, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { Component, effect, inject, OnInit, resource, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, } from '@angular/forms';
 
 import { SignInService } from '../../signals/signIn.service';
 import { EmailVO, PasswordVO } from '../../../domain/value-objects';
 import { emailVOValidator, passwordVOValidator } from '../../validators/validators';
 import { 
+  ToastService,
   FormUtilsService, 
   SubmitButtonComponent, 
-  InputGenericFieldComponent, 
-  PasswordInputComponent
+  PasswordInputComponent,
+  InputGenericFieldComponent,
 } from '../../../../../shared/shared';
 
 @Component({
@@ -30,10 +31,13 @@ export default class LoginComponent implements OnInit {
 
   signInForm!:FormGroup;
   showPassword = false;
-  private fb = inject(FormBuilder);
-  private signInServices = inject(SignInService);
-  public formUtilServices = inject(FormUtilsService);
   private loginTrigger = signal<{ email: EmailVO; password: PasswordVO } | null>(null);
+
+  private fb              = inject(FormBuilder);
+  private signInServices  = inject(SignInService);
+  public formUtilServices = inject(FormUtilsService);
+  private toast           = inject(ToastService);
+  private router          = inject(Router);
   
   signInResource = resource({
     params: () => ({email: this.loginTrigger()?.email, password: this.loginTrigger()?.password }),
@@ -41,6 +45,21 @@ export default class LoginComponent implements OnInit {
       return this.signInServices.signIn(params.email!, params.password!);
     },
   });
+
+  constructor() {
+    effect(() => {
+
+      if ( this.signInResource.hasValue() ) {
+        const data = this.signInResource.value();
+        this.router.navigate(['/home/dashboard']);
+        this.toast.success('Login exitoso', 'Bienvenido de vuelta!');
+      }
+
+      if ( this.signInResource.error() && this.signInForm.valid ) {
+        this.toast.error('Error en el inicio sesión', 'Hubo algun error en la petición' );
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -60,5 +79,4 @@ export default class LoginComponent implements OnInit {
       this.loginTrigger.set({ email: emailVO, password: passwordVO });
     }
   }
-
 }
