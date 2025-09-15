@@ -1,8 +1,9 @@
-import { Observable } from "rxjs";
+import { firstValueFrom } from "rxjs";
 import { inject, Injectable } from "@angular/core";
 import { catchError } from "rxjs/internal/operators/catchError";
 import { throwError } from "rxjs/internal/observable/throwError";
 
+import { ApiResponse } from "../../../../../core/utils";
 import { SignInDatasource } from "../../domain/datasource";
 import { SignInResponseEntity } from "../../domain/entities";
 import { HttpClientService } from "../../../../../core/services";
@@ -13,15 +14,15 @@ export class SignInDatasourceImpl implements SignInDatasource {
 
     private httpClient = inject(HttpClientService);
 
-    signIn(email: EmailVO, password: PasswordVO): Observable<SignInResponseEntity> {
-        return this.httpClient.post<SignInResponseEntity>( '/auth/singIn', { 
+    async signIn(email: EmailVO, password: PasswordVO): Promise<ApiResponse<SignInResponseEntity>> {
+        return await firstValueFrom( this.httpClient.post<ApiResponse<SignInResponseEntity>>( '/auth/singIn', { 
             email   : email.getValue(), 
             password: password.getValue() 
         } ).pipe(
-            catchError(error => {
-                return throwError( () => new Error(error) );
-            })
+                catchError(error => {
+                    return throwError( () => new Error(error) );
+                })
+            )
         );
     }
-
 }
