@@ -7,17 +7,15 @@ import {
 } from '@angular/core';
 
 import { routes } from './app.routes';
-
-import { SIGN_IN_REPOSITORY } from './features/auth/login/domain/domain';
-import { SignInRepositoryImpl } from './features/auth/login/infrastructure/infrastructure';
+import { SIGN_IN_REPOSITORY } from '@app/auth/login/domain/repositories';
+import { SignInRepositoryImpl } from '@app/auth/login/infrastructure/repositories';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideRouter(routes, withViewTransitions() ),
+    provideRouter( routes, withViewTransitions() ),
     provideHttpClient(),
-
     { provide: SIGN_IN_REPOSITORY, useClass: SignInRepositoryImpl }
   ]
 };
