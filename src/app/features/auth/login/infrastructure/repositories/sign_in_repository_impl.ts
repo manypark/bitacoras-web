@@ -1,11 +1,8 @@
-import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 
-import { SignInDatasourceImpl } from "../datasource";
-import { ApiResponse } from "../../../../../core/utils";
-import { SignInResponseEntity } from "../../domain/entities";
-import { SignInRepository } from "../../domain/repositories";
-import { EmailVO, PasswordVO } from "../../domain/value-objects";
+import { ApiResponse } from "@utils/api_response";
+import { SignInDatasourceImpl } from "@app/auth/login/infrastructure/datasource";
+import { SignInResponseEntity, SignInRepository, EmailVO, PasswordVO } from "@app/auth/login/domain";
 
 @Injectable({ providedIn: 'root' })
 export class SignInRepositoryImpl implements SignInRepository {
@@ -15,5 +12,4 @@ export class SignInRepositoryImpl implements SignInRepository {
     signIn(email: EmailVO, password: PasswordVO): Promise<ApiResponse<SignInResponseEntity>> {
         return this.signInDataSource.signIn( email, password );
     }
-
 }
