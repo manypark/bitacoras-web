@@ -1,4 +1,4 @@
-export interface RegsiterEntity {
+export interface RegisterResponseEntity {
     createdAt: string;
     updatedAt: string;
     idUser:    number;
