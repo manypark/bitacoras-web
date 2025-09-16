@@ -21,48 +21,37 @@ import { FirstNameVO, LastNameVO } from '@app/auth/register/domain/value-objects
 @Component({
   selector    : 'app-register',
   imports: [
-    RouterLink,
-    ReactiveFormsModule,
-    PasswordInputComponent,
-    InputGenericFieldComponent,
-    SubmitButtonComponent
+    RouterLink, ReactiveFormsModule,
+    PasswordInputComponent, InputGenericFieldComponent,
+    SubmitButtonComponent,
 ],
   templateUrl : './register.component.html',
   styleUrl    : './register.component.css',
 })
 export default class RegisterComponent implements OnInit {
 
-  registerForm!:FormGroup;
-  
-  private registerTrigger = signal<RegisterPayload | null>(null);
-
-  private fb              = inject(FormBuilder);
-  private registerServices= inject(RegisterService);
-  public formUtilServices = inject(FormUtilsService);
-  private toast           = inject(ToastService);
-  private router          = inject(Router);
+  private fb                = inject(FormBuilder);
+  private registerServices  = inject(RegisterService);
+  public formUtilServices   = inject(FormUtilsService);
+  private toast             = inject(ToastService);
+  private router            = inject(Router);
+  private registerTrigger   = signal<RegisterPayload | null>(null);
+  public registerForm!:FormGroup;
 
   registerResource = resource({
-    params: () => (
-      {
-        firstName : this.registerTrigger()?.firstName,
-        lastName  : this.registerTrigger()?.lastName,
-        email     : this.registerTrigger()?.email,
-        password  : this.registerTrigger()?.password,
-      }),
-    loader: ({ params }) => {
+    params: () => this.registerTrigger(),
+    loader: async ({ params }) => {
+      if (!params) return undefined;
       return this.registerServices.register( params.firstName!, params.lastName!, params.email!, params.password!);
     },
   });
   
   constructor() {
     effect(() => {
-
       if ( this.registerResource.hasValue() ) {
         this.router.navigate(['/auth/login']);
         this.toast.success('Registro exitoso', 'Bienvenido!');
       }
-
       if ( this.registerResource.error() && this.registerForm.valid ) {
         this.toast.error('Error en el registro', 'Hubo algun error en la petición' );
       }
@@ -70,10 +59,6 @@ export default class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initForm();
-  }
-
-  private initForm(): void {
     this.registerForm = this.fb.group({
       firstName : ['', [Validators.required, firstNameVOValidator() ] ],
       lastName  : ['', [Validators.required, lastNameVOValidator() ] ],
