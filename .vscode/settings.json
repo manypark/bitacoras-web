@@ -1,4 +1,5 @@
 {
+    "typescript.preferences.importModuleSpecifier": "non-relative",
     "angular-schematics.schematicsDefaultOptions": {
         "angular-*": {
             "externalTemplate": true

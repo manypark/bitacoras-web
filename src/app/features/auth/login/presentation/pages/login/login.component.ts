@@ -3,16 +3,10 @@ import { Router, RouterLink } from '@angular/router';
 import { Component, effect, inject, OnInit, resource, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, } from '@angular/forms';
 
-import { SignInService } from '../../signals/signIn.service';
-import { EmailVO, PasswordVO } from '../../../domain/value-objects';
-import { emailVOValidator, passwordVOValidator } from '../../validators/validators';
-import { 
-  ToastService,
-  FormUtilsService, 
-  SubmitButtonComponent, 
-  PasswordInputComponent,
-  InputGenericFieldComponent,
-} from '../../../../../shared/shared';
+import { EmailVO, PasswordVO } from '@app/auth/login/domain/domain';
+import { emailVOValidator, passwordVOValidator } from '@shared/validators';
+import { SignInService } from '@app/auth/login/presentation/signals/signIn.service';
+import { ToastService, FormUtilsService, SubmitButtonComponent, PasswordInputComponent, InputGenericFieldComponent, } from '@shared/shared';
 
 @Component({
   selector    : 'app-login',
@@ -30,7 +24,6 @@ import {
 export default class LoginComponent implements OnInit {
 
   signInForm!:FormGroup;
-  showPassword = false;
   private loginTrigger = signal<{ email: EmailVO; password: PasswordVO } | null>(null);
 
   private fb              = inject(FormBuilder);

@@ -15,7 +15,7 @@ export class PasswordVO {
 
     if (!passwordRegex.test(value)) {
       throw new Error(
-        'La contraseña debe incluir mayúscula, minúscula, número y símbolo'
+        'La contraseña debe incluir mayúscula, minúscula y número'
       );
     }
 
