@@ -1,5 +1,6 @@
 import { ApiResponse } from "@utils/index";
-import { PasswordVO, EmailVO } from "@app/auth/login/domain/domain";
+
+import { EmailVO, PasswordVO } from "@app/auth/login/domain";
 import { RegisterResponseEntity } from "@app/auth/register/domain/entities";
 import { FirstNameVO, LastNameVO } from "@app/auth/register/domain/value-objects";
 

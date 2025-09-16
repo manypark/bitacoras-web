@@ -26,6 +26,14 @@ export class FormUtilsService {
       return 'Este campo es obligatorio.';
     }
 
+    if (control.hasError('firstNameVO')) {
+      return control.getError('firstNameVO').message;
+    }
+
+    if (control.hasError('lastNameVO')) {
+      return control.getError('lastNameVO').message;
+    }
+
     if (control.hasError('emailVO')) {
       return control.getError('emailVO').message;
     }

@@ -1,22 +1,22 @@
 import { Router, RouterLink } from '@angular/router';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, resource, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { ToastService } from '@app/shared/toast';
-import { FormUtilsService } from '@app/shared/services';
-import { SubmitButtonComponent } from '@app/shared/buttons';
+import { 
+  ToastService, 
+  FormUtilsService, 
+  SubmitButtonComponent, 
+  PasswordInputComponent, 
+  InputGenericFieldComponent, 
+  firstNameVOValidator, 
+  lastNameVOValidator, 
+  emailVOValidator, 
+  passwordVOValidator
+} from '@app/shared/shared';
+import { RegisterPayload } from '@app/auth/register/infrastructure/dtos';
+import { RegisterService } from '@app/auth/register/presentation/signals';
 import { EmailVO, PasswordVO } from '@app/auth/login/domain/value-objects';
-import { SignInService } from '@app/auth/login/presentation/signals/signIn.service';
 import { FirstNameVO, LastNameVO } from '@app/auth/register/domain/value-objects';
-import { PasswordInputComponent, InputGenericFieldComponent } from '@app/shared/inputs';
-import { firstNameVOValidator, lastNameVOValidator, emailVOValidator, passwordVOValidator } from '@app/shared/validators';
-
-export interface RegisterPayload {
-  firstName : FirstNameVO;
-  lastName  : LastNameVO;
-  email     : EmailVO;
-  password  : PasswordVO;
-}
 
 @Component({
   selector    : 'app-register',
@@ -37,10 +37,37 @@ export default class RegisterComponent implements OnInit {
   private registerTrigger = signal<RegisterPayload | null>(null);
 
   private fb              = inject(FormBuilder);
-  private signInServices  = inject(SignInService);
+  private registerServices= inject(RegisterService);
   public formUtilServices = inject(FormUtilsService);
   private toast           = inject(ToastService);
   private router          = inject(Router);
+
+  registerResource = resource({
+    params: () => (
+      {
+        firstName : this.registerTrigger()?.firstName,
+        lastName  : this.registerTrigger()?.lastName,
+        email     : this.registerTrigger()?.email,
+        password  : this.registerTrigger()?.password,
+      }),
+    loader: ({ params }) => {
+      return this.registerServices.register( params.firstName!, params.lastName!, params.email!, params.password!);
+    },
+  });
+  
+  constructor() {
+    effect(() => {
+
+      if ( this.registerResource.hasValue() ) {
+        this.router.navigate(['/auth/login']);
+        this.toast.success('Registro exitoso', 'Bienvenido!');
+      }
+
+      if ( this.registerResource.error() && this.registerForm.valid ) {
+        this.toast.error('Error en el registro', 'Hubo algun error en la petición' );
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -56,7 +83,12 @@ export default class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
-
+    if (this.registerForm.valid) {
+      const firstNameVO = new FirstNameVO(this.registerForm.value.firstName);
+      const lastNameVO  = new LastNameVO(this.registerForm.value.lastName);
+      const emailVO     = new EmailVO(this.registerForm.value.email);
+      const passwordVO  = new PasswordVO(this.registerForm.value.password);
+      this.registerTrigger.set({firstName: firstNameVO, lastName: lastNameVO, email: emailVO, password: passwordVO });
+    }
   }
-
 }

@@ -3,7 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Component, effect, inject, OnInit, resource, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, } from '@angular/forms';
 
-import { EmailVO, PasswordVO } from '@app/auth/login/domain/domain';
+import { EmailVO, PasswordVO } from '@app/auth/login/domain';
 import { emailVOValidator, passwordVOValidator } from '@shared/validators';
 import { SignInService } from '@app/auth/login/presentation/signals/signIn.service';
 import { ToastService, FormUtilsService, SubmitButtonComponent, PasswordInputComponent, InputGenericFieldComponent, } from '@shared/shared';

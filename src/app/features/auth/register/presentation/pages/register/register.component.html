@@ -59,8 +59,8 @@
                     <div class="flex justify-center mt-6">
                         <app-button
                             label="Registrate"
-                            [disabled]="!registerForm.valid"
-                            [loading]="false"
+                            [disabled]="!registerForm.valid || registerResource.isLoading()"
+                            [loading]="registerResource.isLoading()"
                             (onClick)="onSubmit()">
                         </app-button>
                     </div>
