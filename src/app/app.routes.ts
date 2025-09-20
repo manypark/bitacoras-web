@@ -17,35 +17,46 @@ export const routes: Routes = [
     },
 
     // Rutas de la aplicación (home)
-    { 
-        path: 'home/dashboard',
-        loadComponent: () => import('./features/dashboards/presentation/pages/dashboard/dashboard.component'),
-        title: 'Dashboard',
-        canActivate: [checkAuthGuard]
-    },
-    { 
-        path: 'home/roles',
-        loadComponent: () => import('./features/roles/presentation/pages/roles/roles.component'),
-        title: 'Roles',
-        canActivate: [checkAuthGuard],
-    },
-    { 
-        path: 'home/concepts',
-        loadComponent: () => import('./features/concepts/presentation/pages/concepts/concepts.component'),
-        title: 'Conceptos',
-        canActivate: [checkAuthGuard]
-    },
-    { 
-        path: 'home/tasks',
-        loadComponent: () => import('./features/tasks/presentation/pages/tasks/tasks.component'),
-        title: 'Tareas',
-        canActivate: [checkAuthGuard]
-    },
-    { 
-        path: 'home/logs',
-        loadComponent: () => import('./features/logs/presentation/pages/logs/logs.component'),
-        title: 'Bitacoras',
-        canActivate: [checkAuthGuard]
+    {
+        path            : 'home',
+        loadComponent   : () => import('./features/sidebar/presentation/pages/page/sidebar.component'),
+        canActivate     : [checkAuthGuard],
+        children        : [
+            {
+                path: 'dashboard',
+                loadComponent: () => import('./features/dashboards/presentation/pages/dashboard/dashboard.component'),
+                title: 'Dashboard',
+                canActivate: [checkAuthGuard],
+            },
+            { 
+                path: 'roles',
+                loadComponent: () => import('./features/roles/presentation/pages/roles/roles.component'),
+                title: 'Roles',
+                canActivate: [checkAuthGuard],
+            },
+            { 
+                path: 'concepts',
+                loadComponent: () => import('./features/concepts/presentation/pages/concepts/concepts.component'),
+                title: 'Conceptos',
+                canActivate: [checkAuthGuard]
+            },
+            { 
+                path: 'tasks',
+                loadComponent: () => import('./features/tasks/presentation/pages/tasks/tasks.component'),
+                title: 'Tareas',
+                canActivate: [checkAuthGuard]
+            },
+            { 
+                path: 'logs',
+                loadComponent: () => import('./features/logs/presentation/pages/logs/logs.component'),
+                title: 'Bitacoras',
+                canActivate: [checkAuthGuard]
+            },
+            { 
+                path: '**',
+                redirectTo: '/dashboard',
+            },
+        ]
     },
 
     // Ruta por defecto (opcional)
