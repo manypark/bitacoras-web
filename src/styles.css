@@ -1,6 +1,20 @@
 @import "tailwindcss";
 @import "basecoat-css";
 
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
 :root {
   --radius: 0.65rem;
   --background: oklch(1 0 0);

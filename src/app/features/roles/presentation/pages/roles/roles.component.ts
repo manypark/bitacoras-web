@@ -17,7 +17,7 @@ export default class RolesComponent {
   ref:HttpResourceRef<ApiResponse<RolesEntity[]>>;
 
   roles = signal<RolesEntity[]>([]);
-  constructor( 
+  constructor(
     private repository: RolesRepositoryImpl,
     private toast     : ToastService,
   ) {
