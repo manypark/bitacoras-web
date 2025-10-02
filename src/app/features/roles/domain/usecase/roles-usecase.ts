@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 
 import { RolesRepository } from "@app/roles/domain/repositories";
 
-Injectable({providedIn: 'root'})
+@Injectable({providedIn: 'root'})
 export class GetAllRoloes {
 
     constructor( private repository:RolesRepository ) {}

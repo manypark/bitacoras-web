@@ -1,1 +1,52 @@
-<p>roles works!</p>,
+<div class="border-2 rounded-lg border-gray-300">
+<table class="table">
+  <caption>Lista de todos tus roles.</caption>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Estatus</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (item of roles(); track $index) {
+        <tr>
+          <td class="font-medium">{{ item.idRoles }}</td>
+          <td>{{ item.name }}</td>
+          @if ( item.active ) {
+            <td> <span class="badge">Activo</span> </td>
+          }
+          @if ( !item.active ) {
+            <td> <span class="badge-destructive">Inactivo</span> </td>
+          }
+          <td>
+            <div id="demo-dropdown-menu" class="dropdown-menu">
+            <button type="button" id="demo-dropdown-menu-trigger" aria-haspopup="menu" aria-controls="demo-dropdown-menu-menu" aria-expanded="false" class="btn-outline">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+            </button>
+            <div id="demo-dropdown-menu-popover" data-popover aria-hidden="true" class="min-w-56">
+                <div role="menu" id="demo-dropdown-menu-menu" aria-labelledby="demo-dropdown-menu-trigger">
+                <div role="group" aria-labelledby="account-options">
+                    <div role="menuitem">
+                        Eliminar
+                    </div>
+                    <div role="menuitem">
+                        Actualizar
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+          </td>
+        </tr>
+    }
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3">Total</td>
+      <td> {{ roles().length }} </td>
+    </tr>
+  </tfoot>
+</table>
+</div>
