@@ -7,8 +7,9 @@ import {
 } from '@angular/core';
 
 import { routes } from './app.routes';
-import { REGISTER_REPOSITORY } from '@app/auth/register/domain';
-import { SIGN_IN_REPOSITORY } from '@app/auth/login/domain/repositories';
+
+import { SignInRepository } from '@app/auth/login/domain';
+import { RegisterRepository } from '@app/auth/register/domain';
 import { RegsiterRepositoryImpl } from '@app/auth/register/infrastructure';
 import { SignInRepositoryImpl } from '@app/auth/login/infrastructure/repositories';
 
@@ -18,7 +19,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter( routes, withViewTransitions() ),
     provideHttpClient(),
-    { provide: SIGN_IN_REPOSITORY,  useClass: SignInRepositoryImpl },
-    { provide: REGISTER_REPOSITORY, useClass: RegsiterRepositoryImpl },
+    { provide: SignInRepository,  useClass: SignInRepositoryImpl },
+    { provide: RegisterRepository, useClass: RegsiterRepositoryImpl },
   ]
 };

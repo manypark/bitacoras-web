@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { Injectable, Signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { HttpAdapter } from './http_services';
