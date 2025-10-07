@@ -3,3 +3,5 @@ export interface RolesEntity {
     name    : string;
     active  : boolean;
 }
+
+export const ROLES_KEYS: (keyof RolesEntity)[] = ['idRoles', 'name', 'active'];

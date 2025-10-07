@@ -12,7 +12,7 @@ import {
   lastNameVOValidator, 
   emailVOValidator, 
   passwordVOValidator
-} from '@app/shared/shared';
+} from '@app/shared/index';
 import { RegisterPayload } from '@app/auth/register/infrastructure/dtos';
 import { RegisterService } from '@app/auth/register/presentation/signals';
 import { EmailVO, PasswordVO } from '@app/auth/login/domain/value-objects';

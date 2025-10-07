@@ -1,22 +1,24 @@
 import { HttpResourceRef } from '@angular/common/http';
 import { Component, effect, signal } from '@angular/core';
 
-import { RolesEntity } from '@app/roles/domain';
-import { ApiResponse } from '@utils/api_response';
-import { RolesRepositoryImpl } from '@app/roles/infrastructure/repositories';
 import { ToastService } from '@app/shared/toast';
+import { ApiResponse } from '@utils/api_response';
+import { CustomTableComponent } from "@app/shared";
+import { ROLES_KEYS, RolesEntity } from '@app/roles/domain';
+import { RolesRepositoryImpl } from '@app/roles/infrastructure/repositories';
 
 @Component({
   selector    : 'app-roles',
-  imports     : [],
+  imports     : [ CustomTableComponent ],
   templateUrl : './roles.component.html',
   styleUrl    : './roles.component.css',
 })
 export default class RolesComponent {
 
   ref:HttpResourceRef<ApiResponse<RolesEntity[]>>;
-
   roles = signal<RolesEntity[]>([]);
+  keys = ROLES_KEYS;
+
   constructor(
     private repository: RolesRepositoryImpl,
     private toast     : ToastService,
@@ -35,5 +37,11 @@ export default class RolesComponent {
     });
   }
 
-
+  onTableAction(event: { action: string; row: RolesEntity }) {
+    if (event.action === 'edit') {
+      this.toast.info('Editar', `Editar rol ${event.row.name}`);
+    } else if (event.action === 'delete') {
+      this.toast.error('Eliminar', `Eliminar rol ${event.row.name}`);
+    }
+  }
 }

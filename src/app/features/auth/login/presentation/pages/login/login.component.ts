@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, } from '@angul
 import { EmailVO, PasswordVO } from '@app/auth/login/domain';
 import { emailVOValidator, passwordVOValidator } from '@shared/validators';
 import { SignInService } from '@app/auth/login/presentation/signals/signIn.service';
-import { ToastService, FormUtilsService, SubmitButtonComponent, PasswordInputComponent, InputGenericFieldComponent, } from '@shared/shared';
+import { ToastService, FormUtilsService, SubmitButtonComponent, PasswordInputComponent, InputGenericFieldComponent, } from '@shared/index';
 
 @Component({
   selector    : 'app-login',

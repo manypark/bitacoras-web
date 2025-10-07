@@ -1,0 +1,101 @@
+<div class="border-2 rounded-lg border-gray-300">
+  <table class="table">
+    <caption>{{ caption }}</caption>
+
+    <thead>
+      <tr>
+        @for (header of headers(); track $index) {
+          <th>{{ header }}</th>
+        }
+        @if (actions.length > 0) {
+          <th>Acciones</th>
+        }
+      </tr>
+    </thead>
+
+    <tbody>
+        @if ( isLoading() ) {
+            @for (i of [1,2,3,4,5]; track i) {
+                <tr>
+                    <td>
+                        <div class="h-4 w-8 rounded-md bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
+                    </td>
+                    <td>
+                        <div class="h-4 w-40 rounded-md bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
+                    </td>
+                    <td>
+                        <div class="h-4 w-24 rounded-md bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
+                    </td>
+                    <td>
+                    <div class="flex gap-2 justify-center">
+                        <div class="h-6 w-6 rounded-md bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
+                    </div>
+                    </td>
+                </tr>
+            }
+        }
+        @for (row of data; track $index) {
+          <tr>
+            @for (key of keys(); track $index) {
+                <td>
+                    @if ( key === 'active' ) {
+                        @if (row[key]) {
+                            <span class="badge">Activo</span>
+                        } @else {
+                            <span class="badge-destructive">Inactivo</span>
+                        }
+                    } @else {
+                        <span class="ml-2"> {{ row[key] }} </span>
+                    }
+                </td>
+            }
+
+            @if (actions.length > 0) {
+              <td>
+                <div id="demo-dropdown-menu" class="dropdown-menu">
+                    <button 
+                        type="button" 
+                        id="demo-dropdown-menu-trigger" 
+                        aria-haspopup="menu" 
+                        aria-controls="demo-dropdown-menu-menu" 
+                        aria-expanded="false" 
+                        class="btn-outline">
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg" 
+                            width="24" 
+                            height="24" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            stroke-width="2" 
+                            stroke-linecap="round" 
+                            stroke-linejoin="round">
+                                <path d="m9 18 6-6-6-6" />
+                            </svg>
+                    </button>
+                    <div id="demo-dropdown-menu-popover" data-popover aria-hidden="true" class="min-w-56">
+                        <div role="menu" id="demo-dropdown-menu-menu" aria-labelledby="demo-dropdown-menu-trigger">
+                            <div role="group" aria-labelledby="account-options">
+                                @for (a of actions; track $index) {
+                                    <div role="menuitem" (click)="onAction(a.action, row)">
+                                        {{ a.label }}
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </td>
+            }
+          </tr>
+        }
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <td colspan="3"> Total de registros: </td>
+        <td> {{ data.length }} </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
