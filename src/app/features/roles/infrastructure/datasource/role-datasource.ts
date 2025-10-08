@@ -24,9 +24,9 @@ export class RolesDatasource {
         ) as HttpResourceRef<ApiResponse<RolesResponseDto[]>>;
     }
 
-    async updateRole( {name, idRoles}:RolesEntity ):Promise<ApiResponse<RolesEntity>> {
+    async updateRole( {name, active, idRoles}:RolesEntity ):Promise<ApiResponse<RolesEntity>> {
         return await firstValueFrom(
-            this.httpClient.patch<Promise<ApiResponse<RolesEntity>> >(`/roles/${idRoles}`, { name }).pipe( catchError(error =>  throwError( () => new Error(error) ) ) )
+            this.httpClient.patch<Promise<ApiResponse<RolesEntity>> >(`/roles/${idRoles}`, { name, active }).pipe( catchError(error =>  throwError( () => new Error(error) ) ) )
         );
     }
 

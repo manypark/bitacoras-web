@@ -56,4 +56,11 @@ export default class RolesComponent {
     }
 
   }
+
+  retryGetAllRoles( value:boolean ) {
+    if(value) {
+      this.roles.set([]);
+      this.ref.reload();
+    }
+  }
 }

@@ -5,23 +5,62 @@
     aria-describedby="demo-dialog-edit-profile-description" 
     onclick="if (event.target === this) this.close()">
   <article>
-    <header>
-      <h2 id="demo-dialog-edit-profile-title">Editar Role</h2>
-      <p id="demo-dialog-edit-profile-description">Has tus cambios del Role aqui. Da click en editar cuando hayas terminado.</p>
+    <header class="border-b py-4 border-gray-400">
+      <h2 id="demo-dialog-edit-profile-title">Editar Rol</h2>
+      <p id="demo-dialog-edit-profile-description">Has tus cambios del Rol aqui. Da click en editar cuando hayas terminado.</p>
     </header>
 
     <section>
-      <form class="form grid gap-4">
-        <div class="grid gap-3">
-          <label for="demo-dialog-edit-profile-name">Role</label>
-          <input type="text" [value]="roleSelectedServices.selectedRole()?.name" id="demo-dialog-edit-profile-name" autofocus />
-        </div>
-      </form>
+        <form class="form grid gap-4">
+            <div class="flex flex-col gap-8">
+
+                <div class="flex flex-col gap-4">
+                    <label for="active-role">Estatus</label>
+    
+                    <label class="label gap-3">
+                        <!-- <input type="checkbox" id="active-role" [checked]="roleSelectedServices.selectedRole()?.active" (input)="onStatusChange($event)" class="input"> -->
+
+                        <label class="label">
+                        <input type="checkbox" name="switch" role="switch" [checked]="roleSelectedServices.selectedRole()?.active" (input)="onStatusChange($event)" class="input">
+                            @if (roleSelectedServices.selectedRole()?.active) {
+                                <span> Activo </span>
+                            }
+                            @if (!roleSelectedServices.selectedRole()?.active) {
+                                <span> Inactivo</span>
+                            }
+                        </label>
+                    </label>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <label for="demo-dialog-edit-profile-name">Role</label>
+                    <input 
+                    type="text" 
+                    [value]="roleSelectedServices.selectedRole()?.name" 
+                    id="demo-dialog-edit-profile-name"
+                    (input)="onNameChange($any($event.target).value)"
+                    [disabled]="updateResource.isLoading()"
+                    autofocus />
+                </div>
+
+            </div>
+        </form>
+
+      @if (updateResource.error(); as err) {
+        <p class="text-red-500 text-sm mt-2">⚠️ {{ err.message }}</p>
+      }
     </section>
 
     <footer>
-      <button class="btn-outline" (click)="closeModal()">Cancelar</button>
-      <button class="btn" >Editar</button>
+        <button class="btn-outline" [disabled]="updateResource.isLoading()" (click)="closeModal()">Cancelar</button>
+        <button class="btn" [disabled]="updateResource.isLoading()" (click)="onEdit()">
+            @if ( updateResource.isLoading() ) {
+                <p>Cargando</p>
+            }
+            @if ( !updateResource.isLoading() ) {
+                <p>Editar</p>
+            }
+        </button>
     </footer>
 
     <button type="button" aria-label="Close dialog" onclick="this.closest('dialog').close()">

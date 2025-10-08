@@ -4,7 +4,7 @@ import { RolesEntity } from "@app/roles/domain/entities";
 import { RolesRepository } from "@app/roles/domain/repositories";
 
 @Injectable({providedIn: 'root'})
-export class UpdateRoloes {
+export class UpdateRoloesUsecase {
 
     constructor( private repository:RolesRepository ) {}
 
