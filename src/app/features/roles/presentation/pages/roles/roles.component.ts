@@ -4,12 +4,17 @@ import { Component, effect, signal } from '@angular/core';
 import { ToastService } from '@app/shared/toast';
 import { ApiResponse } from '@utils/api_response';
 import { CustomTableComponent } from "@app/shared";
+import { CustomDialogComponent } from "../../components";
 import { ROLES_KEYS, RolesEntity } from '@app/roles/domain';
+import { RoleSelectionService } from '@app/roles/presentation/signals';
 import { RolesRepositoryImpl } from '@app/roles/infrastructure/repositories';
 
 @Component({
   selector    : 'app-roles',
-  imports     : [ CustomTableComponent ],
+  imports     : [
+    CustomTableComponent, 
+    CustomDialogComponent,
+  ],
   templateUrl : './roles.component.html',
   styleUrl    : './roles.component.css',
 })
@@ -20,8 +25,9 @@ export default class RolesComponent {
   keys = ROLES_KEYS;
 
   constructor(
-    private repository: RolesRepositoryImpl,
-    private toast     : ToastService,
+    private repository          : RolesRepositoryImpl,
+    private toast               : ToastService,
+    private roleSelectedServices: RoleSelectionService
   ) {
     this.ref = this.repository.getAllRoles();
 
@@ -38,10 +44,16 @@ export default class RolesComponent {
   }
 
   onTableAction(event: { action: string; row: RolesEntity }) {
+
     if (event.action === 'edit') {
-      this.toast.info('Editar', `Editar rol ${event.row.name}`);
-    } else if (event.action === 'delete') {
-      this.toast.error('Eliminar', `Eliminar rol ${event.row.name}`);
+      const modal = document.getElementById('custom-edit-role') as HTMLDialogElement | null;
+      this.roleSelectedServices.setSelectedRole(event.row);
+      modal?.showModal();
     }
+
+    if (event.action === 'delete') {
+
+    }
+
   }
 }

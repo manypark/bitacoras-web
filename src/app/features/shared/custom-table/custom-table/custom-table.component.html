@@ -39,7 +39,7 @@
             @for (key of keys(); track $index) {
                 <td>
                     @if ( key === 'active' ) {
-                        @if (row[key]) {
+                        @if ( row[key] ) {
                             <span class="badge">Activo</span>
                         } @else {
                             <span class="badge-destructive">Inactivo</span>
