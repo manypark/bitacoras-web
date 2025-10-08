@@ -4,10 +4,8 @@
   [keys]="keys"
   [data]="roles()"
   [isLoading]="ref.isLoading()"
-  [actions]="[
-    { label: 'Editar',   action: 'edit' },
-    { label: 'Eliminar', action: 'delete' }
-  ]"
   (actionClick)="onTableAction($event)"/>
 
-<custom-dialog (roleUpdated)="retryGetAllRoles($event)"/>
+<edit-dialog (roleUpdated)="retryGetAllRoles($event)"/>
+
+<delete-dialog (roleUpdated)="retryGetAllRoles($event)"/>

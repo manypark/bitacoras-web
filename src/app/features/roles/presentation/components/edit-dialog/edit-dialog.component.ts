@@ -5,12 +5,11 @@ import { UpdateRoloesUsecase } from '@app/roles/domain';
 import { RoleSelectionService } from '@app/roles/presentation/signals';
 
 @Component({
-  selector    : 'custom-dialog',
-  imports     : [],
-  templateUrl : './custom-dialog.component.html',
-  styleUrl    : './custom-dialog.component.css',
+  selector    : 'edit-dialog',
+  templateUrl : './edit-dialog.component.html',
+  styleUrl    : './edit-dialog.component.css',
 })
-export class CustomDialogComponent {
+export class EditDialogComponent {
 
   roleSelectedServices  = inject(RoleSelectionService);
   private readonly roleUpdateUsecase  = inject(UpdateRoloesUsecase);

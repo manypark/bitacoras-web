@@ -1,0 +1,39 @@
+<dialog 
+    id="custom-delete-role"
+    class="dialog w-full sm:max-w-[425px] max-h-[612px]" 
+    aria-labelledby="demo-dialog-edit-profile-title" 
+    aria-describedby="demo-dialog-edit-profile-description" 
+    onclick="if (event.target === this) this.close()">
+  <article>
+    <header>
+      <h2 id="demo-dialog-edit-profile-title">Eliminar Rol</h2>
+      <p id="demo-dialog-edit-profile-description">Una vez eliminado sera necesario hablar con el adminitrador para restablecer el rol.</p>
+    </header>
+
+    <section>
+        <form class="form grid">
+            <div class="flex flex-col gap-2">
+                <label for="demo-dialog-edit-profile-name" class="font-bold">Role</label>
+                    <input 
+                    type="text" 
+                    [value]="roleSelectedServices.selectedRole()?.name" 
+                    id="demo-dialog-edit-profile-name"
+                    disabled="true"
+                    autofocus />
+            </div>
+        </form>
+    </section>
+
+    <footer>
+        <button class="btn-outline" [disabled]="updateResource.isLoading()" (click)="closeModal()"> Cancelar </button>
+        <button class="btn-destructive" [disabled]="updateResource.isLoading()" (click)="onEdit()"> Eliminar </button>
+    </footer>
+
+    <button type="button" aria-label="Close dialog" onclick="this.closest('dialog').close()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x">
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </svg>
+    </button>
+  </article>
+</dialog>

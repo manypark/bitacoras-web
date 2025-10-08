@@ -23,9 +23,6 @@ export class CustomTableComponent {
   /** Claves de los datos que corresponden a cada columna */
   keys = input.required<string[]>();
 
-  /** Acciones disponibles: [{label: 'Editar', action: 'edit'}, ...] */
-  @Input() actions: { label: string; action: string }[] = [];
-
   /** Evento que emite cuando se ejecuta una acción */
   @Output() actionClick = new EventEmitter<{ action: string; row: any }>();
 
