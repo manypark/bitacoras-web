@@ -9,6 +9,10 @@ import { RolesDatasource } from "@app/roles/infrastructure/datasource";
 export class RolesRepositoryImpl implements RolesRepository {
 
     constructor( private datasource:RolesDatasource ) {}
+    
+    updateRole(role: RolesEntity): Promise<ApiResponse<RolesEntity>> {
+        return this.datasource.updateRole(role);
+    }
 
     getAllRoles(): HttpResourceRef<ApiResponse<RolesEntity[]>> {
         return this.datasource.getAllRoles();
