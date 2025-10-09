@@ -7,14 +7,15 @@ import { CustomTableComponent } from "@app/shared";
 import { ROLES_KEYS, RolesEntity } from '@app/roles/domain';
 import { RoleSelectionService } from '@app/roles/presentation/signals';
 import { RolesRepositoryImpl } from '@app/roles/infrastructure/repositories';
-import { EditDialogComponent, DeleteDialogComponent } from "../../components";
+import { EditDialogComponent, DeleteDialogComponent, CreateDialogComponent } from "../../components";
 
 @Component({
   selector    : 'app-roles',
   imports: [
     CustomTableComponent,
     EditDialogComponent,
-    DeleteDialogComponent
+    DeleteDialogComponent,
+    CreateDialogComponent
 ],
   templateUrl : './roles.component.html',
   styleUrl    : './roles.component.css',
@@ -42,6 +43,11 @@ export default class RolesComponent {
       if( this.ref.error() )
       this.toast.success('Petición fallida', this.ref.error()?.message ?? 'Hubo algún error' );
     });
+  }
+
+  openCreateDialog() {
+    const modal = document.getElementById('custom-create-role') as HTMLDialogElement | null;
+    modal?.showModal();
   }
 
   onTableAction(event: { action: string; row: RolesEntity }) {

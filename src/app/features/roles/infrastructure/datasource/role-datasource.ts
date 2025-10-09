@@ -1,6 +1,6 @@
 import { inject, Injectable, Injector } from "@angular/core";
-import { httpResource, HttpResourceRef } from "@angular/common/http";
 import { catchError, firstValueFrom, throwError } from "rxjs";
+import { httpResource, HttpResourceRef } from "@angular/common/http";
 
 import { RolesEntity } from "@app/roles/domain";
 import { ApiResponse } from "@utils/api_response";
@@ -26,7 +26,17 @@ export class RolesDatasource {
 
     async updateRole( {name, active, idRoles}:RolesEntity ):Promise<ApiResponse<RolesEntity>> {
         return await firstValueFrom(
-            this.httpClient.patch<Promise<ApiResponse<RolesEntity>> >(`/roles/${idRoles}`, { name, active }).pipe( catchError(error =>  throwError( () => new Error(error) ) ) )
+            this.httpClient.patch<Promise<ApiResponse<RolesEntity>> >(`/roles/${idRoles}`, { name, active }).pipe(
+                catchError(error =>  throwError( () => new Error(error) ) ),
+            ),
+        );
+    }
+
+    async createRole( rol:string ):Promise<ApiResponse<RolesEntity>> {
+        return await firstValueFrom(
+            this.httpClient.post<Promise<ApiResponse<RolesEntity>> >(`/roles`, { name: rol }).pipe(
+                catchError(error =>  throwError( () => new Error(error) ) ),
+            ),
         );
     }
 

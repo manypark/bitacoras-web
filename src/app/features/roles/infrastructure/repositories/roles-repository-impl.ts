@@ -17,4 +17,8 @@ export class RolesRepositoryImpl implements RolesRepository {
     getAllRoles(): HttpResourceRef<ApiResponse<RolesEntity[]>> {
         return this.datasource.getAllRoles();
     }
+
+    createNewRol(newRol: string): Promise<ApiResponse<RolesEntity>> {
+        return this.datasource.createRole( newRol );
+    }
 }
