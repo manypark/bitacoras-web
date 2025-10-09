@@ -1,5 +1,6 @@
+import { FormsModule } from '@angular/forms';
 import { HttpResourceRef } from '@angular/common/http';
-import { Component, effect, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 
 import { ToastService } from '@app/shared/toast';
 import { ApiResponse } from '@utils/api_response';
@@ -12,6 +13,7 @@ import { EditDialogComponent, DeleteDialogComponent, CreateDialogComponent } fro
 @Component({
   selector    : 'app-roles',
   imports: [
+    FormsModule,
     CustomTableComponent,
     EditDialogComponent,
     DeleteDialogComponent,
@@ -24,7 +26,17 @@ export default class RolesComponent {
 
   ref:HttpResourceRef<ApiResponse<RolesEntity[]>>;
   roles = signal<RolesEntity[]>([]);
+  searchRol = signal<string>('');
   keys = ROLES_KEYS;
+
+  filteredRoles = computed(() => {
+    const search = this.searchRol().toLowerCase().trim();
+    if (!search) { return this.roles(); }
+
+    return this.roles().filter(role =>
+      role.name.toLowerCase().includes(search)
+    );
+  });
 
   constructor(
     private repository          : RolesRepositoryImpl,
