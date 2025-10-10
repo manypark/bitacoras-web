@@ -1,13 +1,18 @@
 import { Injectable } from "@angular/core";
 
 import { ApiResponse } from "@utils/api_response";
-import { RolesEntity, RolesRepository } from "@app/roles/domain";
+import { RolesEntity, RolesInfoEntity, RolesRepository } from "@app/roles/domain";
 import { RolesDatasource } from "@app/roles/infrastructure/datasource";
+import { HttpResourceRef } from "@angular/common/http";
 
 @Injectable({ providedIn: 'root'})
 export class RolesRepositoryImpl implements RolesRepository {
 
     constructor( private datasource:RolesDatasource ) {}
+
+    getAllRolesInfo(): HttpResourceRef<ApiResponse<RolesInfoEntity>> {
+        return this.datasource.getAllRolesInfo();
+    }
     
     updateRole(role: RolesEntity): Promise<ApiResponse<RolesEntity>> {
         return this.datasource.updateRole(role);

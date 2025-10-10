@@ -3,7 +3,7 @@ import { Component, computed, effect, inject, resource, signal } from '@angular/
 
 import { ToastService } from '@app/shared/toast';
 import { CustomTableComponent } from "@app/shared";
-import { GetAllRoles, ROLES_KEYS, RolesEntity } from '@app/roles/domain';
+import { GetAllRoles, GetAllRolesInfo, ROLES_KEYS, RolesEntity } from '@app/roles/domain';
 import { RoleSelectionService } from '@app/roles/presentation/signals';
 import { EditDialogComponent, DeleteDialogComponent, CreateDialogComponent } from "../../components";
 
@@ -25,13 +25,15 @@ export default class RolesComponent {
   roles = signal<RolesEntity[]>([]);
   searchRol = signal<string>('');
 
-  private getAllRolesUSecase = inject(GetAllRoles);
   private toast = inject(ToastService);
+  private getAllRolesUsecase = inject(GetAllRoles);
+  private getAllRolesUSecaseInfo = inject(GetAllRolesInfo);
   private roleSelectedServices = inject(RoleSelectionService);
 
   // 🔢 Paginación
   page = signal(1);
   keys = ROLES_KEYS;
+  rolesInfo = this.getAllRolesUSecaseInfo.execute();
 
   // 🔍 Filtro local
   filteredRoles = computed( () => {
@@ -44,7 +46,7 @@ export default class RolesComponent {
     params: () => this.page(),
     loader: async ( page ) => {
       this.roles.set([]);
-      return this.getAllRolesUSecase.execute( 5, (this.page() - 1) * 5  );
+      return this.getAllRolesUsecase.execute( 5, (this.page() - 1) * 5  );
     },
   });
 
