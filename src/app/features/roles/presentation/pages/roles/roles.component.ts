@@ -1,13 +1,10 @@
 import { FormsModule } from '@angular/forms';
-import { HttpResourceRef } from '@angular/common/http';
-import { Component, computed, effect, signal } from '@angular/core';
+import { Component, computed, effect, inject, resource, signal } from '@angular/core';
 
 import { ToastService } from '@app/shared/toast';
-import { ApiResponse } from '@utils/api_response';
 import { CustomTableComponent } from "@app/shared";
-import { ROLES_KEYS, RolesEntity } from '@app/roles/domain';
+import { GetAllRoles, ROLES_KEYS, RolesEntity } from '@app/roles/domain';
 import { RoleSelectionService } from '@app/roles/presentation/signals';
-import { RolesRepositoryImpl } from '@app/roles/infrastructure/repositories';
 import { EditDialogComponent, DeleteDialogComponent, CreateDialogComponent } from "../../components";
 
 @Component({
@@ -24,37 +21,55 @@ import { EditDialogComponent, DeleteDialogComponent, CreateDialogComponent } fro
 })
 export default class RolesComponent {
 
-  ref:HttpResourceRef<ApiResponse<RolesEntity[]>>;
+  // 🧠 Signals principales
   roles = signal<RolesEntity[]>([]);
   searchRol = signal<string>('');
+
+  private getAllRolesUSecase = inject(GetAllRoles);
+  private toast = inject(ToastService);
+  private roleSelectedServices = inject(RoleSelectionService);
+
+  // 🔢 Paginación
+  page = signal(1);
   keys = ROLES_KEYS;
 
-  filteredRoles = computed(() => {
+  // 🔍 Filtro local
+  filteredRoles = computed( () => {
     const search = this.searchRol().toLowerCase().trim();
-    if (!search) { return this.roles(); }
-
-    return this.roles().filter(role =>
-      role.name.toLowerCase().includes(search)
-    );
+    if (!search) return this.roles();
+    return this.roles().filter( role => role.name.toLowerCase().includes(search) );
   });
 
-  constructor(
-    private repository          : RolesRepositoryImpl,
-    private toast               : ToastService,
-    private roleSelectedServices: RoleSelectionService
-  ) {
-    this.ref = this.repository.getAllRoles();
+  readonly updateResource = resource({
+    params: () => this.page(),
+    loader: async ( page ) => {
+      this.roles.set([]);
+      return this.getAllRolesUSecase.execute( 5, (this.page() - 1) * 5  );
+    },
+  });
 
-    effect( () => {
-      const data = this.ref.value();
-      if(data) {
-        this.roles.set(data.data);
+  constructor() {
+    effect(() => {
+
+      const data = this.updateResource?.value()?.data;
+
+      if (data) {
+        this.roles.set( this.updateResource.value()?.data ?? [] );
         this.toast.success('Petición exitosa', 'Roles cargados correctamente');
       }
-      
-      if( this.ref.error() )
-      this.toast.success('Petición fallida', this.ref.error()?.message ?? 'Hubo algún error' );
+
+      if (this.updateResource.error()) {
+        this.toast.error('Petición fallida', this.updateResource.value()?.message ?? 'Hubo algún error');
+      }
     });
+  }
+
+  nextPage() {
+    this.page.update(p => p + 1);
+  }
+
+  prevPage() {
+    if (this.page() > 1) this.page.update(p => p - 1);
   }
 
   openCreateDialog() {
@@ -63,25 +78,19 @@ export default class RolesComponent {
   }
 
   onTableAction(event: { action: string; row: RolesEntity }) {
+    const modalId = event.action === 'edit' ? 'custom-edit-role' : event.action === 'delete' ? 'custom-delete-role': null;
 
-    if (event.action === 'edit') {
-      const modal = document.getElementById('custom-edit-role') as HTMLDialogElement | null;
+    if (modalId) {
+      const modal = document.getElementById(modalId) as HTMLDialogElement | null;
       this.roleSelectedServices.setSelectedRole(event.row);
       modal?.showModal();
     }
-
-    if (event.action === 'delete') {
-      const modal = document.getElementById('custom-delete-role') as HTMLDialogElement | null;
-      this.roleSelectedServices.setSelectedRole(event.row);
-      modal?.showModal();
-    }
-
   }
 
   retryGetAllRoles( value:boolean ) {
     if(value) {
       this.roles.set([]);
-      this.ref.reload();
+      this.updateResource.reload();
     }
   }
 }

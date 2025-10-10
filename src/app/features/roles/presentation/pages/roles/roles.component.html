@@ -6,7 +6,7 @@
     </div>
 
     <div class="flex">
-      <button class="btn h-12" (click)="openCreateDialog()">
+      <button class="btn h-12 text-base font-bold" (click)="openCreateDialog()">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
           <path d="M13.0001 10.9999L22.0002 10.9997L22.0002 12.9997L13.0001 12.9999L13.0001 21.9998L11.0001 21.9998L11.0001 12.9999L2.00004 13.0001L2 11.0001L11.0001 10.9999L11 2.00025L13 2.00024L13.0001 10.9999Z">
           </path>
@@ -26,8 +26,45 @@
     [headers]="['ID', 'Nombre', 'Estatus']"
     [keys]="keys"
     [data]="filteredRoles()"
-    [isLoading]="ref.isLoading()"
+    [isLoading]="updateResource.isLoading()"
     (actionClick)="onTableAction($event)"/>
+
+  <nav role="navigation" aria-label="pagination" class="mx-auto flex w-full mt-2 justify-end">
+    <ul class="flex flex-row items-center gap-1">
+      <!-- Botón Anterior -->
+      <li>
+        <button
+          class="btn-ghost flex items-center gap-1"
+          [disabled]="page() === 1"
+          (click)="prevPage()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+          Anterior
+        </button>
+      </li>
+
+      <!-- Página actual -->
+      <li>
+        <span class="btn-icon-outline">{{ page() }}</span>
+      </li>
+
+      <!-- Botón Siguiente -->
+      <li>
+        <button
+          class="btn-ghost flex items-center gap-1"
+          [disabled]="roles().length === 0"
+          (click)="nextPage()">
+          Siguiente
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </button>
+      </li>
+    </ul>
+  </nav>
 
   <edit-dialog (roleUpdated)="retryGetAllRoles($event)"/>
 

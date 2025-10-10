@@ -1,27 +1,20 @@
-import { inject, Injectable, Injector } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { catchError, firstValueFrom, throwError } from "rxjs";
-import { httpResource, HttpResourceRef } from "@angular/common/http";
 
 import { RolesEntity } from "@app/roles/domain";
 import { ApiResponse } from "@utils/api_response";
 import { HttpClientService } from "../../../../core/services";
 import { RolesResponseDto } from "@app/roles/infrastructure/dtos";
-import { environment } from "../../../../../environments/environment";
 
 @Injectable({ providedIn: 'root'})
 export class RolesDatasource {
 
     private httpClient = inject(HttpClientService);
-    
-    constructor( private injector:Injector ) {}
 
-    getAllRoles():HttpResourceRef<ApiResponse<RolesResponseDto[]>> {
-        return httpResource<ApiResponse<RolesResponseDto[]>>(
-            () => ({ url: `${environment.apiUrl}/roles`, }),
-            {
-                injector: this.injector,
-            }
-        ) as HttpResourceRef<ApiResponse<RolesResponseDto[]>>;
+    async getAllRoles(limit: number = 5, offset: number):Promise<ApiResponse<RolesResponseDto[]>> {
+        return await firstValueFrom( 
+            this.httpClient.get<ApiResponse<RolesResponseDto[]>>( `/roles?limit=${limit}&offset=${offset}`)
+        );
     }
 
     async updateRole( {name, active, idRoles}:RolesEntity ):Promise<ApiResponse<RolesEntity>> {

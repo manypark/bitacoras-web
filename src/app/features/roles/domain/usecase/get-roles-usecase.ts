@@ -3,9 +3,11 @@ import { Injectable } from "@angular/core";
 import { RolesRepository } from "@app/roles/domain/repositories";
 
 @Injectable({providedIn: 'root'})
-export class GetAllRoloes {
+export class GetAllRoles {
 
     constructor( private repository:RolesRepository ) {}
 
-    execute() { return this.repository.getAllRoles(); }
+    execute(limit: number, offset: number) { 
+        return this.repository.getAllRoles( limit, offset );
+    }
 }

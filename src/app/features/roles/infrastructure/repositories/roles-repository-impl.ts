@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { HttpResourceRef } from "@angular/common/http";
 
 import { ApiResponse } from "@utils/api_response";
 import { RolesEntity, RolesRepository } from "@app/roles/domain";
@@ -14,8 +13,8 @@ export class RolesRepositoryImpl implements RolesRepository {
         return this.datasource.updateRole(role);
     }
 
-    getAllRoles(): HttpResourceRef<ApiResponse<RolesEntity[]>> {
-        return this.datasource.getAllRoles();
+    getAllRoles(limit: number, offset: number): Promise<ApiResponse<RolesEntity[]>> {
+        return this.datasource.getAllRoles( limit, offset );
     }
 
     createNewRol(newRol: string): Promise<ApiResponse<RolesEntity>> {
