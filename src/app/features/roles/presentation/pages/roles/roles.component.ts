@@ -3,18 +3,28 @@ import { Component, computed, effect, inject, resource, signal } from '@angular/
 
 import { ToastService } from '@app/shared/toast';
 import { CustomTableComponent } from "@app/shared";
-import { GetAllRoles, GetAllRolesInfo, ROLES_KEYS, RolesEntity } from '@app/roles/domain';
+import { PaginationComponent } from "../../components/pagination";
 import { RoleSelectionService } from '@app/roles/presentation/signals';
-import { EditDialogComponent, DeleteDialogComponent, CreateDialogComponent } from "../../components";
+import { GetAllRoles, GetAllRolesInfo, ROLES_KEYS, RolesEntity } from '@app/roles/domain';
+import { 
+  EditDialogComponent, 
+  DeleteDialogComponent, 
+  CreateDialogComponent, 
+  RolesInfoComponent,
+  TitleDescriptionCreateRolButtonComponent
+} from "../../components";
 
 @Component({
   selector    : 'app-roles',
-  imports: [
+  imports     : [
     FormsModule,
-    CustomTableComponent,
+    RolesInfoComponent,
+    PaginationComponent,
     EditDialogComponent,
+    CustomTableComponent,
     DeleteDialogComponent,
-    CreateDialogComponent
+    CreateDialogComponent,
+    TitleDescriptionCreateRolButtonComponent,
 ],
   templateUrl : './roles.component.html',
   styleUrl    : './roles.component.css',
@@ -52,7 +62,6 @@ export default class RolesComponent {
 
   constructor() {
     effect(() => {
-
       const data = this.updateResource?.value()?.data;
 
       if (data) {
@@ -66,22 +75,12 @@ export default class RolesComponent {
     });
   }
 
-  nextPage() {
-    this.page.update(p => p + 1);
-  }
+  nextPage() { this.page.update(p => p + 1); }
 
-  prevPage() {
-    if (this.page() > 1) this.page.update(p => p - 1);
-  }
-
-  openCreateDialog() {
-    const modal = document.getElementById('custom-create-role') as HTMLDialogElement | null;
-    modal?.showModal();
-  }
+  prevPage() { if (this.page() > 1) this.page.update(p => p - 1); }
 
   onTableAction(event: { action: string; row: RolesEntity }) {
     const modalId = event.action === 'edit' ? 'custom-edit-role' : event.action === 'delete' ? 'custom-delete-role': null;
-
     if (modalId) {
       const modal = document.getElementById(modalId) as HTMLDialogElement | null;
       this.roleSelectedServices.setSelectedRole(event.row);
@@ -93,6 +92,7 @@ export default class RolesComponent {
     if(value) {
       this.roles.set([]);
       this.updateResource.reload();
+      this.rolesInfo.reload();
     }
   }
 }

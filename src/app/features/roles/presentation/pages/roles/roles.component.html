@@ -1,118 +1,6 @@
-  <div class="flex justify-between mb-12">
+  <title-description-create-rol-button />
 
-    <div class="flex flex-col gap-y-2">
-      <h1 class="font-bold text-4xl">Gestión de roles</h1>
-      <p> Crear, administrar y controlar roles.</p>
-    </div>
-
-    <div class="flex">
-      <button class="btn h-12 text-base font-bold" (click)="openCreateDialog()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M13.0001 10.9999L22.0002 10.9997L22.0002 12.9997L13.0001 12.9999L13.0001 21.9998L11.0001 21.9998L11.0001 12.9999L2.00004 13.0001L2 11.0001L11.0001 10.9999L11 2.00025L13 2.00024L13.0001 10.9999Z">
-          </path>
-        </svg>
-        Crear Rol
-      </button>
-    </div>
-
-  </div>
-
-  @if ( rolesInfo.isLoading() ) {
-    <div class="flex flex-col 2xl:flex-row justify-between gap-6 mb-6">
-      
-      <!-- Tarjeta 1 -->
-      <div class="flex w-full 2xl:w-96">
-        <div class="card shadow-lg px-6 w-full">
-          <section class="px-0 flex flex-row justify-between items-center">
-            <div class="flex flex-col space-y-2">
-              <div class="h-4 w-40 rounded-md bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
-              <div class="h-6 w-24 rounded-md bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
-            </div>
-            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
-          </section>
-        </div>
-      </div>
-
-      <!-- Tarjeta 2 -->
-      <div class="flex w-full 2xl:w-96">
-        <div class="card shadow-lg px-6 w-full">
-          <section class="px-0 flex flex-row justify-between items-center">
-            <div class="flex flex-col space-y-2">
-              <div class="h-4 w-40 rounded-md bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
-              <div class="h-6 w-24 rounded-md bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
-            </div>
-            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
-          </section>
-        </div>
-      </div>
-
-      <!-- Tarjeta 3 -->
-      <div class="flex w-full 2xl:w-96">
-        <div class="card shadow-lg px-6 w-full">
-          <section class="px-0 flex flex-row justify-between items-center">
-            <div class="flex flex-col space-y-2">
-              <div class="h-4 w-40 rounded-md bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
-              <div class="h-6 w-24 rounded-md bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
-            </div>
-            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
-          </section>
-        </div>
-      </div>
-
-    </div>
-  }
-
-  @if ( rolesInfo.value() ) {
-    <div class="flex flex-col xl:flex-row justify-between gap-6 mb-6 xl:[@media(max-width:1400px)]:flex-col">
-    
-      <div class="flex w-full xl:w-96">
-        <div class="card shadow-lg px-6 w-full">
-          <section class="px-0 flex flex-row justify-between items-center">
-            <div>
-              <h2 class="text-xl font-bold text-gray-500">Total Roles</h2>
-              <span class="text-3xl">{{ rolesInfo.value().data.rolesTotals }}</span>
-            </div>
-            <div class="w-12 h-12 text-gray-500">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3.78307 2.82598L12 1L20.2169 2.82598C20.6745 2.92766 21 3.33347 21 3.80217V13.7889C21 15.795 19.9974 17.6684 18.3282 18.7812L12 23L5.6718 18.7812C4.00261 17.6684 3 15.795 3 13.7889V3.80217C3 3.33347 3.32553 2.92766 3.78307 2.82598ZM5 4.60434V13.7889C5 15.1263 5.6684 16.3752 6.7812 17.1171L12 20.5963L17.2188 17.1171C18.3316 16.3752 19 15.1263 19 13.7889V4.60434L12 3.04879L5 4.60434ZM12 11C10.6193 11 9.5 9.88071 9.5 8.5C9.5 7.11929 10.6193 6 12 6C13.3807 6 14.5 7.11929 14.5 8.5C14.5 9.88071 13.3807 11 12 11ZM7.52746 16C7.77619 13.75 9.68372 12 12 12C14.3163 12 16.2238 13.75 16.4725 16H7.52746Z"></path></svg>
-            </div>
-          </section>
-        </div>
-      </div>
-    
-      <div class="flex w-full xl:w-96">
-        <div class="card shadow-lg px-6 w-full">
-          <section class="px-0 flex flex-row justify-between items-center">
-            <div>
-              <h2 class="text-xl font-bold text-gray-500">Total Activos</h2>
-              <span class="text-3xl">{{ rolesInfo.value().data.rolesActive }}</span>
-            </div>
-            <div class="w-12 h-12 text-gray-500">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12ZM12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM17.4571 9.45711L16.0429 8.04289L11 13.0858L8.20711 10.2929L6.79289 11.7071L11 15.9142L17.4571 9.45711Z"/>
-              </svg>
-            </div>
-          </section>
-        </div>
-      </div>
-    
-      <div class="flex w-full xl:w-96">
-        <div class="card shadow-lg px-6 w-full">
-          <section class="px-0 flex flex-row justify-between items-center">
-            <div>
-              <h2 class="text-xl font-bold text-gray-500">Total Inactivos</h2>
-              <span class="text-3xl">{{ rolesInfo.value().data.rolesInactive }}</span>
-            </div>
-            <div class="w-12 h-12 text-gray-500">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20ZM12 10.5858L14.8284 7.75736L16.2426 9.17157L13.4142 12L16.2426 14.8284L14.8284 16.2426L12 13.4142L9.17157 16.2426L7.75736 14.8284L10.5858 12L7.75736 9.17157L9.17157 7.75736L12 10.5858Z"/>
-              </svg>
-            </div>
-          </section>
-        </div>
-      </div>
-    
-    </div>
-  }
+  <roles-info [rolesInfo]="rolesInfo"/>
 
   <div class="card p-4 mb-6">
     <input class="input" type="email" placeholder="Buscar..." [(ngModel)]="searchRol">
@@ -126,42 +14,11 @@
     [isLoading]="updateResource.isLoading()"
     (actionClick)="onTableAction($event)"/>
 
-  <nav role="navigation" aria-label="pagination" class="mx-auto flex w-full mt-2 justify-end">
-    <ul class="flex flex-row items-center gap-1">
-      <!-- Botón Anterior -->
-      <li>
-        <button
-          class="btn-ghost flex items-center gap-1"
-          [disabled]="page() === 1"
-          (click)="prevPage()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="m15 18-6-6 6-6" />
-          </svg>
-          Anterior
-        </button>
-      </li>
-
-      <!-- Página actual -->
-      <li>
-        <span class="btn-icon-outline">{{ page() }}</span>
-      </li>
-
-      <!-- Botón Siguiente -->
-      <li>
-        <button
-          class="btn-ghost flex items-center gap-1"
-          [disabled]="roles().length === 0"
-          (click)="nextPage()">
-          Siguiente
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="m9 18 6-6-6-6" />
-          </svg>
-        </button>
-      </li>
-    </ul>
-  </nav>
+  <pagination 
+  [page]="page()"
+  [hasNextPage]="roles().length < 5"
+  (next)="nextPage()"
+  (prev)="prevPage()"/>
 
   <edit-dialog (roleUpdated)="retryGetAllRoles($event)"/>
 
