@@ -1,3 +1,5 @@
+<h2 class="text-red-500 font-bold text-xl"> {{ data().error()?.message }} </h2>
+
 @if ( data().isLoading() ) { <totals-info-skeleton /> }
 
 @if (data().value() && !data().isLoading()) {

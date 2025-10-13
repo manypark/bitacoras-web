@@ -7,5 +7,5 @@ export class GetConceptInfoUsecase {
     
     constructor( private repository:ConceptRepository ) {}
 
-    execute() { this.repository.getAllConceptsInfo() }
+    execute() { return this.repository.getAllConceptsInfo() }
 }

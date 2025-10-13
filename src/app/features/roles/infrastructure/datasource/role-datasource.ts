@@ -16,7 +16,9 @@ export class RolesDatasource {
 
     async getAllRoles(limit: number = 5, offset: number):Promise<ApiResponse<RolesResponseDto[]>> {
         return await firstValueFrom( 
-            this.httpClient.get<ApiResponse<RolesResponseDto[]>>( `/roles?limit=${limit}&offset=${offset}`)
+            this.httpClient.get<ApiResponse<RolesResponseDto[]>>( `/roles?limit=${limit}&offset=${offset}`).pipe(
+                catchError(error =>  throwError( () => new Error(error) ) ),
+            ),
         );
     }
 

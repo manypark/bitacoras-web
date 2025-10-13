@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter, withViewTransitions } from '@angular/router';
 import { ApplicationConfig, provideZonelessChangeDetection, } from '@angular/core';
 
@@ -13,13 +13,19 @@ import { SignInRepositoryImpl } from '@app/auth/login/infrastructure/repositorie
 import { RolesRepository } from '@app/roles/domain';
 import { RolesRepositoryImpl } from '@app/roles/infrastructure/repositories';
 
+import { ConceptRepository } from '@app/concepts/domain';
+import { ConceptRepositoryImpl } from '@app/concepts/infrastructure';
+
+import { authInterceptor } from './core/core';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideRouter( routes, withViewTransitions() ),
-    provideHttpClient(),
+    provideHttpClient( withInterceptors([authInterceptor]), ),
     { provide: RolesRepository, useClass: RolesRepositoryImpl },
     { provide: SignInRepository,  useClass: SignInRepositoryImpl },
+    { provide: ConceptRepository, useClass: ConceptRepositoryImpl },
     { provide: RegisterRepository, useClass: RegsiterRepositoryImpl },
   ]
 };

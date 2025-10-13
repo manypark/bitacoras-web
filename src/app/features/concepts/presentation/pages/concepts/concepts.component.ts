@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { CreateDialogComponent } from "../../components/dialogs";
-import { TitleDescriptionCustomButtonComponent } from '@app/shared/containers';
+import { GetConceptInfoUsecase } from '@app/concepts/domain';
+import { TitleDescriptionCustomButtonComponent, TotalsInfoComponent } from '@app/shared/containers';
 
 @Component({
   selector    : 'app-concepts',
   imports: [
+    TotalsInfoComponent,
     CreateDialogComponent,
     TitleDescriptionCustomButtonComponent,
 ],
@@ -13,5 +15,8 @@ import { TitleDescriptionCustomButtonComponent } from '@app/shared/containers';
   styleUrl    : './concepts.component.css',
 })
 export default class ConceptsComponent {
+
+  private readonly getConceptsInfoUsecase = inject(GetConceptInfoUsecase);
+  conceptsInfo = this.getConceptsInfoUsecase.execute();
   
 }
