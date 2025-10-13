@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-roles-info-skeleton',
+  selector: 'totals-info-skeleton',
   template: `
       <div class="flex flex-col 2xl:flex-row justify-between gap-6 mb-6">
         @for (item of [1,2,3]; track $index) {
@@ -20,4 +20,4 @@ import { Component } from '@angular/core';
     </div>
 `
 })
-export class RolesInfoSkeletonComponent { }
+export class TotalsInfoSkeletonComponent { }

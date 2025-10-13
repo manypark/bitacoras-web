@@ -6,25 +6,24 @@ import { CustomTableComponent } from "@app/shared";
 import { PaginationComponent } from "../../components/pagination";
 import { RoleSelectionService } from '@app/roles/presentation/signals';
 import { GetAllRoles, GetAllRolesInfo, ROLES_KEYS, RolesEntity } from '@app/roles/domain';
+import { TitleDescriptionCustomButtonComponent, TotalsInfoComponent } from '@app/shared/containers';
 import { 
   EditDialogComponent, 
   DeleteDialogComponent, 
   CreateDialogComponent, 
-  RolesInfoComponent,
-  TitleDescriptionCreateRolButtonComponent
 } from "../../components";
 
 @Component({
   selector    : 'app-roles',
-  imports     : [
+  imports: [
     FormsModule,
-    RolesInfoComponent,
     PaginationComponent,
     EditDialogComponent,
     CustomTableComponent,
     DeleteDialogComponent,
     CreateDialogComponent,
-    TitleDescriptionCreateRolButtonComponent,
+    TitleDescriptionCustomButtonComponent,
+    TotalsInfoComponent
 ],
   templateUrl : './roles.component.html',
   styleUrl    : './roles.component.css',

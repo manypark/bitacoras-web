@@ -1,5 +1,5 @@
 export interface RolesInfoEntity {
-    rolesActive   :number;
-    rolesInactive :number;
-    rolesTotals   :number;
+    actives   :number;
+    inactives :number;
+    totals    :number;
 }
