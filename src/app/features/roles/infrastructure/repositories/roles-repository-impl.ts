@@ -4,6 +4,7 @@ import { ApiResponse } from "@utils/api_response";
 import { RolesEntity, RolesInfoEntity, RolesRepository } from "@app/roles/domain";
 import { RolesDatasource } from "@app/roles/infrastructure/datasource";
 import { HttpResourceRef } from "@angular/common/http";
+import { Observable } from "rxjs";
 
 @Injectable({ providedIn: 'root'})
 export class RolesRepositoryImpl implements RolesRepository {
@@ -22,7 +23,7 @@ export class RolesRepositoryImpl implements RolesRepository {
         return this.datasource.getAllRoles( limit, offset );
     }
 
-    createNewRol(newRol: string): Promise<ApiResponse<RolesEntity>> {
-        return this.datasource.createRole( newRol );
+    createNewRol(newRol: string): Observable<ApiResponse<RolesEntity>> {
+        return this.datasource.createRoleObs( newRol );
     }
 }

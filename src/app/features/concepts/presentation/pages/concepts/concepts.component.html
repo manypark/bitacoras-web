@@ -6,4 +6,22 @@
 
   <totals-info [data]="conceptsInfo"/>
 
-  <create-dialog-concept />
+  <div class="card p-4 mb-6">
+    <input class="input" type="email" placeholder="Buscar..." [(ngModel)]="searchConcepts">
+  </div>
+
+  <app-custom-table
+    [caption]="'Lista de todos tus conceptos'"
+    [headers]="['ID', 'Descripcion', 'Estatus']"
+    [keys]="keys"
+    [data]="filteredConcepts()"
+    [isLoading]="getConceptsResource.isLoading()"
+    (actionClick)="onTableAction($event)"/>
+    
+  <pagination
+    [page]="page()"
+    [hasNextPage]="concetps().length < 5"
+    (next)="nextPage()"
+    (prev)="prevPage()"/>
+
+  <create-dialog-concept (conceptCreated)="retryGetAllRoles($event)"/>

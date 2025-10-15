@@ -3,3 +3,5 @@ export interface ConceptEntity {
     description : string;
     active      : boolean;
 }
+
+export const CONCEPTS_KEYS: (keyof ConceptEntity)[] = ['idConcept', 'description', 'active'];

@@ -1,5 +1,5 @@
 import { inject, Injectable, Injector } from "@angular/core";
-import { catchError, firstValueFrom, throwError } from "rxjs";
+import { catchError, firstValueFrom, Observable, throwError } from "rxjs";
 
 import { ApiResponse } from "@utils/api_response";
 import { HttpClientService } from "../../../../core/services";
@@ -42,8 +42,14 @@ export class RolesDatasource {
     async createRole( rol:string ):Promise<ApiResponse<RolesEntity>> {
         return await firstValueFrom(
             this.httpClient.post<Promise<ApiResponse<RolesEntity>> >(`/roles`, { name: rol }).pipe(
-                catchError(error =>  throwError( () => new Error(error) ) ),
+                catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
             ),
+        );
+    }
+
+    createRoleObs( rol:string ):Observable<ApiResponse<RolesEntity>> {
+        return  this.httpClient.post<ApiResponse<RolesEntity>>(`/roles`, { name: rol }).pipe(
+            catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
         );
     }
 

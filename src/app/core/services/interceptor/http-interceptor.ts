@@ -36,7 +36,6 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
   );
 };
 
-
 function handle401Error(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn,

@@ -2,7 +2,7 @@ import { FormsModule } from '@angular/forms';
 import { Component, effect, ElementRef, inject, output, resource, signal, ViewChild } from '@angular/core';
 
 import { ToastService } from '@app/shared/toast';
-import { CreateRolUsecase } from '@app/roles/domain/usecase';
+import { CreateConceptUsecase } from '@app/concepts/domain';
 
 @Component({
   selector    : 'create-dialog-concept',
@@ -12,43 +12,43 @@ import { CreateRolUsecase } from '@app/roles/domain/usecase';
 })
 export class CreateDialogComponent {
 
-  private readonly createRolUsecase = inject(CreateRolUsecase);
+  private readonly createConceptUsecase = inject(CreateConceptUsecase);
   private readonly toast = inject(ToastService);
-  public roleCreated  = output<boolean>();
-  @ViewChild('newRol') newRolInput!: ElementRef;
-  valueRol = signal<string>('');
+  public conceptCreated  = output<boolean>();
+  @ViewChild('newConcept') newConceptInput!: ElementRef;
+  valueConcept = signal<string>('');
 
   readonly createdResource = resource({
-    params: () => this.valueRol(),
-    loader: async ( newRolCreated ) => {
-      if (newRolCreated.params === '') return null;
-      return await this.createRolUsecase.execute(newRolCreated.params);
+    params: () => this.valueConcept(),
+    loader: async ( newConcept ) => {
+      if (newConcept.params === '') return null;
+      return await this.createConceptUsecase.execute(newConcept.params);
     },
   });
 
   constructor() {
     effect( () => {
       if ( this.createdResource.value() !== undefined &&  this.createdResource.value() !== null ) {
-        this.toast.success('Rol creado', this.createdResource.value()!.data.name);
-        this.roleCreated.emit(true);
+        this.toast.success('Concepto creado', this.createdResource.value()!.data.description);
+        this.conceptCreated.emit(true);
         this.closeModal();
       }
 
       if( this.createdResource.error() ) {
-        this.roleCreated.emit(false);
+        this.conceptCreated.emit(false);
         this.toast.error('Error', this.createdResource.error()?.message ?? 'Error al crearlo');
       }
     });
   }
 
-  submitNewRol() {
-    const value = this.newRolInput.nativeElement.value;
-    this.valueRol.set(value);
-    this.newRolInput.nativeElement.value = '';
+  submitNewConcept() {
+    const value = this.newConceptInput.nativeElement.value;
+    this.valueConcept.set(value);
+    this.newConceptInput.nativeElement.value = '';
   }
 
   closeModal() {
-    const modal = document.getElementById('custom-create-role') as HTMLDialogElement | null;
+    const modal = document.getElementById('custom-create-concept') as HTMLDialogElement | null;
     modal?.close();
   }
 

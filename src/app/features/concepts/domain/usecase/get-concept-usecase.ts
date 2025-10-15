@@ -6,5 +6,5 @@ export class GetAllConceptUsecase {
     
     constructor( private repository:ConceptRepository ) {}
 
-    execute( limit:number, offset:number ) { this.repository.getAllConcepts( limit, offset ); }
+    execute( limit:number, offset:number ) { return this.repository.getAllConcepts( limit, offset ); }
 }

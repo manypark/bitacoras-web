@@ -6,5 +6,5 @@ export class CreateConceptUsecase {
     
     constructor( private repository:ConceptRepository ) {}
 
-    execute( concept:string ) { this.repository.createNewConcept(concept); }
+    execute( concept:string ) { return this.repository.createNewConcept(concept); }
 }

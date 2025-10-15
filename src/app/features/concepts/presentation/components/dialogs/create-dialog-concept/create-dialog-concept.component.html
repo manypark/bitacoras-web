@@ -1,5 +1,5 @@
 <dialog 
-    id="custom-create-role"
+    id="custom-create-concept"
     class="dialog w-full sm:max-w-[425px] max-h-[612px]" 
     aria-labelledby="demo-dialog-edit-profile-title" 
     aria-describedby="demo-dialog-edit-profile-description" 
@@ -15,8 +15,8 @@
             <div class="flex flex-col gap-2">
                 <label for="create-dialog-input" class="font-bold">Concepto</label>
                     <input
-                    #newRol
-                    name="newRol"
+                    #newConcept
+                    name="newConcept"
                     type="text"
                     id="create-dialog-input"
                     [disabled]="createdResource.isLoading()"
@@ -32,7 +32,7 @@
 
     <footer>
         <button class="btn-outline" [disabled]="createdResource.isLoading()" onclick="this.closest('dialog').close()"> Cancelar </button>
-        <button class="btn" [disabled]="createdResource.isLoading()"  (click)="submitNewRol()">
+        <button class="btn" [disabled]="createdResource.isLoading()"  (click)="submitNewConcept()">
              @if ( createdResource.isLoading() ) {
                 <p>Cargando</p>
             }
