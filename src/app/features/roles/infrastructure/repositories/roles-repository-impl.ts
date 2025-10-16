@@ -15,7 +15,7 @@ export class RolesRepositoryImpl implements RolesRepository {
         return this.datasource.getAllRolesInfo();
     }
     
-    updateRole(role: RolesEntity): Promise<ApiResponse<RolesEntity>> {
+    updateRole(role: RolesEntity): Observable<ApiResponse<RolesEntity>> {
         return this.datasource.updateRole(role);
     }
 

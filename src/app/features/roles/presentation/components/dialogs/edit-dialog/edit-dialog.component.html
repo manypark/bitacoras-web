@@ -2,8 +2,7 @@
     id="custom-edit-role" 
     class="dialog w-full sm:max-w-[425px] max-h-[612px]" 
     aria-labelledby="demo-dialog-edit-profile-title" 
-    aria-describedby="demo-dialog-edit-profile-description" 
-    onclick="if (event.target === this) this.close()">
+    aria-describedby="demo-dialog-edit-profile-description">
   <article>
     <header class="border-b py-4 border-gray-400">
       <h2 id="demo-dialog-edit-profile-title">Editar Rol</h2>
@@ -18,8 +17,6 @@
                     <label for="active-role">Estatus</label>
     
                     <label class="label gap-3">
-                        <!-- <input type="checkbox" id="active-role" [checked]="roleSelectedServices.selectedRole()?.active" (input)="onStatusChange($event)" class="input"> -->
-
                         <label class="label">
                         <input type="checkbox" name="switch" role="switch" [checked]="roleSelectedServices.selectedRole()?.active" (input)="onStatusChange($event)" class="input">
                             @if (roleSelectedServices.selectedRole()?.active) {
@@ -39,31 +36,31 @@
                     [value]="roleSelectedServices.selectedRole()?.name" 
                     id="demo-dialog-edit-profile-name"
                     (input)="onNameChange($any($event.target).value)"
-                    [disabled]="updateResource.isLoading()"
+                    [disabled]="isLoading()"
                     autofocus />
                 </div>
 
             </div>
         </form>
 
-      @if (updateResource.error(); as err) {
-        <p class="text-red-500 text-sm mt-2">⚠️ {{ err.message }}</p>
+      @if ( errValue() ) {
+        <p class="text-red-500 text-sm mt-2">⚠️ {{ errValue() }}</p>
       }
     </section>
 
     <footer>
-        <button class="btn-outline" [disabled]="updateResource.isLoading()" (click)="closeModal()">Cancelar</button>
-        <button class="btn" [disabled]="updateResource.isLoading()" (click)="onEdit()">
-            @if ( updateResource.isLoading() ) {
+        <button class="btn-outline" [disabled]="isLoading()" (click)="closeModal()">Cancelar</button>
+        <button class="btn" [disabled]="isLoading()" (click)="onEdit()">
+            @if ( isLoading() ) {
                 <p>Cargando</p>
             }
-            @if ( !updateResource.isLoading() ) {
+            @if ( !isLoading() ) {
                 <p>Editar</p>
             }
         </button>
     </footer>
 
-    <button type="button" aria-label="Close dialog" onclick="this.closest('dialog').close()">
+    <button type="button" aria-label="Close dialog" (click)="closeModal()">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x">
         <path d="M18 6 6 18" />
         <path d="m6 6 12 12" />

@@ -8,5 +8,5 @@ export abstract class RolesRepository {
     abstract getAllRoles(limit: number, offset: number):Promise<ApiResponse<RolesEntity[]>>;
     abstract getAllRolesInfo():HttpResourceRef<ApiResponse<RolesInfoEntity>>;
     abstract createNewRol( newRol:string ):Observable<ApiResponse<RolesEntity>>;
-    abstract updateRole( role:RolesEntity ):Promise<ApiResponse<RolesEntity>>;
+    abstract updateRole( role:RolesEntity ):Observable<ApiResponse<RolesEntity>>;
 }

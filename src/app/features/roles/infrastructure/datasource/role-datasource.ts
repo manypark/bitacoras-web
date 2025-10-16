@@ -17,7 +17,7 @@ export class RolesDatasource {
     async getAllRoles(limit: number = 5, offset: number):Promise<ApiResponse<RolesResponseDto[]>> {
         return await firstValueFrom( 
             this.httpClient.get<ApiResponse<RolesResponseDto[]>>( `/roles?limit=${limit}&offset=${offset}`).pipe(
-                catchError(error =>  throwError( () => new Error(error) ) ),
+                catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
             ),
         );
     }
@@ -31,11 +31,9 @@ export class RolesDatasource {
         ) as HttpResourceRef<ApiResponse<RolesInfoEntity>>;
     }
 
-    async updateRole( {name, active, idRoles}:RolesEntity ):Promise<ApiResponse<RolesEntity>> {
-        return await firstValueFrom(
-            this.httpClient.patch<Promise<ApiResponse<RolesEntity>> >(`/roles/${idRoles}`, { name, active }).pipe(
-                catchError(error =>  throwError( () => new Error(error) ) ),
-            ),
+    updateRole( {name, active, idRoles}:RolesEntity ):Observable<ApiResponse<RolesEntity>> {
+        return this.httpClient.patch<ApiResponse<RolesEntity>>(`/roles/${idRoles}`, { name, active }).pipe(
+            catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
         );
     }
 

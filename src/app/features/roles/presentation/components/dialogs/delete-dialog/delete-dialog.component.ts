@@ -11,46 +11,44 @@ import { RoleSelectionService } from '@app/roles/presentation/signals';
 })
 export class DeleteDialogComponent {
 
+  // #=================== dependencias ===================#
   roleSelectedServices  = inject(RoleSelectionService);
   private readonly roleUpdateUsecase  = inject(UpdateRoloesUsecase);
   private readonly toast = inject(ToastService);
 
-  private readonly trigger = signal<number | null >(null);
+  // #=================== variables ===================#
+  errValue    = signal<string>('');
+  isLoading   = signal<boolean>(false);
   public roleUpdated  = output<boolean>();
 
-  readonly updateResource = resource({
-    params: () => this.trigger(),
-    loader: async ( triggerValue ) => {
+  onEdit() {
 
-      if (triggerValue.params === null) return null;
+      this.isLoading.set(true);
 
       const role = this.roleSelectedServices.selectedRole();
       if (!role) throw new Error('No hay rol seleccionado');
 
-      return await this.roleUpdateUsecase.execute({ ...role, active:false });
-    },
-  });
-
-  constructor() {
-    effect( () => {
-      if ( this.updateResource.value() !== undefined &&  this.updateResource.value() !== null ) {
-        this.toast.success('Rol eliminado', this.updateResource.value()!.data.name);
-        this.roleUpdated.emit(true);
-        this.closeModal();
-      }
-
-      if( this.updateResource.error() ) {
-        this.roleUpdated.emit(false);
-        this.toast.error('Error', this.updateResource.error()?.message ?? 'Error al actualizar');
-      }
-    });
+      this.roleUpdateUsecase.execute({ ...role, active:false }).subscribe({
+        next: () => {
+          this.toast.success('Rol eliminado',this.roleSelectedServices.selectedRole()?.name );
+          this.roleUpdated.emit(true);
+          this.isLoading.set(false);
+          this.closeModal();
+        },
+        error: (err) => {
+          this.isLoading.set(false);
+          this.roleUpdated.emit(false);
+          this.errValue.set(err);
+          this.toast.error('Error', err ?? 'Error al editar');
+        },
+        complete: () => this.isLoading.set(false)
+      });
   }
-
-  onEdit() { this.trigger.update((v) => v! + 1); }
 
   closeModal() {
     const modal = document.getElementById('custom-delete-role') as HTMLDialogElement | null;
     modal?.close();
+    this.errValue.set('');
     this.roleSelectedServices.clearSelectedRole();
   }
 }

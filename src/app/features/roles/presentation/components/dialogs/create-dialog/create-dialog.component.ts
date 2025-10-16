@@ -44,6 +44,8 @@ export class CreateDialogComponent {
   }
 
   closeModal() {
+    this.errValue.set('');
+    this.newRolInput.nativeElement.value = '';
     const modal = document.getElementById('custom-create-role') as HTMLDialogElement | null;
     modal?.close();
   }

@@ -1,4 +1,4 @@
-import { Component, effect, inject, output, resource, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 
 import { ToastService } from '@app/shared/toast';
 import { UpdateRoloesUsecase } from '@app/roles/domain';
@@ -11,46 +11,43 @@ import { RoleSelectionService } from '@app/roles/presentation/signals';
 })
 export class EditDialogComponent {
 
+  // #=================== dependencias ===================#
   roleSelectedServices  = inject(RoleSelectionService);
   private readonly roleUpdateUsecase  = inject(UpdateRoloesUsecase);
   private readonly toast = inject(ToastService);
 
-  private readonly trigger = signal<number | null >(null);
-  public roleUpdated  = output<boolean>();
+  // #=================== variables ===================#
+  errValue    = signal<string>('');
+  isLoading   = signal<boolean>(false);
+  public readonly roleUpdated  = output<boolean>();
 
-  readonly updateResource = resource({
-    params: () => this.trigger(),
-    loader: async ( triggerValue ) => {
-
-      if (triggerValue.params === null) return null;
-
+  // #=================== funciones ===================#
+  onEdit() {
+      this.isLoading.set(true);
       const role = this.roleSelectedServices.selectedRole();
       if (!role) throw new Error('No hay rol seleccionado');
 
-      return await this.roleUpdateUsecase.execute(role);
-    },
-  });
-
-  constructor() {
-    effect( () => {
-      if ( this.updateResource.value() !== undefined &&  this.updateResource.value() !== null ) {
-        this.toast.success('Rol actualizado', this.updateResource.value()!.data.name);
-        this.roleUpdated.emit(true);
-        this.closeModal();
-      }
-
-      if( this.updateResource.error() ) {
-        this.roleUpdated.emit(false);
-        this.toast.error('Error', this.updateResource.error()?.message ?? 'Error al actualizar');
-      }
-    });
+      this.roleUpdateUsecase.execute(role).subscribe({
+        next: () => {
+          this.toast.success('Rol actualizado',this.roleSelectedServices.selectedRole()?.name );
+          this.roleUpdated.emit(true);
+          this.isLoading.set(false);
+          this.closeModal();
+        },
+        error: (err) => {
+          this.roleUpdated.emit(false);
+          this.isLoading.set(false);
+          this.errValue.set(err);
+          this.toast.error('Error', err ?? 'Error al editar');
+        },
+        complete: () => this.isLoading.set(false),
+      });
   }
-
-  onEdit() { this.trigger.update((v) => v! + 1); }
 
   closeModal() {
     const modal = document.getElementById('custom-edit-role') as HTMLDialogElement | null;
     modal?.close();
+    this.errValue.set('');
     this.roleSelectedServices.clearSelectedRole();
   }
 
