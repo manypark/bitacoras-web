@@ -28,4 +28,7 @@ export class ConceptRepositoryImpl implements ConceptRepository {
         return this.datasource.updateConcept( concept );
     }
 
+    deleteConcept(idConcept: number): Observable<void> {
+        return this.datasource.deleteConcept( idConcept );
+    }
 }

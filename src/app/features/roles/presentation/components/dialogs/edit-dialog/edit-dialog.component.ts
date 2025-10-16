@@ -1,7 +1,7 @@
 import { Component, inject, output, signal } from '@angular/core';
 
 import { ToastService } from '@app/shared/toast';
-import { UpdateRoloesUsecase } from '@app/roles/domain';
+import { UpdateRolesUsecase } from '@app/roles/domain';
 import { RoleSelectionService } from '@app/roles/presentation/signals';
 
 @Component({
@@ -13,7 +13,7 @@ export class EditDialogComponent {
 
   // #=================== dependencias ===================#
   roleSelectedServices  = inject(RoleSelectionService);
-  private readonly roleUpdateUsecase  = inject(UpdateRoloesUsecase);
+  private readonly roleUpdateUsecase  = inject(UpdateRolesUsecase);
   private readonly toast = inject(ToastService);
 
   // #=================== variables ===================#

@@ -9,4 +9,5 @@ export abstract class ConceptRepository {
     abstract getAllConceptsInfo():HttpResourceRef<ApiResponse<ConceptInfoEntity>>;
     abstract createNewConcept( newConcept:string ):Observable<ApiResponse<ConceptEntity>>;
     abstract updateConcept( concept:ConceptEntity ):Observable<ApiResponse<ConceptEntity>>;
+    abstract deleteConcept( idConcept:number ):Observable<void>;
 }

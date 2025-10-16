@@ -9,4 +9,5 @@ export abstract class RolesRepository {
     abstract getAllRolesInfo():HttpResourceRef<ApiResponse<RolesInfoEntity>>;
     abstract createNewRol( newRol:string ):Observable<ApiResponse<RolesEntity>>;
     abstract updateRole( role:RolesEntity ):Observable<ApiResponse<RolesEntity>>;
+    abstract deleteRole( idRole:number ):Observable<void>;
 }

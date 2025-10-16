@@ -42,4 +42,10 @@ export class ConceptDatasource {
             catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
         );
     }
+
+    deleteConcept( idConcept:number ):Observable<void> {
+        return this.httpClient.delete<void>(`/concepts/${idConcept}`).pipe(
+            catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
+        );
+    }
 }

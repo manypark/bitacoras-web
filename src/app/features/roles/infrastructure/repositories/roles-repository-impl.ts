@@ -1,10 +1,10 @@
+import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
+import { HttpResourceRef } from "@angular/common/http";
 
 import { ApiResponse } from "@utils/api_response";
-import { RolesEntity, RolesInfoEntity, RolesRepository } from "@app/roles/domain";
 import { RolesDatasource } from "@app/roles/infrastructure/datasource";
-import { HttpResourceRef } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { RolesEntity, RolesInfoEntity, RolesRepository } from "@app/roles/domain";
 
 @Injectable({ providedIn: 'root'})
 export class RolesRepositoryImpl implements RolesRepository {
@@ -25,5 +25,9 @@ export class RolesRepositoryImpl implements RolesRepository {
 
     createNewRol(newRol: string): Observable<ApiResponse<RolesEntity>> {
         return this.datasource.createRoleObs( newRol );
+    }
+
+    deleteRole( idRole:number ): Observable<void> {
+        return this.datasource.deleteRole( idRole );
     }
 }

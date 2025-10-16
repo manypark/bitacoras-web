@@ -1,7 +1,7 @@
 import { Component, inject, output, signal } from '@angular/core';
 
 import { ToastService } from '@app/shared';
-import { UpdateRoloesUsecase } from '@app/roles/domain';
+import { DeleteRolesUsecase } from '@app/roles/domain';
 import { RoleSelectionService } from '@app/roles/presentation/signals';
 
 @Component({
@@ -13,7 +13,7 @@ export class DeleteDialogComponent {
 
   // #=================== dependencias ===================#
   roleSelectedServices  = inject(RoleSelectionService);
-  private readonly roleUpdateUsecase  = inject(UpdateRoloesUsecase);
+  private readonly roleUpdateUsecase  = inject(DeleteRolesUsecase);
   private readonly toast = inject(ToastService);
 
   // #=================== variables ===================#
@@ -28,7 +28,7 @@ export class DeleteDialogComponent {
       const role = this.roleSelectedServices.selectedRole();
       if (!role) throw new Error('No hay rol seleccionado');
 
-      this.roleUpdateUsecase.execute({ ...role, active:false }).subscribe({
+      this.roleUpdateUsecase.execute( role.idRoles ).subscribe({
         next: () => {
           this.toast.success('Rol eliminado',this.roleSelectedServices.selectedRole()?.name );
           this.roleUpdated.emit(true);

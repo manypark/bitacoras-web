@@ -47,6 +47,7 @@ export class CreateDialogComponent {
     const modal = document.getElementById('custom-create-concept') as HTMLDialogElement | null;
     this.newConceptInput.nativeElement.value = '';
     this.isLoading.set(false);
+    this.errMsg.set('');
     modal?.close();
   }
 }

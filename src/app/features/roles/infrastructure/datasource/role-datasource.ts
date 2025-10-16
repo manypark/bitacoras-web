@@ -51,4 +51,9 @@ export class RolesDatasource {
         );
     }
 
+    deleteRole( idRol:number ):Observable<void> {
+        return this.httpClient.delete<void>(`/roles/${idRol}`).pipe(
+            catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
+        );
+    }
 }

@@ -1,7 +1,8 @@
 import { Component, inject, output, signal } from '@angular/core';
-import { UpdateConceptUsecase } from '@app/concepts/domain';
-import { ConceptSelectedService } from '@app/concepts/presentation/signals';
+
 import { ToastService } from '@app/shared';
+import { DeleteConceptUsecase } from '@app/concepts/domain';
+import { ConceptSelectedService } from '@app/concepts/presentation/signals';
 
 @Component({
   selector    : 'delete-dialog-concept',
@@ -11,7 +12,7 @@ import { ToastService } from '@app/shared';
 export class DeleteDialogConceptComponent {
   
   // #=================== dependencias ===================#
-  private readonly conceptUpdateUsecase = inject(UpdateConceptUsecase);
+  private readonly conceptUpdateUsecase = inject(DeleteConceptUsecase);
   readonly conceptSelectedServices = inject(ConceptSelectedService);
   private readonly toast = inject(ToastService);
 
@@ -27,7 +28,7 @@ export class DeleteDialogConceptComponent {
     const concept = this.conceptSelectedServices.selectedConcept();
     if (!concept) throw new Error('No hay concepto seleccionado');
 
-    this.conceptUpdateUsecase.execute( { ...concept, active:false } ).subscribe({
+    this.conceptUpdateUsecase.execute( concept.idConcept ).subscribe({
       next: () => {
         this.toast.success('Concepto eliminado', this.conceptSelectedServices.selectedConcept()?.description );
         this.conceptDeleted.emit(true);
