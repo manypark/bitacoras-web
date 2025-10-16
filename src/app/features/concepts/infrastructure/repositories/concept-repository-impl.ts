@@ -1,3 +1,4 @@
+import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { HttpResourceRef } from "@angular/common/http";
 
@@ -19,11 +20,11 @@ export class ConceptRepositoryImpl implements ConceptRepository {
         return this.datasource.getAllConceptsInfo();
     }
 
-    createNewConcept(newConcept: string): Promise<ApiResponse<ConceptEntity>> {
+    createNewConcept(newConcept: string): Observable<ApiResponse<ConceptEntity>> {
         return this.datasource.createConcept( newConcept );
     }
 
-    updateConcept(concept: ConceptEntity): Promise<ApiResponse<ConceptEntity>> {
+    updateConcept(concept: ConceptEntity): Observable<ApiResponse<ConceptEntity>> {
         return this.datasource.updateConcept( concept );
     }
 

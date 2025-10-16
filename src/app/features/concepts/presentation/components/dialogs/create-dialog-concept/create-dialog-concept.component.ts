@@ -1,5 +1,5 @@
 import { FormsModule } from '@angular/forms';
-import { Component, effect, ElementRef, inject, output, resource, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, output, signal, ViewChild } from '@angular/core';
 
 import { ToastService } from '@app/shared/toast';
 import { CreateConceptUsecase } from '@app/concepts/domain';
@@ -12,44 +12,41 @@ import { CreateConceptUsecase } from '@app/concepts/domain';
 })
 export class CreateDialogComponent {
 
+  // #=============== dependencias ===============#
   private readonly createConceptUsecase = inject(CreateConceptUsecase);
   private readonly toast = inject(ToastService);
+  
+  // #=============== variables ===============#
   public conceptCreated  = output<boolean>();
   @ViewChild('newConcept') newConceptInput!: ElementRef;
-  valueConcept = signal<string>('');
+  errMsg        = signal<string>('');
+  isLoading     = signal<boolean>(false);
 
-  readonly createdResource = resource({
-    params: () => this.valueConcept(),
-    loader: async ( newConcept ) => {
-      if (newConcept.params === '') return null;
-      return await this.createConceptUsecase.execute(newConcept.params);
-    },
-  });
-
-  constructor() {
-    effect( () => {
-      if ( this.createdResource.value() !== undefined &&  this.createdResource.value() !== null ) {
-        this.toast.success('Concepto creado', this.createdResource.value()!.data.description);
-        this.conceptCreated.emit(true);
-        this.closeModal();
-      }
-
-      if( this.createdResource.error() ) {
-        this.conceptCreated.emit(false);
-        this.toast.error('Error', this.createdResource.error()?.message ?? 'Error al crearlo');
-      }
-    });
-  }
-
+  // #=============== funciones ===============#
   submitNewConcept() {
     const value = this.newConceptInput.nativeElement.value;
-    this.valueConcept.set(value);
-    this.newConceptInput.nativeElement.value = '';
+    this.isLoading.set(true);
+
+    this.createConceptUsecase.execute(value).subscribe({
+      next: () => {
+        this.toast.success('Concepto creado', value );
+        this.conceptCreated.emit(true);
+        this.closeModal();
+      },
+      error: (err) => {
+        this.conceptCreated.emit(false);
+        this.errMsg.set( err ?? 'Error al crearlo' );
+        this.toast.error('Error', err ?? 'Error al crearlo');
+        this.isLoading.set(false);
+      },
+      complete: () =>  this.isLoading.set(false),
+    });
   }
 
   closeModal() {
     const modal = document.getElementById('custom-create-concept') as HTMLDialogElement | null;
+    this.newConceptInput.nativeElement.value = '';
+    this.isLoading.set(false);
     modal?.close();
   }
-
 }

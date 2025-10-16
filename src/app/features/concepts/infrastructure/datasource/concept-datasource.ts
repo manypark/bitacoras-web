@@ -1,6 +1,6 @@
 import { Injectable, Injector } from "@angular/core";
-import { catchError, firstValueFrom, throwError } from "rxjs";
 import { httpResource, HttpResourceRef } from "@angular/common/http";
+import { catchError, firstValueFrom, Observable, throwError } from "rxjs";
 
 import { ApiResponse } from "@utils/api_response";
 import { HttpClientService } from "../../../../core/services";
@@ -31,20 +31,15 @@ export class ConceptDatasource {
         ) as HttpResourceRef<ApiResponse<ConceptInfoEntity>>;
     }
 
-    async updateConcept( { idConcept, description, active }:ConceptEntity ): Promise<ApiResponse<ConceptResponseDto>> {
-        return await firstValueFrom(
-            this.httpClient.patch<ApiResponse<ConceptResponseDto>>(`/concepts/${idConcept}`, { description, active }).pipe(
-                catchError(error =>  throwError( () => new Error(error) ) ),
-            ),
+    updateConcept( { idConcept, description, active }:ConceptEntity ): Observable<ApiResponse<ConceptResponseDto>> {
+        return this.httpClient.patch<ApiResponse<ConceptResponseDto>>(`/concepts/${idConcept}`, { description, active }).pipe(
+            catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
         );
     }
 
-    async createConcept( concept:string ):Promise<ApiResponse<ConceptResponseDto>> {
-        return await firstValueFrom(
-            this.httpClient.post<ApiResponse<ConceptResponseDto>>('/concepts', { description: concept }).pipe(
-                catchError(error =>  throwError( () => new Error(error) ) ),
-            ),
-        )
+    createConcept( concept:string ):Observable<ApiResponse<ConceptResponseDto>> {
+        return this.httpClient.post<ApiResponse<ConceptResponseDto>>('/concepts', { description: concept }).pipe(
+            catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
+        );
     }
-
 }
