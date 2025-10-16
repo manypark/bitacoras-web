@@ -17,12 +17,12 @@ export class EditDialogComponent {
   private readonly toast = inject(ToastService);
 
   // #=================== variables ===================#
-  errValue    = signal<string>('');
-  isLoading   = signal<boolean>(false);
+  errValue  = signal<string>('');
+  isLoading = signal<boolean>(false);
   public readonly roleUpdated  = output<boolean>();
 
   // #=================== funciones ===================#
-  onEdit() {
+  onEditRol() {
       this.isLoading.set(true);
       const role = this.roleSelectedServices.selectedRole();
       if (!role) throw new Error('No hay rol seleccionado');

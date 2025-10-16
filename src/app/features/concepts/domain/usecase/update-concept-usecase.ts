@@ -7,5 +7,5 @@ export class UpdateConceptUsecase {
     
     constructor( private repository:ConceptRepository ) {}
 
-    execute( concept:ConceptEntity ) { this.repository.updateConcept( concept ); }
+    execute( concept:ConceptEntity ) { return this.repository.updateConcept( concept ); }
 }

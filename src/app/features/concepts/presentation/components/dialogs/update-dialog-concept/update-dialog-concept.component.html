@@ -1,12 +1,12 @@
 <dialog 
-    id="custom-edit-role" 
+    id="custom-edit-concept"
     class="dialog w-full sm:max-w-[425px] max-h-[612px]" 
     aria-labelledby="demo-dialog-edit-profile-title" 
     aria-describedby="demo-dialog-edit-profile-description">
   <article>
     <header class="border-b py-4 border-gray-400">
-      <h2 id="demo-dialog-edit-profile-title">Editar Rol</h2>
-      <p id="demo-dialog-edit-profile-description">Has tus cambios del Rol aqui. Da click en editar cuando hayas terminado.</p>
+      <h2 id="demo-dialog-edit-profile-title">Editar Concepto</h2>
+      <p id="demo-dialog-edit-profile-description">Has tus cambios del Concepto aqui. Da click en editar cuando hayas terminado.</p>
     </header>
 
     <section>
@@ -18,11 +18,17 @@
     
                     <label class="label gap-3">
                         <label class="label">
-                        <input type="checkbox" name="switch" role="switch" [checked]="roleSelectedServices.selectedRole()?.active" (input)="onStatusChange($event)" class="input">
-                            @if (roleSelectedServices.selectedRole()?.active) {
+                        <input 
+                            type="checkbox" 
+                            name="switch" 
+                            role="switch" 
+                            [checked]="conceptSelectedServices.selectedConcept()?.active"
+                            (input)="onStatusChange($event)"
+                            class="input">
+                            @if (conceptSelectedServices.selectedConcept()?.active) {
                                 <span> Activo </span>
                             }
-                            @if (!roleSelectedServices.selectedRole()?.active) {
+                            @if (!conceptSelectedServices.selectedConcept()?.active) {
                                 <span> Inactivo</span>
                             }
                         </label>
@@ -33,7 +39,7 @@
                     <label for="demo-dialog-edit-profile-name">Role</label>
                     <input 
                     type="text" 
-                    [value]="roleSelectedServices.selectedRole()?.name" 
+                    [value]="conceptSelectedServices.selectedConcept()?.description"
                     id="demo-dialog-edit-profile-name"
                     (input)="onNameChange($any($event.target).value)"
                     [disabled]="isLoading()"
@@ -50,7 +56,7 @@
 
     <footer>
         <button class="btn-outline" [disabled]="isLoading()" (click)="closeModal()">Cancelar</button>
-        <button class="btn" [disabled]="isLoading()" (click)="onEditRol()">
+        <button class="btn" [disabled]="isLoading()" (click)="onEditConcept()">
             @if ( isLoading() ) {
                 <p>Cargando</p>
             }

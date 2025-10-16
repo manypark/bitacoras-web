@@ -2,10 +2,11 @@ import { FormsModule } from '@angular/forms';
 import { Component, computed, effect, inject, resource, signal } from '@angular/core';
 
 import { CustomTableComponent, ToastService } from "@app/shared";
-import { CreateDialogComponent } from "../../components/dialogs";
+import { PaginationComponent } from "@app/roles/presentation/components";
+import { ConceptSelectedService } from '@app/concepts/presentation/signals';
+import { CreateDialogComponent, UpdateDialogConceptComponent } from "../../components/dialogs";
 import { TitleDescriptionCustomButtonComponent, TotalsInfoComponent } from '@app/shared/containers';
 import { ConceptEntity, CONCEPTS_KEYS, GetAllConceptUsecase, GetConceptInfoUsecase } from '@app/concepts/domain';
-import { PaginationComponent } from "@app/roles/presentation/components";
 
 @Component({
   selector    : 'app-concepts',
@@ -14,8 +15,9 @@ import { PaginationComponent } from "@app/roles/presentation/components";
     TotalsInfoComponent,
     CreateDialogComponent,
     CustomTableComponent,
+    PaginationComponent,
+    UpdateDialogConceptComponent,
     TitleDescriptionCustomButtonComponent,
-    PaginationComponent
 ],
   templateUrl : './concepts.component.html',
   styleUrl    : './concepts.component.css',
@@ -26,6 +28,7 @@ export default class ConceptsComponent {
   private readonly toast = inject(ToastService);
   private readonly getConceptsUsecase = inject(GetAllConceptUsecase);
   private readonly getConceptsInfoUsecase = inject(GetConceptInfoUsecase);
+  private readonly conceptSelectedServices = inject(ConceptSelectedService);
   conceptsInfo = this.getConceptsInfoUsecase.execute();
 
   // #=============== variables ===============#
@@ -66,9 +69,10 @@ export default class ConceptsComponent {
 
   // #=============== functions ===============#
   onTableAction(event: { action: string; row: ConceptEntity }) {
-    const modalId = event.action === 'edit' ? 'custom-edit-role' : event.action === 'delete' ? 'custom-delete-role': null;
+    const modalId = event.action === 'edit' ? 'custom-edit-concept' : event.action === 'delete' ? 'custom-delete-concept': null;
     if (modalId) {
       const modal = document.getElementById(modalId) as HTMLDialogElement | null;
+      this.conceptSelectedServices.setSelectedConcept(event.row);
       modal?.showModal();
     }
   }

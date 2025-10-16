@@ -1,5 +1,5 @@
-// role-selection.service.ts
 import { Injectable, computed, signal } from '@angular/core';
+
 import { RolesEntity } from '@app/roles/domain';
 
 @Injectable({ providedIn: 'root' })
