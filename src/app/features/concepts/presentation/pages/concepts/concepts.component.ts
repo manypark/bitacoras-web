@@ -4,9 +4,9 @@ import { Component, computed, effect, inject, resource, signal } from '@angular/
 import { CustomTableComponent, ToastService } from "@app/shared";
 import { PaginationComponent } from "@app/roles/presentation/components";
 import { ConceptSelectedService } from '@app/concepts/presentation/signals';
-import { CreateDialogComponent, UpdateDialogConceptComponent } from "../../components/dialogs";
 import { TitleDescriptionCustomButtonComponent, TotalsInfoComponent } from '@app/shared/containers';
 import { ConceptEntity, CONCEPTS_KEYS, GetAllConceptUsecase, GetConceptInfoUsecase } from '@app/concepts/domain';
+import { CreateDialogComponent, UpdateDialogConceptComponent, DeleteDialogConceptComponent } from "../../components/dialogs";
 
 @Component({
   selector    : 'app-concepts',
@@ -17,6 +17,7 @@ import { ConceptEntity, CONCEPTS_KEYS, GetAllConceptUsecase, GetConceptInfoUseca
     CustomTableComponent,
     PaginationComponent,
     UpdateDialogConceptComponent,
+    DeleteDialogConceptComponent,
     TitleDescriptionCustomButtonComponent,
 ],
   templateUrl : './concepts.component.html',
@@ -49,7 +50,7 @@ export default class ConceptsComponent {
 
       if (data) {
         this.concetps.set( this.getConceptsResource.value()?.data ?? [] );
-        this.toast.success('Petición exitosa', 'Roles cargados correctamente');
+        this.toast.success('Petición exitosa', 'Conceptos cargados correctamente');
       }
 
       if (this.getConceptsResource.error()) {

@@ -1,4 +1,4 @@
-import { Component, effect, inject, output, resource, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 
 import { ToastService } from '@app/shared';
 import { UpdateRoloesUsecase } from '@app/roles/domain';
