@@ -1,7 +1,7 @@
-import { Component, inject, output, signal } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 
-import { ToastService } from '@app/shared/toast';
 import { UpdateRolesUsecase } from '@app/roles/domain';
+import { RoleDialogBaseComponent } from '@app/shared/custom-dialog';
 import { RoleSelectionService } from '@app/roles/presentation/signals';
 
 @Component({
@@ -9,46 +9,32 @@ import { RoleSelectionService } from '@app/roles/presentation/signals';
   templateUrl : './edit-dialog.component.html',
   styleUrl    : './edit-dialog.component.css',
 })
-export class EditDialogComponent {
-
+export class EditDialogComponent extends RoleDialogBaseComponent {
   // #=================== dependencias ===================#
   roleSelectedServices  = inject(RoleSelectionService);
   private readonly roleUpdateUsecase  = inject(UpdateRolesUsecase);
-  private readonly toast = inject(ToastService);
 
   // #=================== variables ===================#
-  errValue  = signal<string>('');
-  isLoading = signal<boolean>(false);
   public readonly roleUpdated  = output<boolean>();
 
   // #=================== funciones ===================#
-  onEditRol() {
-      this.isLoading.set(true);
-      const role = this.roleSelectedServices.selectedRole();
-      if (!role) throw new Error('No hay rol seleccionado');
-
-      this.roleUpdateUsecase.execute(role).subscribe({
-        next: () => {
-          this.toast.success('Rol actualizado',this.roleSelectedServices.selectedRole()?.name );
-          this.roleUpdated.emit(true);
-          this.isLoading.set(false);
-          this.closeModal();
-        },
-        error: (err) => {
-          this.roleUpdated.emit(false);
-          this.isLoading.set(false);
-          this.errValue.set(err);
-          this.toast.error('Error', err ?? 'Error al editar');
-        },
-        complete: () => this.isLoading.set(false),
-      });
+  protected performOperation() {
+    return this.roleUpdateUsecase.execute( this.roleSelectedServices.selectedRole()! );
   }
+  
+  protected successTitle = ():string => 'Rol actualizado';
 
-  closeModal() {
-    const modal = document.getElementById('custom-edit-role') as HTMLDialogElement | null;
-    modal?.close();
-    this.errValue.set('');
+  protected successMessage = () : string | undefined => this.roleSelectedServices.selectedRole()?.name;
+
+  protected modalId = () : string => 'custom-edit-role';
+
+  protected emitResult = ( value:boolean ): void => this.roleUpdated.emit(value);
+
+  submitUpdateRol = (): void => this.submit();
+
+  protected override onClose(): void {
     this.roleSelectedServices.clearSelectedRole();
+    this.close();
   }
 
   onNameChange(value: string) {

@@ -24,8 +24,8 @@
     </section>
 
     <footer>
-        <button class="btn-outline" [disabled]="isLoading()" (click)="closeModal()"> Cancelar </button>
-        <button class="btn-destructive" [disabled]="isLoading()" (click)="onEdit()"> Eliminar </button>
+        <button class="btn-outline" [disabled]="isLoading()" (click)="onClose()"> Cancelar </button>
+        <button class="btn-destructive" [disabled]="isLoading()" (click)="submitDeletedRol()"> Eliminar </button>
     </footer>
 
     <button type="button" aria-label="Close dialog" onclick="this.closest('dialog').close()">

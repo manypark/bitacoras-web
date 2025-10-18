@@ -1,52 +1,42 @@
 import { FormsModule } from '@angular/forms';
-import { Component, ElementRef, inject, output, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, output } from '@angular/core';
 
-import { ToastService } from '@app/shared/toast';
+import { RoleDialogBaseComponent } from '@app/shared';
 import { CreateRolUsecase } from '@app/roles/domain/usecase';
 
 @Component({
   selector    : 'create-dialog',
-  imports     : [ FormsModule, ],
+  imports     : [ FormsModule ],
   styleUrl    : './create-dialog.component.css',
   templateUrl : './create-dialog.component.html',
 })
-export class CreateDialogComponent {
+export class CreateDialogComponent extends RoleDialogBaseComponent {
 
-  // #=================== dependencias ===================#
+  // #=============== dependencias ===============#
   private readonly createRolUsecase = inject(CreateRolUsecase);
-  private readonly toast = inject(ToastService);
+  
+  // #=============== variables ===============#
+  @ViewChild('newRol') newRolInput!: ElementRef<HTMLInputElement>;
+  public readonly roleCreated = output<boolean>();
+  
+  // #=============== funciones ===============#
+  submitNewRol = (): void => this.submit();
 
-  // #=================== variables ===================#
-  @ViewChild('newRol') newRolInput!: ElementRef;
-  errValue    = signal<string>('');
-  isLoading   = signal<boolean>(false);
-  roleCreated = output<boolean>();
+  protected emitResult = (value: boolean): void => this.roleCreated.emit(value);
 
-  // #=================== funciones ===================#
-  submitNewRol() {
-    const value = this.newRolInput.nativeElement.value;
-    this.isLoading.set(true);
+  protected successTitle = ():string => 'Rol creado';
 
-    this.createRolUsecase.execute( value ).subscribe({
-      next: () => {
-        this.toast.success('Rol creado', value);
-        this.roleCreated.emit(true);
-        this.closeModal();
-      },
-      error: (err) => {
-        this.isLoading.set(false);
-        this.roleCreated.emit(false);
-        this.errValue.set(err);
-        this.toast.error('Error', err ?? 'Error al crearlo');
-      },
-      complete: () => this.isLoading.set(false)
-    });
+  protected successMessage = (): string | undefined => this.newRolInput?.nativeElement?.value;
+
+  protected modalId = ():string => 'custom-create-role';
+
+  protected override onClose(): void {
+    (this.newRolInput) ? this.newRolInput.nativeElement.value = '' : null;
+    this.close();
   }
 
-  closeModal() {
-    this.errValue.set('');
-    this.newRolInput.nativeElement.value = '';
-    const modal = document.getElementById('custom-create-role') as HTMLDialogElement | null;
-    modal?.close();
+  protected performOperation() {
+    const value = this.newRolInput?.nativeElement?.value;
+    return this.createRolUsecase.execute(value);
   }
 }

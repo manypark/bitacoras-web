@@ -1,6 +1,6 @@
-import { Component, inject, output, signal } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 
-import { ToastService } from '@app/shared';
+import { RoleDialogBaseComponent } from '@app/shared';
 import { DeleteRolesUsecase } from '@app/roles/domain';
 import { RoleSelectionService } from '@app/roles/presentation/signals';
 
@@ -9,46 +9,29 @@ import { RoleSelectionService } from '@app/roles/presentation/signals';
   templateUrl : './delete-dialog.component.html',
   styleUrl    : './delete-dialog.component.css',
 })
-export class DeleteDialogComponent {
-
+export class DeleteDialogComponent extends RoleDialogBaseComponent {
   // #=================== dependencias ===================#
   roleSelectedServices  = inject(RoleSelectionService);
   private readonly roleUpdateUsecase  = inject(DeleteRolesUsecase);
-  private readonly toast = inject(ToastService);
 
   // #=================== variables ===================#
-  errValue    = signal<string>('');
-  isLoading   = signal<boolean>(false);
-  public roleUpdated  = output<boolean>();
+  public readonly roleDeleted = output<boolean>();
+  
+  // #=================== funciones ===================#
+  submitDeletedRol = (): void => this.submit();
 
-  onEdit() {
+  protected performOperation = () => this.roleUpdateUsecase.execute( this.roleSelectedServices.selectedRole()?.idRoles! );
 
-      this.isLoading.set(true);
+  protected successTitle = ():string => 'Rol eliminado';
 
-      const role = this.roleSelectedServices.selectedRole();
-      if (!role) throw new Error('No hay rol seleccionado');
+  protected successMessage = () : string | undefined => this.roleSelectedServices.selectedRole()?.name;
 
-      this.roleUpdateUsecase.execute( role.idRoles ).subscribe({
-        next: () => {
-          this.toast.success('Rol eliminado',this.roleSelectedServices.selectedRole()?.name );
-          this.roleUpdated.emit(true);
-          this.isLoading.set(false);
-          this.closeModal();
-        },
-        error: (err) => {
-          this.isLoading.set(false);
-          this.roleUpdated.emit(false);
-          this.errValue.set(err);
-          this.toast.error('Error', err ?? 'Error al editar');
-        },
-        complete: () => this.isLoading.set(false)
-      });
-  }
+  protected modalId = () : string => 'custom-delete-role';
 
-  closeModal() {
-    const modal = document.getElementById('custom-delete-role') as HTMLDialogElement | null;
-    modal?.close();
-    this.errValue.set('');
+  protected emitResult = ( value:boolean ): void => this.roleDeleted.emit(value);
+
+  protected override onClose(): void {
     this.roleSelectedServices.clearSelectedRole();
+    this.close();
   }
 }

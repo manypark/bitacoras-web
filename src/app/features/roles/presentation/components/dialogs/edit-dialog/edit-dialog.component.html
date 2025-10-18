@@ -1,5 +1,5 @@
 <dialog 
-    id="custom-edit-role" 
+    id="custom-edit-role"
     class="dialog w-full sm:max-w-[425px] max-h-[612px]" 
     aria-labelledby="demo-dialog-edit-profile-title" 
     aria-describedby="demo-dialog-edit-profile-description">
@@ -49,8 +49,8 @@
     </section>
 
     <footer>
-        <button class="btn-outline" [disabled]="isLoading()" (click)="closeModal()">Cancelar</button>
-        <button class="btn" [disabled]="isLoading()" (click)="onEditRol()">
+        <button class="btn-outline" [disabled]="isLoading()" (click)="onClose()">Cancelar</button>
+        <button class="btn" [disabled]="isLoading()" (click)="submitUpdateRol()">
             @if ( isLoading() ) {
                 <p>Cargando</p>
             }
@@ -60,7 +60,7 @@
         </button>
     </footer>
 
-    <button type="button" aria-label="Close dialog" (click)="closeModal()">
+    <button type="button" aria-label="Close dialog" (click)="onClose()">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x">
         <path d="M18 6 6 18" />
         <path d="m6 6 12 12" />
