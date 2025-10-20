@@ -19,6 +19,8 @@ export class UpdateDialogConceptComponent extends RoleDialogBaseComponent {
   public readonly conceptUpdated = output<boolean>();
 
   // #=================== funciones ===================#
+  onEditConcept = (): void => this.submit();
+
   protected override performOperation() {
     const value = this.conceptSelectedServices.selectedConcept();
     return this.conceptUpdateUsecase.execute(value!);
