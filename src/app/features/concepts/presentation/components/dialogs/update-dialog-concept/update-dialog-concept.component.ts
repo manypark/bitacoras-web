@@ -1,6 +1,6 @@
-import { Component, inject, output, signal } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 
-import { ToastService } from '@app/shared';
+import { RoleDialogBaseComponent } from '@app/shared';
 import { UpdateConceptUsecase } from '@app/concepts/domain';
 import { ConceptSelectedService } from '@app/concepts/presentation/signals';
 
@@ -9,47 +9,32 @@ import { ConceptSelectedService } from '@app/concepts/presentation/signals';
   templateUrl : './update-dialog-concept.component.html',
   styleUrl    : './update-dialog-concept.component.css',
 })
-export class UpdateDialogConceptComponent {
+export class UpdateDialogConceptComponent extends RoleDialogBaseComponent {
 
   // #=================== dependencias ===================#
   private readonly conceptUpdateUsecase = inject(UpdateConceptUsecase);
   readonly conceptSelectedServices = inject(ConceptSelectedService);
-  private readonly toast = inject(ToastService);
 
   // #=================== variables ===================#
-  errValue  = signal<string>('');
-  isLoading = signal<boolean>(false);
   public readonly conceptUpdated = output<boolean>();
 
   // #=================== funciones ===================#
-  onEditConcept() {
-    this.isLoading.set(true);
-
-    const concept = this.conceptSelectedServices.selectedConcept();
-    if (!concept) throw new Error('No hay concepto seleccionado');
-
-    this.conceptUpdateUsecase.execute( concept ).subscribe({
-      next: () => {
-        this.toast.success('Concepto actualizado', this.conceptSelectedServices.selectedConcept()?.description );
-        this.conceptUpdated.emit(true);
-        this.isLoading.set(false);
-        this.closeModal();
-      },
-      error: (err) => {
-        this.conceptUpdated.emit(false);
-        this.isLoading.set(false);
-        this.errValue.set(err);
-        this.toast.error('Error', err ?? 'Error al editar');
-      },
-      complete: () => this.isLoading.set(false),
-    });    
+  protected override performOperation() {
+    const value = this.conceptSelectedServices.selectedConcept();
+    return this.conceptUpdateUsecase.execute(value!);
   }
 
-  closeModal() {
-    const modal = document.getElementById('custom-edit-concept') as HTMLDialogElement | null;
-    modal?.close();
-    this.errValue.set('');
+  protected successTitle = ():string => 'Concepto actualizado';
+
+  protected successMessage = (): string | undefined => this.conceptSelectedServices.selectedConcept()?.description;
+
+  protected modalId = ():string => 'custom-edit-concept';
+
+  protected emitResult = (value: boolean): void => this.conceptUpdated.emit(value);
+
+  protected override onClose(): void {
     this.conceptSelectedServices.clearSelectedConcept();
+    this.close();
   }
 
   onNameChange(value: string) {

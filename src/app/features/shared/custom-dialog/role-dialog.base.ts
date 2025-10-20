@@ -76,10 +76,7 @@ export abstract class RoleDialogBaseComponent {
           this.emitResult(false);
           this.isLoading.set(false);
         },
-        complete: () => {
-          // Ensure isLoading is reset even if the observable completes without emitting
-          this.isLoading.set(false);
-        },
+        complete: () => this.isLoading.set(false),
       });
     } catch (err:any) {
       // Synchronously thrown errors are handled here

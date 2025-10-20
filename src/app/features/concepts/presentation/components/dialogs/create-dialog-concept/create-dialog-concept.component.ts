@@ -1,8 +1,8 @@
 import { FormsModule } from '@angular/forms';
-import { Component, ElementRef, inject, output, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, output, ViewChild } from '@angular/core';
 
-import { ToastService } from '@app/shared/toast';
 import { CreateConceptUsecase } from '@app/concepts/domain';
+import { RoleDialogBaseComponent } from '@app/shared/custom-dialog';
 
 @Component({
   selector    : 'create-dialog-concept',
@@ -10,44 +10,34 @@ import { CreateConceptUsecase } from '@app/concepts/domain';
   styleUrl    : './create-dialog-concept.component.css',
   templateUrl : './create-dialog-concept.component.html',
 })
-export class CreateDialogComponent {
+export class CreateDialogComponent extends RoleDialogBaseComponent {
 
   // #=============== dependencias ===============#
   private readonly createConceptUsecase = inject(CreateConceptUsecase);
-  private readonly toast = inject(ToastService);
-  
+
   // #=============== variables ===============#
   public conceptCreated  = output<boolean>();
-  @ViewChild('newConcept') newConceptInput!: ElementRef;
-  errMsg        = signal<string>('');
-  isLoading     = signal<boolean>(false);
+  @ViewChild('newConcept') newConceptInput!: ElementRef<HTMLInputElement>;
 
   // #=============== funciones ===============#
-  submitNewConcept() {
-    const value = this.newConceptInput.nativeElement.value;
-    this.isLoading.set(true);
 
-    this.createConceptUsecase.execute(value).subscribe({
-      next: () => {
-        this.toast.success('Concepto creado', value );
-        this.conceptCreated.emit(true);
-        this.closeModal();
-      },
-      error: (err) => {
-        this.conceptCreated.emit(false);
-        this.errMsg.set( err ?? 'Error al crearlo' );
-        this.toast.error('Error', err ?? 'Error al crearlo');
-        this.isLoading.set(false);
-      },
-      complete: () =>  this.isLoading.set(false),
-    });
+  submitNewConcept = (): void => this.submit();
+
+  protected performOperation() {
+    const value = this.newConceptInput?.nativeElement?.value;
+    return this.createConceptUsecase.execute(value);
   }
 
-  closeModal() {
-    const modal = document.getElementById('custom-create-concept') as HTMLDialogElement | null;
-    this.newConceptInput.nativeElement.value = '';
-    this.isLoading.set(false);
-    this.errMsg.set('');
-    modal?.close();
+  protected successTitle = ():string => 'Concepto creado';
+
+  protected successMessage = (): string | undefined => this.newConceptInput?.nativeElement?.value;
+
+  protected modalId = ():string => 'custom-create-concept';
+
+  protected emitResult = (value: boolean): void => this.conceptCreated.emit(value);
+
+  protected override onClose(): void {
+    (this.newConceptInput) ? this.newConceptInput.nativeElement.value = '' : null;
+    this.close();
   }
 }
