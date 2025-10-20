@@ -15,12 +15,12 @@
     [headers]="['ID', 'Descripcion', 'Estatus']"
     [keys]="keys"
     [data]="filteredConcepts()"
-    [isLoading]="getConceptsResource.isLoading()"
+    [isLoading]="getConceptsQuery.isLoading()"
     (actionClick)="onTableAction($event)"/>
     
   <pagination
     [page]="page()"
-    [hasNextPage]="concetps().length < 5"
+    [hasNextPage]="(getConceptsQuery.data()?.data ?? []).length < 5"
     (next)="nextPage()"
     (prev)="prevPage()"/>
 

@@ -2,7 +2,6 @@ import { Component, EventEmitter, input, Input, Output } from '@angular/core';
 
 @Component({
   selector    : 'app-custom-table',
-  imports     : [],
   templateUrl : './custom-table.component.html',
   styleUrl    : './custom-table.component.css',
 })
@@ -29,5 +28,4 @@ export class CustomTableComponent {
   onAction(action: string, row: any) {
     this.actionClick.emit({ action, row });
   }
-
 }

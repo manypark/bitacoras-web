@@ -1,5 +1,6 @@
 import { FormsModule } from '@angular/forms';
-import { Component, computed, effect, inject, resource, signal } from '@angular/core';
+import { injectQuery } from '@tanstack/angular-query-experimental';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 
 import { CustomTableComponent, ToastService } from "@app/shared";
 import { PaginationComponent } from "@app/roles/presentation/components";
@@ -36,37 +37,28 @@ export default class ConceptsComponent {
   keys = CONCEPTS_KEYS;
   page = signal(1);
   searchConcepts = signal<string>('');
-  concetps = signal<ConceptEntity[]>([]);
   filteredConcepts = computed( () => {
     const search = this.searchConcepts().toLowerCase().trim();
-    if (!search) return this.concetps();
-    return this.concetps().filter( role => role.description.toLowerCase().includes(search) );
+    const dataConcepts = this.getConceptsQuery.data()?.data ?? [];
+    if (!search) return dataConcepts;
+    return dataConcepts.filter( role => role.description.toLowerCase().includes(search) );
   });
   
   // #=============== constructor ===============#
   constructor() {
     effect( () => {
-      const data = this.getConceptsResource?.value()?.data;
-
-      if (data) {
-        this.concetps.set( this.getConceptsResource.value()?.data ?? [] );
-        this.toast.success('Petición exitosa', 'Conceptos cargados correctamente');
-      }
-
-      if (this.getConceptsResource.error()) {
-        this.toast.error('Petición fallida', this.getConceptsResource.value()?.message ?? 'Hubo algún error');
-      }
+      const data = this.getConceptsQuery.data();
+      const err  = this.getConceptsQuery;
+      if (data) this.toast.success('Petición exitosa', 'Conceptos cargados correctamente');
+      if ( err.isError() ) this.toast.error('Petición fallida', err.error().message ?? 'Hubo algún error');
     });
   }
 
-  // #=============== resources ===============#
-  readonly getConceptsResource = resource({
-    params: () => this.page(),
-    loader: async () => {
-      this.concetps.set([]);
-      return this.getConceptsUsecase.execute( 5, (this.page() - 1) * 5  );
-    },
-  });
+  // #=============== queries ===============#
+  readonly getConceptsQuery = injectQuery( () => ({
+    queryKey: [ 'concepts', this.page() ],
+    queryFn : () => this.getConceptsUsecase.execute( 5, (this.page() - 1) * 5  ),
+  }));
 
   // #=============== functions ===============#
   onTableAction(event: { action: string; row: ConceptEntity }) {
@@ -84,10 +76,8 @@ export default class ConceptsComponent {
 
   retryGetAllRoles( value:boolean ) {
     if(value) {
-      this.concetps.set([]);
-      this.getConceptsResource.reload();
+      this.getConceptsQuery.refetch();
       this.conceptsInfo.reload();
     }
   }
-  
 }

@@ -1,6 +1,8 @@
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter, withViewTransitions } from '@angular/router';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { withDevtools } from '@tanstack/angular-query-experimental/devtools'
 import { ApplicationConfig, provideZonelessChangeDetection, } from '@angular/core';
+import { provideTanStackQuery, QueryClient, } from '@tanstack/angular-query-experimental'
 
 import { routes } from './app.routes';
 
@@ -23,6 +25,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter( routes, withViewTransitions() ),
     provideHttpClient( withInterceptors([authInterceptor]), ),
+    provideTanStackQuery( new QueryClient(), withDevtools() ),
     { provide: RolesRepository, useClass: RolesRepositoryImpl },
     { provide: SignInRepository,  useClass: SignInRepositoryImpl },
     { provide: ConceptRepository, useClass: ConceptRepositoryImpl },

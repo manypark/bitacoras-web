@@ -97,7 +97,5 @@ export abstract class RoleDialogBaseComponent {
     modal?.close();
     // reset error state
     this.errValue.set('');
-    // invoke subclass-specific cleanup
-    this.onClose();
   }
 }
