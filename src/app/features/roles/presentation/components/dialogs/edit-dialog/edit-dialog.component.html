@@ -4,7 +4,7 @@
     aria-labelledby="demo-dialog-edit-profile-title" 
     aria-describedby="demo-dialog-edit-profile-description">
   <article>
-    <header class="border-b py-4 border-gray-400">
+    <header class="mb-8 border-b py-4 border-gray-200">
       <h2 id="demo-dialog-edit-profile-title">Editar Rol</h2>
       <p id="demo-dialog-edit-profile-description">Has tus cambios del Rol aqui. Da click en editar cuando hayas terminado.</p>
     </header>
@@ -16,7 +16,7 @@
                 <div class="flex flex-col gap-4">
                     <label for="active-role">Estatus</label>
     
-                    <label class="label gap-3">
+                    <label class="label gap-3 w-12">
                         <label class="label">
                         <input type="checkbox" name="switch" role="switch" [checked]="roleSelectedServices.selectedRole()?.active" (input)="onStatusChange($event)" class="input">
                             @if (roleSelectedServices.selectedRole()?.active) {
