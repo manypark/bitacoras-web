@@ -20,6 +20,9 @@ import { ConceptRepositoryImpl } from '@app/concepts/infrastructure';
 
 import { authInterceptor } from './core/core';
 
+import { TaskRepository } from '@app/tasks/domain';
+import { TaskRespoitoryImpl } from '@app/tasks/infrastructure';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
@@ -30,5 +33,6 @@ export const appConfig: ApplicationConfig = {
     { provide: SignInRepository,  useClass: SignInRepositoryImpl },
     { provide: ConceptRepository, useClass: ConceptRepositoryImpl },
     { provide: RegisterRepository, useClass: RegsiterRepositoryImpl },
+    { provide: TaskRepository, useClass: TaskRespoitoryImpl },
   ]
 };

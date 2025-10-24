@@ -1,7 +1,10 @@
 import { Component, inject } from '@angular/core';
+import { injectMutation, injectQuery } from '@tanstack/angular-query-experimental';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { UsersResponseDto } from '@app/tasks/infrastructure/dtos';
+import { ToastService } from '@app/shared';
+import { descriptionVOValidator, titleVOValidator } from '@app/tasks/presentation/forms-validators';
+import { CreateTaskUsecase, DescriptionVO, GetAllUsersUsecase, TaskEntity, TitleVO, UsersEntity } from '@app/tasks/domain';
 
 @Component({
   selector    : 'create-dialog-task',
@@ -11,65 +14,62 @@ import { UsersResponseDto } from '@app/tasks/infrastructure/dtos';
 })
 export class CreateTaksComponent {
 
-  usersList:UsersResponseDto[] = [
-    {
-            "idUser": 49,
-            "firstName": "Manuel",
-            "lastName": "Lopez",
-            "email": "manu.lopez@live.com",
-            "active": true,
-            "avatarUrl": ""
-        },
-        {
-            "idUser": 25,
-            "firstName": "Rodolfo",
-            "lastName": "Vera",
-            "email": "jose@gmail.com",
-            "active": true,
-            "avatarUrl": "https://twerlrptjboelidlfioz.supabase.co/storage/v1/object/sign/images-bitacoras/kaiju-no-8-1.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV84YTIyNTM2Mi02N2I1LTRjMTYtODgxZC0zYzBlMDhhYzU4YmIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWFnZXMtYml0YWNvcmFzL2thaWp1LW5vLTgtMS5qcGciLCJpYXQiOjE3NTU3ODQ0MDAsImV4cCI6MTc4NzMyMDQwMH0.i4PU_P1hzy7hkZwlXmnEZ3bxCRV1wrCM-WR9TOl_Yw4"
-        },
-        {
-            "idUser": 26,
-            "firstName": "Manuel",
-            "lastName": "Maldonado",
-            "email": "manu@live.com",
-            "active": true,
-            "avatarUrl": ""
-        },
-        {
-            "idUser": 28,
-            "firstName": "Jose",
-            "lastName": "Lopez",
-            "email": "jose.l@outlook.com",
-            "active": true,
-            "avatarUrl": ""
-        },
-        {
-            "idUser": 50,
-            "firstName": "Edna",
-            "lastName": "Serrato",
-            "email": "edna.serrato@live.com",
-            "active": true,
-            "avatarUrl": ""
-        }
-  ];
-  userLogueaded = this.usersList.filter( user => user.idUser+'' === (localStorage.getItem('idUser') ?? '0') )[0];
+  // #=============== dependencias ===============#
+  private readonly getUsersUsecase = inject(GetAllUsersUsecase);
+  private readonly postTaskUsecase = inject(CreateTaskUsecase);
+  private readonly toast           = inject(ToastService);
+
+  // #=============== queries ===============#
+  usersList = injectQuery( () => ({
+    queryKey: ['getUsers'],
+    queryFn : () => this.getUsersUsecase.execute(),
+  }));
+
+  // #=============== mutation ===============#
+  postTask = injectMutation(  () => ({
+    mutationKey : ['postTask'],
+    mutationFn  : (data:TaskEntity) => this.postTaskUsecase.execute(data),
+    onSuccess   : (res) => {
+      this.toast.success('Tarea creada', `Felicidades, tu tarea se creó correctamente`);
+      this.onClose();
+    },
+    onError: (error: Error) => {
+      this.toast.error('Error al crear tarea', error.message);
+    },
+  }));
+
+  // #=============== variables ===============#
+  userLogueaded   = localStorage.getItem('username');
+  userLogueadedId = localStorage.getItem('idUser');
+
   taskForm = inject(NonNullableFormBuilder).group({
-    title       : ['', Validators.required],
-    description : ['', Validators.required],
+    title       : ['', [Validators.required, titleVOValidator ]],
+    description : ['', [Validators.required, descriptionVOValidator ]],
     assignedUser: ['', Validators.required],
   });
 
-  onSelectUser( user:UsersResponseDto ) {
-    console.log(user);
+  // #=============== funciones ===============#
+  onSelectUser( user:UsersEntity ) { 
+    this.taskForm.get('assignedUser')?.setValue(user.idUser+''); 
   }
 
   submitNewTask() {
+    if (this.taskForm.invalid) {
+      this.taskForm.markAllAsTouched();
+      return;
+    }
 
+    this.postTask.mutate({
+      title       : new TitleVO(this.taskForm.value.title!),
+      description : new DescriptionVO(this.taskForm.value.description!),
+      userCreated : +this.userLogueadedId!,
+      userAssigned: +this.taskForm.controls.assignedUser.value,
+    });
   }
   
   onClose() {
     const modal = document.getElementById('custom-create-task') as HTMLDialogElement | null;
+    this.taskForm.reset();
     modal?.close();
   }
 }

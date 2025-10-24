@@ -11,7 +11,12 @@ export class TaskDatasource {
     constructor( private http: HttpClientService ) {}
 
     async postTasks( task:TaskEntity ): Promise<ApiResponse<TaskResponseEntity>> {
-        return await firstValueFrom( this.http.post<ApiResponse<TaskResponseEntity>>('/tasks', { ...task }).pipe(
+        return await firstValueFrom( this.http.post<ApiResponse<TaskResponseEntity>>('/tasks', {
+            title           : task.title.getValue(),
+            description     : task.description.getValue(),
+            userCreated     : task.userAssigned,
+            userAssigned    : task.userAssigned,
+        }).pipe(
                 catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
             )
         );
