@@ -4,29 +4,85 @@
     aria-labelledby="demo-dialog-edit-profile-title" 
     aria-describedby="demo-dialog-edit-profile-description">
   <article>
-    <header>
+    <header class="mb-6 border-b py-4 border-gray-200">
       <h2 id="demo-dialog-edit-profile-title">Craer Tarea</h2>
       <p id="demo-dialog-edit-profile-description">Creación de tarea</p>
     </header>
 
     <section>
-        <form class="form grid">
+        <form class="form flex flex-col gap-y-8" [formGroup]="taskForm">
+
+            <!-- Usuario creado -->
+            <div id="select-445592" class="select flex flex-col gap-y-2">
+                <span class="font-bold">Usuario creado</span>
+                <button type="button" class="btn-outline justify-between font-normal w-full" id="select-445592-trigger" disabled="disabled" aria-haspopup="listbox" aria-expanded="false" aria-controls="select-445592-listbox">
+                    <span class="truncate">
+                        {{ userLogueaded.firstName }} {{ userLogueaded.lastName }}
+                    </span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-up-down-icon lucide-chevrons-up-down text-muted-foreground opacity-50 shrink-0">
+                        <path d="m7 15 5 5 5-5" />
+                        <path d="m7 9 5-5 5 5" />
+                    </svg>
+                </button>
+                <div id="select-445592-popover" data-popover aria-hidden="true">
+                    <div role="listbox" id="select-445592-listbox" aria-orientation="vertical" aria-labelledby="select-445592-trigger">
+                    <div role="group" aria-labelledby="group-label-select-445592-items-1">
+                        <div id="select-445592-items-1-1" role="option" data-value="apple" aria-selected="true">
+                            {{ userLogueaded.firstName }} {{ userLogueaded.lastName }}
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <input type="hidden" name="select-445592-value" value="apple" />
+            </div>
+
+            <!-- Titulo-->
             <div class="flex flex-col gap-2">
-                <label for="create-dialog-input" class="font-bold">Tarea</label>
+                <label for="create-dialog-input" class="font-bold">Título</label>
                     <input
-                    #newConcept
-                    name="newConcept"
+                    #title
+                    name="title"
                     type="text"
-                    id="create-dialog-input"
                     [disabled]="false"
                     autofocus />
             </div>
+
+            <!-- Description -->
+            <div class="flex flex-col gap-2">
+                <label for="create-dialog-input" class="font-bold">Descripción</label>
+                    <input
+                    #description
+                    name="description"
+                    type="text"
+                    [disabled]="false"
+                    autofocus />
+            </div>
+
+            <!-- Usuario asignado -->
+            <div id="select-123321" class="select flex flex-col gap-y-2">
+                <span class="font-bold">Usuario asignado</span>
+                    <button type="button" class="btn-outline justify-between font-normal w-full" id="select-123321-trigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="select-123321-listbox">
+                        <span class="truncate" id="selected-user"> Selecciona un usuario</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-up-down-icon lucide-chevrons-up-down text-muted-foreground opacity-50 shrink-0">
+                            <path d="m7 15 5 5 5-5" />
+                            <path d="m7 9 5-5 5 5" />
+                        </svg>
+                    </button>
+
+                    <div id="select-123321-popover" data-popover aria-hidden="true" class="border rounded-lg mt-1 bg-white shadow-md">
+                        <div role="listbox" id="select-123321-listbox" aria-orientation="vertical" aria-labelledby="select-123321-trigger">
+                        <div role="group" aria-labelledby="group-label-select-123321-items-1">
+                            @for (item of usersList; track item.idUser) {
+                                <div [id]="'select-123321-items-1-' + item.idUser" role="option" [attr.data-value]="item.idUser" class="px-3 py-2 hover:bg-gray-100 cursor-pointer" (click)="onSelectUser(item)">
+                                    {{ item.firstName }} {{ item.lastName }}
+                                </div>
+                            }
+                        </div>
+                        </div>
+                    </div>
+                <input type="hidden" name="select-123321-value" id="select-123321-value" value=""/>
+            </div>
         </form>
-
-        <!-- @if ( errValue() ) {
-            <p class="text-red-500 text-sm mt-2">⚠️ {{ errValue() }}</p>
-        } -->
-
     </section>
 
     <footer>
