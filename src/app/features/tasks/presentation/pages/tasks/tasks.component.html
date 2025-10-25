@@ -4,4 +4,12 @@
   idModal="custom-create-task"
   buttonName="Crear tarea" />
 
-  <create-dialog-task />
+<app-custom-table
+  [caption]="'Lista de todos tus roles'"
+  [headers]="['ID', 'Tarea', 'Descripción','Asignada Por', 'Asignada A', 'Activo','Fecha creación']"
+  [keys]="keys"
+  [data]="filteredTask() ?? []"
+  [isLoading]="taskQuery.isLoading()"
+  (actionClick)="onTableAction($event)"/>
+
+<create-dialog-task />

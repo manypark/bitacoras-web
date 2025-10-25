@@ -17,6 +17,7 @@ export class TaskRespoitoryImpl implements TaskRepository {
     constructor( private readonly datasource:TaskDatasource ) {}
 
     postTask(task: TaskEntity): Promise<ApiResponse<TaskResponseEntity>> {
+        console.log(`taskRepository: ${task}`);
         return this.datasource.postTasks( task );
     }
 

@@ -45,12 +45,12 @@ export class CreateTaksComponent {
   taskForm = inject(NonNullableFormBuilder).group({
     title       : ['', [Validators.required, titleVOValidator ]],
     description : ['', [Validators.required, descriptionVOValidator ]],
-    assignedUser: ['', Validators.required],
+    assignedUser: [0, Validators.required],
   });
 
   // #=============== funciones ===============#
   onSelectUser( user:UsersEntity ) { 
-    this.taskForm.get('assignedUser')?.setValue(user.idUser+''); 
+    this.taskForm.get('assignedUser')?.setValue(user.idUser); 
   }
 
   submitNewTask() {
@@ -58,12 +58,12 @@ export class CreateTaksComponent {
       this.taskForm.markAllAsTouched();
       return;
     }
-
+    
     this.postTask.mutate({
       title       : new TitleVO(this.taskForm.value.title!),
       description : new DescriptionVO(this.taskForm.value.description!),
-      userCreated : +this.userLogueadedId!,
-      userAssigned: +this.taskForm.controls.assignedUser.value,
+      userCreated : parseInt(this.userLogueadedId!),
+      userAssigned: this.taskForm.controls.assignedUser.value,
     });
   }
   

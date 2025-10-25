@@ -1,9 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, input, Input, Output } from '@angular/core';
 
 @Component({
   selector    : 'app-custom-table',
   templateUrl : './custom-table.component.html',
   styleUrl    : './custom-table.component.css',
+  imports     : [ CommonModule],
 })
 export class CustomTableComponent {
 
@@ -27,5 +29,22 @@ export class CustomTableComponent {
 
   onAction(action: string, row: any) {
     this.actionClick.emit({ action, row });
+  }
+  /** Lee paths anidados tipo "a.b.c" */
+  getValueByPath(obj: any, path: string): any {
+    if (!obj || !path) return undefined;
+    return path.split('.').reduce((acc, key) => (acc != null ? acc[key] : undefined), obj);
+  }
+
+  /** Formatea para mostrar: concatena firstName + lastName si es objeto de usuario */
+  formatDisplay(value: any): string {
+    if (value == null) return '';
+    if (typeof value === 'object') {
+      const fn = value.firstName;
+      const ln = value.lastName;
+      if (fn || ln) return `${fn ?? ''} ${ln ?? ''}`.trim();
+      return '';
+    }
+    return String(value);
   }
 }
