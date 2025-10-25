@@ -12,8 +12,7 @@
 
   <app-custom-table
     [caption]="'Lista de todos tus roles'"
-    [headers]="['ID', 'Nombre', 'Estatus']"
-    [keys]="keys"
+    [columns]="columns"
     [data]="filteredRoles()"
     [isLoading]="updateResource.isLoading()"
     (actionClick)="onTableAction($event)"/>

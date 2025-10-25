@@ -2,11 +2,11 @@ import { FormsModule } from '@angular/forms';
 import { injectQuery } from '@tanstack/angular-query-experimental';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 
-import { CustomTableComponent, ToastService } from "@app/shared";
 import { PaginationComponent } from "@app/roles/presentation/components";
 import { ConceptSelectedService } from '@app/concepts/presentation/signals';
+import { ColumnConfig, CustomTableComponent, ToastService } from "@app/shared";
+import { ConceptEntity, GetAllConceptUsecase, GetConceptInfoUsecase } from '@app/concepts/domain';
 import { TitleDescriptionCustomButtonComponent, TotalsInfoComponent } from '@app/shared/containers';
-import { ConceptEntity, CONCEPTS_KEYS, GetAllConceptUsecase, GetConceptInfoUsecase } from '@app/concepts/domain';
 import { CreateDialogComponent, UpdateDialogConceptComponent, DeleteDialogConceptComponent } from "../../components/dialogs";
 
 @Component({
@@ -34,7 +34,11 @@ export default class ConceptsComponent {
   conceptsInfo = this.getConceptsInfoUsecase.execute();
 
   // #=============== variables ===============#
-  keys = CONCEPTS_KEYS;
+  columns:ColumnConfig[] = [
+    { key: 'idConcept', header: 'ID', type: 'text' },
+    { key: 'description', header: 'Descripción', type: 'text' },
+    { key: 'active', header: 'Estatus', type: 'booleanBadge' }
+  ];
   page = signal(1);
   searchConcepts = signal<string>('');
   filteredConcepts = computed( () => {

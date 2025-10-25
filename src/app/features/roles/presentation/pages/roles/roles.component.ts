@@ -2,7 +2,7 @@ import { FormsModule } from '@angular/forms';
 import { Component, computed, effect, inject, resource, signal } from '@angular/core';
 
 import { ToastService } from '@app/shared/toast';
-import { CustomTableComponent } from "@app/shared";
+import { ColumnConfig, CustomTableComponent } from "@app/shared";
 import { PaginationComponent } from "../../components/pagination";
 import { RoleSelectionService } from '@app/roles/presentation/signals';
 import { GetAllRoles, GetAllRolesInfo, ROLES_KEYS, RolesEntity } from '@app/roles/domain';
@@ -41,7 +41,11 @@ export default class RolesComponent {
 
   // 🔢 Paginación
   page = signal(1);
-  keys = ROLES_KEYS;
+  columns:ColumnConfig[] = [
+    { key: 'idRoles', header: 'ID', type: 'text' },
+    { key: 'name', header: 'Nombre', type: 'text' },
+    { key: 'active', header: 'Estatus', type: 'booleanBadge' }
+  ];
   rolesInfo = this.getAllRolesUSecaseInfo.execute();
 
   // 🔍 Filtro local

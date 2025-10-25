@@ -6,8 +6,7 @@
 
 <app-custom-table
   [caption]="'Lista de todos tus roles'"
-  [headers]="['ID', 'Tarea', 'Descripción','Asignada Por', 'Asignada A', 'Activo','Fecha creación']"
-  [keys]="keys"
+  [columns]="columns"
   [data]="filteredTask() ?? []"
   [isLoading]="taskQuery.isLoading()"
   (actionClick)="onTableAction($event)"/>

@@ -1,16 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, input, Input, Output } from '@angular/core';
 
+import { ColumnConfig } from '@app/shared';
+
 @Component({
   selector    : 'app-custom-table',
   templateUrl : './custom-table.component.html',
   styleUrl    : './custom-table.component.css',
-  imports     : [ CommonModule],
+  imports     : [CommonModule],
 })
 export class CustomTableComponent {
-
-   /** Encabezados de la tabla */
-  headers = input.required<string[]>();
 
   /** Datos del cuerpo */
   @Input() data: any[] = [];
@@ -22,7 +21,7 @@ export class CustomTableComponent {
   isLoading = input.required<boolean>();
 
   /** Claves de los datos que corresponden a cada columna */
-  keys = input.required<string[]>();
+  columns = input.required<ColumnConfig[]>();
 
   /** Evento que emite cuando se ejecuta una acción */
   @Output() actionClick = new EventEmitter<{ action: string; row: any }>();
@@ -30,10 +29,24 @@ export class CustomTableComponent {
   onAction(action: string, row: any) {
     this.actionClick.emit({ action, row });
   }
-  /** Lee paths anidados tipo "a.b.c" */
+  
   getValueByPath(obj: any, path: string): any {
     if (!obj || !path) return undefined;
     return path.split('.').reduce((acc, key) => (acc != null ? acc[key] : undefined), obj);
+  }
+
+  formatCell(row: any, column: ColumnConfig): string {
+    const raw = this.getValueByPath(row, column.key);
+    switch (column.type) {
+      case 'date':
+        return raw ? /* usar pipe aquí o manual */ new Date(raw).toLocaleDateString() : '';
+      case 'booleanBadge':
+        // devolvemos algún indicador interno, el template lo mostrará
+        return raw ? 'true' : 'false';
+      case 'text':
+      default:
+        return this.formatDisplay(raw);
+    }
   }
 
   /** Formatea para mostrar: concatena firstName + lastName si es objeto de usuario */

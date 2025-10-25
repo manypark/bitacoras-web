@@ -3,7 +3,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 
 import { CreateTaksComponent } from "../../components/dialogs";
 import { GetAllTasksUsecase, TaskParamsEntity, } from '@app/tasks/domain';
-import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ToastService } from "@app/shared";
+import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ToastService, ColumnConfig } from "@app/shared";
 
 const importsList = [TitleDescriptionCustomButtonComponent, CreateTaksComponent];
 
@@ -18,7 +18,15 @@ export default class TasksComponent {
   private readonly toast = inject(ToastService);
   private readonly getTaskListUsecase = inject(GetAllTasksUsecase);
 
-  keys = ['idTasks','title','description','userCreated','userAssigned','active','createdAt'];
+  columns:ColumnConfig[] = [
+    { key: 'idTasks', header: 'ID', type: 'text' },
+    { key: 'title', header: 'Tarea', type: 'text' },
+    { key: 'description', header: 'Descripción', type: 'text' },
+    { key: 'userCreated', header: 'Asignada Por', type: 'text' },
+    { key: 'userAssigned', header: 'Asignada A', type: 'text' },
+    { key: 'createdAt', header: 'Fecha creación', type: 'date' },
+    { key: 'active', header: 'Estado', type: 'booleanBadge' },
+  ];
   searchTask = signal<string>('');
   tasksParams = signal<TaskParamsEntity>({ idUserAssigned:'', idUserCreated: '', limit: 5, offset: 0 });
   filteredTask = computed( () => {

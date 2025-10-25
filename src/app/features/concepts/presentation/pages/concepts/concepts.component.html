@@ -12,8 +12,7 @@
 
   <app-custom-table
     [caption]="'Lista de todos tus conceptos'"
-    [headers]="['ID', 'Descripcion', 'Estatus']"
-    [keys]="keys"
+    [columns]="columns"
     [data]="filteredConcepts()"
     [isLoading]="getConceptsQuery.isLoading()"
     (actionClick)="onTableAction($event)"/>
