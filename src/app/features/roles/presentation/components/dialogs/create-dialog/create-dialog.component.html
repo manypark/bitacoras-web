@@ -1,51 +1,44 @@
 <dialog 
-    id="custom-create-role"
-    class="dialog w-full sm:max-w-[425px] max-h-[612px]" 
-    aria-labelledby="demo-dialog-edit-profile-title" 
-    aria-describedby="demo-dialog-edit-profile-description">
-  <article>
-    <header>
-      <h2 id="demo-dialog-edit-profile-title">Craer Rol</h2>
-      <p id="demo-dialog-edit-profile-description">Creación de rol</p>
-    </header>
+  id="custom-create-role"
+  class="modal modal-middle w-full"
+  (cancel)="$event.preventDefault()">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">Crear Rol</h3>
+    <p class="text-sm opacity-70 mb-4">Creación de rol</p>
 
-    <section>
-        <form class="form grid">
-            <div class="flex flex-col gap-2">
-                <label for="create-dialog-input" class="font-bold">Role</label>
-                    <input
-                    #newRol
-                    name="newRol"
-                    type="text"
-                    id="create-dialog-input"
-                    [disabled]="isLoading()"
-                    autofocus />
-            </div>
-        </form>
+    <form class="form grid gap-3">
+      <div class="flex flex-col gap-2">
+        <label for="create-dialog-input" class="font-bold">Rol</label>
+        <input
+          #newRol
+          name="newRol"
+          type="text"
+          id="create-dialog-input"
+          class="input input-primary border w-full"
+          [disabled]="isLoading()"
+          autofocus
+        />
+      </div>
+    </form>
 
-        @if ( errValue() !== '' ) {
-            <p class="text-red-500 text-sm mt-2">⚠️ {{ errValue() }} </p>
-        }
+    @if (errValue() !== '') {
+      <p class="text-red-500 text-sm mt-2">⚠️ {{ errValue() }}</p>
+    }
 
-    </section>
+    <div class="modal-action">
+      <button class="btn btn-outline" [disabled]="isLoading()" (click)="onClose()">Cancelar</button>
+      <button class="btn btn-primary" [disabled]="isLoading()" (click)="submitNewRol()">
+        @if (isLoading()) { <span class="loading loading-spinner"></span> }
+        @if (!isLoading()) { Crear }
+      </button>
+    </div>
 
-    <footer>
-        <button class="btn-outline" [disabled]="isLoading()" (click)="onClose()"> Cancelar </button>
-        <button class="btn" [disabled]="isLoading()" (click)="submitNewRol()">
-             @if ( isLoading() ) {
-                <p>Cargando</p>
-            }
-            @if ( !isLoading() ) {
-                <p>Crear</p>
-            }
-        </button>
-    </footer>
-
-    <button type="button" aria-label="Close dialog" (click)="onClose()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x">
-        <path d="M18 6 6 18" />
-        <path d="m6 6 12 12" />
-      </svg>
+    <button
+      type="button"
+      class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+      aria-label="Close dialog"
+      (click)="onClose()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z"></path></svg>
     </button>
-  </article>
+  </div>
 </dialog>

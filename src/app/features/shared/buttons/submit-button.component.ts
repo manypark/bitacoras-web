@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     <button 
       [disabled]="disabled"
       type="button" 
-      class="btn w-96 h-12 text-xl"
+      class="btn btn-primary w-96 h-12 text-xl"
       (click)="onClick.emit()">
       @if (loading) {
         Cargando...

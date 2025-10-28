@@ -5,7 +5,6 @@
   buttonName="Crear tarea" />
 
 <app-custom-table
-  [caption]="'Lista de todos tus roles'"
   [columns]="columns"
   [data]="filteredTask() ?? []"
   [isLoading]="taskQuery.isLoading()"

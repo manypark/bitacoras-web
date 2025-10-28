@@ -1,52 +1,6 @@
-<!-- <aside class="sidebar" data-side="left" aria-hidden="true">
-  <nav aria-label="Sidebar navigation">
-    <header>
-      <p class="text-2xl"> Hola {{ fullUserNameLogued }} </p>
-    </header>
-    <section class="scrollbar">
-      <div role="group" aria-labelledby="group-label-content-1">
-        <ul>
-          <li>
-            <a [routerLink]="[ '/home/dashboard' ]" routerLinkActive="bg-gray-500 text-white font-bold">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3V19H21V21H3V3H5ZM20.2929 6.29289L21.7071 7.70711L16 13.4142L13 10.415L8.70711 14.7071L7.29289 13.2929L13 7.58579L16 10.585L20.2929 6.29289Z"></path></svg>
-              <span>Dashboard</span>
-            </a>
-          </li>
-
-          <li>
-            <a [routerLink]="[ '/home/roles' ]" routerLinkActive="bg-gray-500 text-white font-bold">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3.78307 2.82598L12 1L20.2169 2.82598C20.6745 2.92766 21 3.33347 21 3.80217V13.7889C21 15.795 19.9974 17.6684 18.3282 18.7812L12 23L5.6718 18.7812C4.00261 17.6684 3 15.795 3 13.7889V3.80217C3 3.33347 3.32553 2.92766 3.78307 2.82598ZM12 11C13.3807 11 14.5 9.88071 14.5 8.5C14.5 7.11929 13.3807 6 12 6C10.6193 6 9.5 7.11929 9.5 8.5C9.5 9.88071 10.6193 11 12 11ZM7.52746 16H16.4725C16.2238 13.75 14.3163 12 12 12C9.68372 12 7.77619 13.75 7.52746 16Z"></path></svg>
-              <span>Roles</span>
-            </a>
-          </li>
-          <li>
-            <a [routerLink]="[ '/home/concepts' ]" routerLinkActive="bg-gray-500 text-white font-bold">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M7.94101 18C7.64391 16.7274 6.30412 15.6857 5.75395 14.9992C4.65645 13.6297 4 11.8915 4 10C4 5.58172 7.58172 2 12 2C16.4183 2 20 5.58172 20 10C20 11.8925 19.3428 13.6315 18.2443 15.0014C17.6944 15.687 16.3558 16.7276 16.059 18H7.94101ZM16 20V21C16 22.1046 15.1046 23 14 23H10C8.89543 23 8 22.1046 8 21V20H16ZM13 10.0048V6L8.5 12.0048H11V16.0048L15.5 10.0048H13Z"></path></svg>
-              <span>Conceptos</span>
-            </a>
-          </li>
-          <li>
-            <a [routerLink]="[ '/home/tasks' ]" routerLinkActive="bg-gray-500 text-white font-bold">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M8.00008 6V9H5.00008V6H8.00008ZM3.00008 4V11H10.0001V4H3.00008ZM13.0001 4H21.0001V6H13.0001V4ZM13.0001 11H21.0001V13H13.0001V11ZM13.0001 18H21.0001V20H13.0001V18ZM10.7072 16.2071L9.29297 14.7929L6.00008 18.0858L4.20718 16.2929L2.79297 17.7071L6.00008 20.9142L10.7072 16.2071Z"></path></svg>
-              <span>Tareas</span>
-            </a>
-          </li>
-          <li>
-            <a [routerLink]="[ '/home/logs' ]" routerLinkActive="bg-gray-500 text-white font-bold">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 22H5C3.34315 22 2 20.6569 2 19V3C2 2.44772 2.44772 2 3 2H17C17.5523 2 18 2.44772 18 3V15H22V19C22 20.6569 20.6569 22 19 22ZM18 17V19C18 19.5523 18.4477 20 19 20C19.5523 20 20 19.5523 20 19V17H18ZM6 7V9H14V7H6ZM6 11V13H14V11H6ZM6 15V17H11V15H6Z"></path></svg>
-              <span>Bitacoras</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </section>
-  </nav>
-</aside> -->
-
 <div class="drawer drawer-open">
   <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content">
-        <!-- NAVBAR -->
     <div class="flex flex-col flex-1">
 
       <div class="navbar flex justify-between bg-base-100 shadow-sm">
@@ -106,7 +60,6 @@
         </li>
       </ul>
 
-      <!-- button to open/close drawer -->
       <div class="m-2 is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Open">
         <label for="my-drawer-4" class="btn btn-ghost btn-circle drawer-button is-drawer-open:rotate-y-180">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" class="inline-block size-4 my-1.5"><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path><path d="M9 4v16"></path><path d="M14 10l2 2l-2 2"></path></svg>

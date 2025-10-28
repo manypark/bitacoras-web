@@ -1,38 +1,46 @@
-<dialog 
-    id="custom-delete-role"
-    class="dialog w-full sm:max-w-[425px] max-h-[612px]" 
-    aria-labelledby="demo-dialog-edit-profile-title" 
-    aria-describedby="demo-dialog-edit-profile-description">
-  <article>
-    <header>
-      <h2 id="demo-dialog-edit-profile-title">Eliminar Rol</h2>
-      <p id="demo-dialog-edit-profile-description">Una vez eliminado sera necesario hablar con el adminitrador para restablecer el rol.</p>
-    </header>
+<dialog
+  id="custom-delete-role"
+  class="modal modal-middle w-full"
+  (cancel)="$event.preventDefault()">
 
-    <section>
-        <form class="form grid">
-            <div class="flex flex-col gap-2">
-                <label for="demo-dialog-edit-profile-name" class="font-bold">Role</label>
-                    <input 
-                    type="text" 
-                    [value]="roleSelectedServices.selectedRole()?.name" 
-                    id="demo-dialog-edit-profile-name"
-                    disabled="true"
-                    autofocus />
-            </div>
-        </form>
-    </section>
+  <div class="modal-box">
+    <h3 class="text-lg font-bold text-error mb-2">Eliminar Rol</h3>
+    <p class="text-sm opacity-70 mb-4">
+      Una vez eliminado será necesario hablar con el administrador para restablecer el rol.
+    </p>
 
-    <footer>
-        <button class="btn-outline" [disabled]="isLoading()" (click)="onClose()"> Cancelar </button>
-        <button class="btn-destructive" [disabled]="isLoading()" (click)="submitDeletedRol()"> Eliminar </button>
-    </footer>
+    <form class="form grid gap-3">
+      <div class="flex flex-col gap-2">
+        <label for="delete-role-name" class="font-semibold">Rol</label>
+        <input
+          type="text"
+          id="delete-role-name"
+          class="input w-full"
+          [value]="roleSelectedServices.selectedRole()?.name"
+          disabled
+          autofocus
+        />
+      </div>
+    </form>
 
-    <button type="button" aria-label="Close dialog" onclick="this.closest('dialog').close()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x">
-        <path d="M18 6 6 18" />
-        <path d="m6 6 12 12" />
-      </svg>
+    <div class="modal-action">
+      <button class="btn btn-outline" [disabled]="isLoading()" (click)="onClose()">Cancelar</button>
+      <button class="btn btn-error" [disabled]="isLoading()" (click)="submitDeletedRol()">
+        @if (isLoading()) {
+          <span class="loading loading-spinner"></span> Eliminando
+        }
+        @if (!isLoading()) {
+          Eliminar
+        }
+      </button>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+      aria-label="Close dialog"
+      (click)="onClose()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z"></path></svg>
     </button>
-  </article>
+  </div>
 </dialog>

@@ -18,7 +18,7 @@ export class CreateDialogComponent extends RoleDialogBaseComponent {
   // #=============== variables ===============#
   @ViewChild('newRol') newRolInput!: ElementRef<HTMLInputElement>;
   public readonly roleCreated = output<boolean>();
-  
+
   // #=============== funciones ===============#
   submitNewRol = (): void => this.submit();
 
