@@ -1,5 +1,5 @@
+@plugin "daisyui";
 @import "tailwindcss";
-@import "basecoat-css";
 
 @keyframes shimmer {
   0% {
@@ -82,34 +82,4 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.541 0.281 293.009);
-}
-
-@keyframes growIn {
-  from {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes fadeOut {
-  from {
-    transform: scale(1);
-    opacity: 1;
-  }
-  to {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-}
-
-.enter-animation {
-  animation: growIn 0.4s ease forwards;
-}
-
-.leave-animation {
-  animation: fadeOut 0.3s ease forwards;
 }

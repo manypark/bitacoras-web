@@ -31,7 +31,7 @@ export default class TasksComponent {
   tasksParams = signal<TaskParamsEntity>({ idUserAssigned:'', idUserCreated: '', limit: 5, offset: 0 });
   filteredTask = computed( () => {
     const search = this.searchTask().toLowerCase().trim();
-    if (!search) return this.taskQuery.data()?.data.sort( (a, b) => a.idTasks - b.idTasks );
+    if (!search) return this.taskQuery.data()?.data.sort( (a, b) => b.idTasks - a.idTasks );
     return this.taskQuery.data()?.data.sort().sort( (a, b) => a.idTasks - b.idTasks ).filter( role =>
       role.title.toLowerCase().includes(search) || 
       role.description.toLowerCase().includes(search),

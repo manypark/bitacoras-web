@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
       <div class="flex flex-col 2xl:flex-row justify-between gap-6 mb-6">
         @for (item of [1,2,3]; track $index) {
         <div class="flex w-full 2xl:w-96">
-        <div class="card shadow-lg px-6 w-full">
+        <div class="card border-0 shadow-md px-6 w-full">
             <section class="px-0 flex flex-row justify-between items-center">
             <div class="flex flex-col space-y-2">
                 <div class="h-4 w-40 rounded-md bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>

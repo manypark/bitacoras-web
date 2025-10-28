@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { injectMutation, injectQuery } from '@tanstack/angular-query-experimental';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -39,18 +39,19 @@ export class CreateTaksComponent {
   }));
 
   // #=============== variables ===============#
-  userLogueaded   = localStorage.getItem('username');
-  userLogueadedId = localStorage.getItem('idUser');
+  userLogueaded   = signal<string>( localStorage.getItem('username') ?? 'fallo' );
+  userLogueadedId = signal<string>( localStorage.getItem('idUser') ?? '0' );
 
   taskForm = inject(NonNullableFormBuilder).group({
     title       : ['', [Validators.required, titleVOValidator ]],
     description : ['', [Validators.required, descriptionVOValidator ]],
-    assignedUser: [0, Validators.required],
+    assignedUser: ['', Validators.required ],
+    createdUser : [ this.userLogueadedId(), Validators.required],
   });
 
   // #=============== funciones ===============#
   onSelectUser( user:UsersEntity ) { 
-    this.taskForm.get('assignedUser')?.setValue(user.idUser); 
+    this.taskForm.get('assignedUser')?.setValue(user.idUser+'');
   }
 
   submitNewTask() {
@@ -62,8 +63,8 @@ export class CreateTaksComponent {
     this.postTask.mutate({
       title       : new TitleVO(this.taskForm.value.title!),
       description : new DescriptionVO(this.taskForm.value.description!),
-      userCreated : parseInt(this.userLogueadedId!),
-      userAssigned: this.taskForm.controls.assignedUser.value,
+      userCreated : parseInt(this.userLogueadedId()!),
+      userAssigned: +this.taskForm.controls.assignedUser.value,
     });
   }
   
