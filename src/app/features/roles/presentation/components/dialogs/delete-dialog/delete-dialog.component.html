@@ -1,7 +1,4 @@
-<dialog
-  id="custom-delete-role"
-  class="modal modal-middle w-full"
-  (cancel)="$event.preventDefault()">
+<dialog id="custom-delete-role" class="modal modal-middle w-full" (cancel)="$event.preventDefault()">
 
   <div class="modal-box">
     <h3 class="text-lg font-bold text-error mb-2">Eliminar Rol</h3>
@@ -26,12 +23,8 @@
     <div class="modal-action">
       <button class="btn btn-outline" [disabled]="isLoading()" (click)="onClose()">Cancelar</button>
       <button class="btn btn-error" [disabled]="isLoading()" (click)="submitDeletedRol()">
-        @if (isLoading()) {
-          <span class="loading loading-spinner"></span> Eliminando
-        }
-        @if (!isLoading()) {
-          Eliminar
-        }
+        @if (isLoading()) { <span class="loading loading-spinner"></span> Eliminando }
+        @if (!isLoading()) { Eliminar}
       </button>
     </div>
 

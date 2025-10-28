@@ -49,12 +49,8 @@
     <div class="modal-action">
       <button class="btn btn-outline" [disabled]="isLoading()" (click)="onClose()">Cancelar</button>
       <button class="btn btn-primary" [disabled]="isLoading()" (click)="submitUpdateRol()">
-        @if (isLoading()) {
-          <span class="loading loading-spinner"></span> Cargando
-        }
-        @if (!isLoading()) {
-          Editar
-        }
+        @if (isLoading()) { <span class="loading loading-spinner"></span> Editando }
+        @if (!isLoading()) { Editar }
       </button>
     </div>
 

@@ -1,76 +1,62 @@
-<dialog 
-    id="custom-edit-concept"
-    class="dialog w-full sm:max-w-[425px] max-h-[612px]" 
-    aria-labelledby="demo-dialog-edit-profile-title" 
-    aria-describedby="demo-dialog-edit-profile-description">
-  <article>
-    <header class="mb-8 border-b py-4 border-gray-200">
-      <h2 id="demo-dialog-edit-profile-title">Editar Concepto</h2>
-      <p id="demo-dialog-edit-profile-description">Has tus cambios del Concepto aqui. Da click en editar cuando hayas terminado.</p>
-    </header>
+<dialog  id="custom-edit-concept" class="modal modal-middle w-full" (cancel)="$event.preventDefault()">
 
-    <section>
-        <form class="form grid gap-4">
-            <div class="flex flex-col gap-8">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">Editar Concepto</h3>
+    <p class="text-sm opacity-70 mb-4"> Has tus cambios del Concepto aqui. Da click en editar cuando hayas terminado. </p>
 
-                <div class="flex flex-col gap-4">
-                    <label for="active-role">Estatus</label>
-    
-                    <label class="label gap-3 w-12">
-                        <label class="label">
-                        <input 
-                            type="checkbox" 
-                            name="switch" 
-                            role="switch" 
-                            [checked]="conceptSelectedServices.selectedConcept()?.active"
-                            (input)="onStatusChange($event)"
-                            class="input">
-                            @if (conceptSelectedServices.selectedConcept()?.active) {
-                                <span> Activo </span>
-                            }
-                            @if (!conceptSelectedServices.selectedConcept()?.active) {
-                                <span> Inactivo</span>
-                            }
-                        </label>
-                    </label>
-                </div>
+    <form class="form grid gap-4">
+        <div class="flex flex-col gap-8">
 
-                <div class="flex flex-col gap-4">
-                    <label for="demo-dialog-edit-profile-name">Role</label>
-                    <input 
-                    type="text" 
-                    [value]="conceptSelectedServices.selectedConcept()?.description"
-                    id="demo-dialog-edit-profile-name"
-                    (input)="onNameChange($any($event.target).value)"
-                    [disabled]="isLoading()"
-                    autofocus />
-                </div>
-
+            <div class="flex flex-col gap-4">
+                <label for="font-semibold">Estatus</label>
+                <label class="flex items-center gap-3 cursor-pointer w-12">
+                    <input
+                        type="checkbox" 
+                        name="switch" 
+                        role="switch" 
+                        [checked]="conceptSelectedServices.selectedConcept()?.active"
+                        (input)="onStatusChange($event)"
+                        class="toggle toggle-primary w-12 border rounded-2xl">
+                        @if (conceptSelectedServices.selectedConcept()?.active) {
+                            <span> Activo </span>
+                        }
+                        @if (!conceptSelectedServices.selectedConcept()?.active) {
+                            <span> Inactivo</span>
+                        }
+                </label>
             </div>
-        </form>
-
-      @if ( errValue() ) {
-        <p class="text-red-500 text-sm mt-2">⚠️ {{ errValue() }}</p>
-      }
-    </section>
-
-    <footer>
-        <button class="btn-outline" [disabled]="isLoading()" (click)="onClose()">Cancelar</button>
-        <button class="btn" [disabled]="isLoading()" (click)="onEditConcept()">
-            @if ( isLoading() ) {
-                <p>Cargando</p>
-            }
-            @if ( !isLoading() ) {
-                <p>Editar</p>
-            }
-        </button>
-    </footer>
-
-    <button type="button" aria-label="Close dialog" (click)="onClose()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x">
-        <path d="M18 6 6 18" />
-        <path d="m6 6 12 12" />
-      </svg>
-    </button>
-  </article>
+  
+            <div class="flex flex-col gap-4">
+                <label for="demo-dialog-edit-profile-name">Concepto</label>
+                <input 
+                type="text"
+                class="input input-primary border w-full"
+                [value]="conceptSelectedServices.selectedConcept()?.description"
+                id="demo-dialog-edit-profile-name"
+                (input)="onNameChange($any($event.target).value)"
+                [disabled]="isLoading()"
+                autofocus />
+            </div>
+        </div>
+    </form>
+  
+    @if ( errValue() ) {
+      <p class="text-red-500 text-sm mt-2">⚠️ {{ errValue() }}</p>
+    }
+  
+    <div class="modal-action">
+      <button class="btn btn-outline" [disabled]="isLoading()" (click)="onClose()">Cancelar</button>
+      <button class="btn btn-primary" [disabled]="isLoading()" (click)="onEditConcept()">
+        @if (isLoading()) { <span class="loading loading-spinner"></span> Editando }
+        @if (!isLoading()) { Editar }
+      </button>
+    </div>
+  
+     <button type="button" aria-label="Close dialog" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" (click)="onClose()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x">
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      </button>
+  </div>
 </dialog>

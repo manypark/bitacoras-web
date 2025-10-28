@@ -22,8 +22,6 @@
   (next)="nextPage()"
   (prev)="prevPage()"/>
 
-  <edit-dialog (roleUpdated)="retryGetAllRoles($event)"/>
-
-  <delete-dialog (roleDeleted)="retryGetAllRoles($event)"/>
-
   <create-dialog (roleCreated)="retryGetAllRoles($event)"/>
+  <edit-dialog (roleUpdated)="retryGetAllRoles($event)"/>
+  <delete-dialog (roleDeleted)="retryGetAllRoles($event)"/>
