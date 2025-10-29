@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { injectMutation, injectQuery } from '@tanstack/angular-query-experimental';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -19,6 +19,18 @@ export class CreateTaksComponent {
   private readonly postTaskUsecase = inject(CreateTaskUsecase);
   private readonly toast           = inject(ToastService);
 
+  // #=============== variables ===============#
+  userLogueaded   = signal<string>( localStorage.getItem('username') ?? 'fallo' );
+  userLogueadedId = signal<string>( localStorage.getItem('idUser') ?? '0' );
+  public readonly taskCreated = output<boolean>();
+
+  taskForm = inject(NonNullableFormBuilder).group({
+    title       : ['', [Validators.required, titleVOValidator ]],
+    description : ['', [Validators.required, descriptionVOValidator ]],
+    assignedUser: ['', Validators.required ],
+    createdUser : [ this.userLogueadedId(), Validators.required],
+  });
+
   // #=============== queries ===============#
   usersList = injectQuery( () => ({
     queryKey: ['getUsers'],
@@ -31,23 +43,14 @@ export class CreateTaksComponent {
     mutationFn  : (data:TaskEntity) => this.postTaskUsecase.execute(data),
     onSuccess   : (res) => {
       this.toast.success('Tarea creada', `Felicidades, tu tarea se creó correctamente`);
+      this.taskCreated.emit(true);
       this.onClose();
     },
     onError: (error: Error) => {
+      this.taskCreated.emit(false);
       this.toast.error('Error al crear tarea', error.message);
     },
   }));
-
-  // #=============== variables ===============#
-  userLogueaded   = signal<string>( localStorage.getItem('username') ?? 'fallo' );
-  userLogueadedId = signal<string>( localStorage.getItem('idUser') ?? '0' );
-
-  taskForm = inject(NonNullableFormBuilder).group({
-    title       : ['', [Validators.required, titleVOValidator ]],
-    description : ['', [Validators.required, descriptionVOValidator ]],
-    assignedUser: ['', Validators.required ],
-    createdUser : [ this.userLogueadedId(), Validators.required],
-  });
 
   // #=============== funciones ===============#
   onSelectUser( user:UsersEntity ) { 

@@ -4,10 +4,16 @@
   idModal="custom-create-task"
   buttonName="Crear tarea" />
 
-<app-custom-table
+  <app-custom-table
   [columns]="columns"
   [data]="filteredTask() ?? []"
   [isLoading]="taskQuery.isLoading()"
   (actionClick)="onTableAction($event)"/>
+
+  <pagination
+  [page]="page()"
+  [hasNextPage]="(taskQuery.data()?.data ?? []).length < 5"
+  (next)="nextPage()"
+  (prev)="prevPage()"/>
 
 <create-dialog-task />

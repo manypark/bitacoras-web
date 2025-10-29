@@ -1,21 +1,15 @@
-<dialog 
-    id="custom-create-task"
-    class="dialog w-full sm:max-w-[425px] max-h-[612px]" 
-    aria-labelledby="demo-dialog-edit-profile-title" 
-    aria-describedby="demo-dialog-edit-profile-description">
-  <article>
-    <header class="mb-6 border-b py-4 border-gray-200">
-      <h2 id="demo-dialog-edit-profile-title">Craer Tarea</h2>
-      <p id="demo-dialog-edit-profile-description">Creación de tarea</p>
-    </header>
+<dialog  id="custom-create-task" class="modal modal-middle w-full">
 
-    <section>
+    <div class="modal-box">
+        <h3 class="text-lg font-bold">Crear Tarea</h3>
+        <p class="text-sm opacity-70 mb-4">Creación de una tarea</p>
+
         <form class="form flex flex-col gap-y-8" [formGroup]="taskForm">
 
             <!-- Usuario creado -->
              <div class="flex flex-col gap-2">
                 <span class="font-bold">Usuario creado</span>
-                 <select formControlName="createdUser" class="select w-full">
+                 <select formControlName="createdUser" class="select select-primary border w-full">
                      <option [ngValue]="userLogueadedId()" [disabled]="true">{{ userLogueaded() }}</option>
                 </select>
              </div>
@@ -26,11 +20,10 @@
                     <input
                     name="title"
                     formControlName="title"
+                    class="input input-primary border w-full"
                     type="text"/>
                     @if (taskForm.get('title')?.touched && taskForm.get('title')?.errors) {
-                        <p class="text-red-500 text-sm">
-                        {{ taskForm.get('title')?.errors?.['titleError'] }}
-                        </p>
+                        <p class="text-red-500 text-sm"> {{ taskForm.get('title')?.errors?.['titleError'] }} </p>
                     }
             </div>
 
@@ -40,11 +33,10 @@
                     <input
                     name="description"
                     formControlName="description"
+                    class="input input-primary border w-full"
                     type="text"/>
                     @if (taskForm.get('description')?.touched && taskForm.get('description')?.errors) {
-                        <p class="text-red-500 text-sm">
-                        {{ taskForm.get('description')?.errors?.['descriptionError'] }}
-                        </p>
+                        <p class="text-red-500 text-sm"> {{ taskForm.get('description')?.errors?.['descriptionError'] }} </p>
                     }
             </div>
 
@@ -55,33 +47,32 @@
 
                 <div class="flex flex-col gap-2">
                     <span class="font-bold">Usuario asignado</span>
-                    <select formControlName="assignedUser" class="select w-full">
+                    <select formControlName="assignedUser" class="select select-primary border w-full">
                         @for ( item of usersList.data()?.data; track item.idUser ) {
                             <option [ngValue]="item.idUser">{{ item.firstName }} {{ item.lastName }}</option>
                         }
                     </select>
+                    @if (taskForm.get('assignedUser')?.touched && taskForm.get('assignedUser')?.errors) {
+                        <p class="text-red-500 text-sm"> El usuario asignado es requerido </p>
+                    }
                 </div>
              }
         </form>
-    </section>
 
-    <footer>
-        <button class="btn btn-soft btn-error" [disabled]="postTask.isPending()" (click)="onClose()"> Cancelar </button>
-        <button class="btn btn-soft btn-primary" [disabled]="!taskForm.valid && !postTask.isPending()"  (click)="submitNewTask()">
-             @if ( false ) {
-                <p>Cargando</p>
-            }
-            @if ( !false ) {
-                <p>Crear</p>
-            }
+        <div class="modal-action">
+            <button class="btn btn-outline" [disabled]="postTask.isPending()" (click)="onClose()"> Cancelar </button>
+            <button class="btn btn-primary" [disabled]="postTask.isPending()"  (click)="submitNewTask()">
+                @if ( !postTask.isPending() ) { <p>Crear</p> }
+                @if ( postTask.isPending() ) { <span class="loading loading-spinner"></span> Creando }
+            </button>
+        </div>
+
+        <button
+            type="button"
+            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            aria-label="Close dialog"
+            (click)="onClose()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z"></path></svg>
         </button>
-    </footer>
-
-    <button type="button" aria-label="Close dialog" (click)="onClose()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x">
-        <path d="M18 6 6 18" />
-        <path d="m6 6 12 12" />
-      </svg>
-    </button>
-  </article>
+    </div>
 </dialog>

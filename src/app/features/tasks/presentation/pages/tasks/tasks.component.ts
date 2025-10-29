@@ -3,21 +3,24 @@ import { Component, computed, inject, signal } from '@angular/core';
 
 import { CreateTaksComponent } from "../../components/dialogs";
 import { GetAllTasksUsecase, TaskParamsEntity, } from '@app/tasks/domain';
+import { PaginationComponent } from "@app/roles/presentation/components";
 import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ToastService, ColumnConfig } from "@app/shared";
 
 const importsList = [TitleDescriptionCustomButtonComponent, CreateTaksComponent];
 
 @Component({
   selector    : 'app-tasks',
-  imports     : [...importsList, CustomTableComponent],
+  imports: [...importsList, CustomTableComponent, PaginationComponent],
   templateUrl : './tasks.component.html',
   styleUrl    : './tasks.component.css',
 })
 export default class TasksComponent {
 
+  // #=============== dependencias ===============#
   private readonly toast = inject(ToastService);
   private readonly getTaskListUsecase = inject(GetAllTasksUsecase);
 
+  // #=============== variables ===============#
   columns:ColumnConfig[] = [
     { key: 'idTasks', header: 'ID', type: 'text' },
     { key: 'title', header: 'Tarea', type: 'text' },
@@ -28,6 +31,7 @@ export default class TasksComponent {
     { key: 'active', header: 'Estado', type: 'booleanBadge' },
   ];
   searchTask = signal<string>('');
+  page = signal(1);
   tasksParams = signal<TaskParamsEntity>({ idUserAssigned:'', idUserCreated: '', limit: 5, offset: 0 });
   filteredTask = computed( () => {
     const search = this.searchTask().toLowerCase().trim();
@@ -38,10 +42,22 @@ export default class TasksComponent {
     );
   });
 
+  // #=============== queries ===============#
   readonly taskQuery = injectQuery( () => ({
-    queryKey: ['taskList'],
+    queryKey: ['taskList', this.tasksParams() ],
     queryFn : () => this.getTaskListUsecase.execute( this.tasksParams() ),
   }));
+
+  // #=============== functions ===============#
+  nextPage() { 
+    this.page.update(p => p + 1);
+    this.tasksParams.set({ idUserAssigned:'', idUserCreated: '', limit: 5, offset: this.page() - 1});
+  }
+
+  prevPage() { 
+    if (this.page() > 1) this.page.update(p => p - 1);
+    this.tasksParams.set({ idUserAssigned:'', idUserCreated: '', limit: 5, offset: this.page() - 1});
+  }
 
   onTableAction(event:any) {
 
