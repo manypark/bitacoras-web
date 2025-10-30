@@ -3,7 +3,6 @@ import { Component, effect, inject, OnInit, resource, signal } from '@angular/co
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { 
-  ToastService, 
   FormUtilsService, 
   SubmitButtonComponent, 
   PasswordInputComponent, 
@@ -33,7 +32,6 @@ export default class RegisterComponent implements OnInit {
   private fb                = inject(FormBuilder);
   private registerServices  = inject(RegisterService);
   public formUtilServices   = inject(FormUtilsService);
-  private toast             = inject(ToastService);
   private router            = inject(Router);
   private registerTrigger   = signal<RegisterPayload | null>(null);
   public registerForm!:FormGroup;
@@ -50,10 +48,10 @@ export default class RegisterComponent implements OnInit {
     effect(() => {
       if ( this.registerResource.hasValue() ) {
         this.router.navigate(['/auth/login']);
-        this.toast.success('Registro exitoso', 'Bienvenido!');
+        // this.toast.success('Registro exitoso', 'Bienvenido!');
       }
       if ( this.registerResource.error() && this.registerForm.valid ) {
-        this.toast.error('Error en el registro', 'Hubo algun error en la petición' );
+        // this.toast.error('Error en el registro', 'Hubo algun error en la petición' );
       }
     });
   }

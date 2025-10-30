@@ -1,7 +1,7 @@
 import { Component, inject, output } from '@angular/core';
 
 import { UpdateRolesUsecase } from '@app/roles/domain';
-import { RoleDialogBaseComponent } from '@app/shared/custom-dialog';
+import { DialogBaseComponent } from '@app/shared/custom-dialog';
 import { RoleSelectionService } from '@app/roles/presentation/signals';
 
 @Component({
@@ -9,7 +9,7 @@ import { RoleSelectionService } from '@app/roles/presentation/signals';
   templateUrl : './edit-dialog.component.html',
   styleUrl    : './edit-dialog.component.css',
 })
-export class EditDialogComponent extends RoleDialogBaseComponent {
+export class EditDialogComponent extends DialogBaseComponent {
   // #=================== dependencias ===================#
   roleSelectedServices  = inject(RoleSelectionService);
   private readonly roleUpdateUsecase  = inject(UpdateRolesUsecase);

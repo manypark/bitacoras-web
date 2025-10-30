@@ -16,7 +16,7 @@
 
             <!-- Titulo-->
             <div class="flex flex-col gap-2">
-                <label for="create-dialog-input" class="font-bold">Título</label>
+                <label class="font-bold">Título</label>
                     <input
                     name="title"
                     formControlName="title"
@@ -29,7 +29,7 @@
 
             <!-- Description -->
             <div class="flex flex-col gap-2">
-                <label for="create-dialog-input" class="font-bold">Descripción</label>
+                <label class="font-bold">Descripción</label>
                     <input
                     name="description"
                     formControlName="description"
@@ -60,10 +60,10 @@
         </form>
 
         <div class="modal-action">
-            <button class="btn btn-outline" [disabled]="postTask.isPending()" (click)="onClose()"> Cancelar </button>
-            <button class="btn btn-primary" [disabled]="postTask.isPending()"  (click)="submitNewTask()">
-                @if ( !postTask.isPending() ) { <p>Crear</p> }
-                @if ( postTask.isPending() ) { <span class="loading loading-spinner"></span> Creando }
+            <button class="btn btn-outline" [disabled]="isLoading()" (click)="onClose()"> Cancelar </button>
+            <button class="btn btn-primary" [disabled]="isLoading()" (click)="submitNewTask()">
+                @if ( !isLoading() ) { <p>Crear</p> }
+                @if ( isLoading() ) { <span class="loading loading-spinner"></span> Creando }
             </button>
         </div>
 

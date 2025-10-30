@@ -6,11 +6,11 @@ import { GetAllTasksUsecase, TaskParamsEntity, } from '@app/tasks/domain';
 import { PaginationComponent } from "@app/roles/presentation/components";
 import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ColumnConfig } from "@app/shared";
 
-const importsList = [TitleDescriptionCustomButtonComponent, CreateTaksComponent];
+const importsList = [TitleDescriptionCustomButtonComponent, CreateTaksComponent, CustomTableComponent, PaginationComponent];
 
 @Component({
   selector    : 'app-tasks',
-  imports: [...importsList, CustomTableComponent, PaginationComponent],
+  imports     : [...importsList],
   templateUrl : './tasks.component.html',
   styleUrl    : './tasks.component.css',
 })
@@ -60,5 +60,11 @@ export default class TasksComponent {
 
   onTableAction(event:any) {
 
+  }
+
+  retryQueries( event:boolean ) {
+    if(event) {
+      this.taskQuery.refetch();
+    }
   }
 }

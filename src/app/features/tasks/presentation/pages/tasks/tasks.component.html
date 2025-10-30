@@ -16,4 +16,4 @@
   (next)="nextPage()"
   (prev)="prevPage()"/>
 
-<create-dialog-task />
+<create-dialog-task (taskCreated)="retryQueries($event)" />

@@ -1,6 +1,6 @@
 import { Component, inject, output } from '@angular/core';
 
-import { RoleDialogBaseComponent } from '@app/shared';
+import { DialogBaseComponent } from '@app/shared';
 import { UpdateConceptUsecase } from '@app/concepts/domain';
 import { ConceptSelectedService } from '@app/concepts/presentation/signals';
 
@@ -9,7 +9,7 @@ import { ConceptSelectedService } from '@app/concepts/presentation/signals';
   templateUrl : './update-dialog-concept.component.html',
   styleUrl    : './update-dialog-concept.component.css',
 })
-export class UpdateDialogConceptComponent extends RoleDialogBaseComponent {
+export class UpdateDialogConceptComponent extends DialogBaseComponent {
 
   // #=================== dependencias ===================#
   private readonly conceptUpdateUsecase = inject(UpdateConceptUsecase);

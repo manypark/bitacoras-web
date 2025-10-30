@@ -1,6 +1,6 @@
 import { Component, inject, output } from '@angular/core';
 
-import { RoleDialogBaseComponent } from '@app/shared';
+import { DialogBaseComponent } from '@app/shared';
 import { DeleteConceptUsecase } from '@app/concepts/domain';
 import { ConceptSelectedService } from '@app/concepts/presentation/signals';
 
@@ -9,7 +9,7 @@ import { ConceptSelectedService } from '@app/concepts/presentation/signals';
   templateUrl : './delete-dialog-concept.component.html',
   styleUrl    : './delete-dialog-concept.component.css',
 })
-export class DeleteDialogConceptComponent extends RoleDialogBaseComponent {
+export class DeleteDialogConceptComponent extends DialogBaseComponent {
 
   // #=================== dependencias ===================#
   private readonly conceptUpdateUsecase = inject(DeleteConceptUsecase);

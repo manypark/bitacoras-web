@@ -2,7 +2,7 @@ import { FormsModule } from '@angular/forms';
 import { Component, ElementRef, inject, output, ViewChild } from '@angular/core';
 
 import { CreateConceptUsecase } from '@app/concepts/domain';
-import { RoleDialogBaseComponent } from '@app/shared/custom-dialog';
+import { DialogBaseComponent } from '@app/shared/custom-dialog';
 
 @Component({
   selector    : 'create-dialog-concept',
@@ -10,7 +10,7 @@ import { RoleDialogBaseComponent } from '@app/shared/custom-dialog';
   styleUrl    : './create-dialog-concept.component.css',
   templateUrl : './create-dialog-concept.component.html',
 })
-export class CreateDialogComponent extends RoleDialogBaseComponent {
+export class CreateDialogComponent extends DialogBaseComponent {
 
   // #=============== dependencias ===============#
   private readonly createConceptUsecase = inject(CreateConceptUsecase);

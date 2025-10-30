@@ -1,6 +1,6 @@
 import { Component, inject, output } from '@angular/core';
 
-import { RoleDialogBaseComponent } from '@app/shared';
+import { DialogBaseComponent } from '@app/shared';
 import { DeleteRolesUsecase } from '@app/roles/domain';
 import { RoleSelectionService } from '@app/roles/presentation/signals';
 
@@ -9,7 +9,7 @@ import { RoleSelectionService } from '@app/roles/presentation/signals';
   templateUrl : './delete-dialog.component.html',
   styleUrl    : './delete-dialog.component.css',
 })
-export class DeleteDialogComponent extends RoleDialogBaseComponent {
+export class DeleteDialogComponent extends DialogBaseComponent {
   // #=================== dependencias ===================#
   roleSelectedServices  = inject(RoleSelectionService);
   private readonly roleUpdateUsecase  = inject(DeleteRolesUsecase);

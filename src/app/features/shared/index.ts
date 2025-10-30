@@ -7,5 +7,4 @@ export * from './helpers';
 export * from './inputs';
 export * from './interfaces';
 export * from './services';
-export * from './toast';
 export * from './validators';

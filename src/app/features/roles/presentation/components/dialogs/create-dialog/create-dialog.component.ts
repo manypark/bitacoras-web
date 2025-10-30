@@ -1,7 +1,7 @@
 import { FormsModule } from '@angular/forms';
 import { Component, ElementRef, inject, ViewChild, output } from '@angular/core';
 
-import { RoleDialogBaseComponent } from '@app/shared';
+import { DialogBaseComponent } from '@app/shared';
 import { CreateRolUsecase } from '@app/roles/domain/usecase';
 
 @Component({
@@ -10,7 +10,7 @@ import { CreateRolUsecase } from '@app/roles/domain/usecase';
   styleUrl    : './create-dialog.component.css',
   templateUrl : './create-dialog.component.html',
 })
-export class CreateDialogComponent extends RoleDialogBaseComponent {
+export class CreateDialogComponent extends DialogBaseComponent {
 
   // #=============== dependencias ===============#
   private readonly createRolUsecase = inject(CreateRolUsecase);

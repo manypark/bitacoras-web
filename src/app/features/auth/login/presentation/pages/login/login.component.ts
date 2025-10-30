@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, } from '@angul
 import { EmailVO, PasswordVO } from '@app/auth/login/domain';
 import { emailVOValidator, passwordVOValidator } from '@shared/validators';
 import { SignInService } from '@app/auth/login/presentation/signals/signIn.service';
-import { ToastService, FormUtilsService, SubmitButtonComponent, PasswordInputComponent, InputGenericFieldComponent, } from '@shared/index';
+import { FormUtilsService, SubmitButtonComponent, PasswordInputComponent, InputGenericFieldComponent, } from '@shared/index';
 
 @Component({
   selector    : 'app-login',
@@ -29,7 +29,6 @@ export default class LoginComponent implements OnInit {
   private fb              = inject(FormBuilder);
   private signInServices  = inject(SignInService);
   public formUtilServices = inject(FormUtilsService);
-  private toast           = inject(ToastService);
   private router          = inject(Router);
   
   signInResource = resource({
@@ -49,11 +48,11 @@ export default class LoginComponent implements OnInit {
         localStorage.setItem('username', data.data.firstName + ' ' +data.data.lastName);
         localStorage.setItem('imageUrl', data.data.avatarUrl);
         this.router.navigate(['/home/dashboard']);
-        this.toast.success('Login exitoso', 'Bienvenido de vuelta!');
+        // this.toast.success('Login exitoso', 'Bienvenido de vuelta!');
       }
 
       if ( this.signInResource.error() && this.signInForm.valid ) {
-        this.toast.error('Error en el inicio sesión', 'Hubo algun error en la petición' );
+        // this.toast.error('Error en el inicio sesión', 'Hubo algun error en la petición' );
       }
     });
   }

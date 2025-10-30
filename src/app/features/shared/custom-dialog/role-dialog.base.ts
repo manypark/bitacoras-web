@@ -1,16 +1,15 @@
 import { Observable } from 'rxjs';
-import { inject, signal } from '@angular/core';
+import { toast } from 'ngx-sonner';
+import { signal } from '@angular/core';
 
-import { ToastService } from '@app/shared/toast';
-
-export abstract class RoleDialogBaseComponent {
+export abstract class DialogBaseComponent {
   /** Signal storing the current error message, if any. */
   errValue = signal<string>('');
   /** Signal indicating whether an operation is in progress. */
   isLoading = signal<boolean>(false);
 
   /** Injected toast service used to display feedback messages. */
-  protected toast = inject(ToastService);
+  protected readonly toast = toast;
 
   /**
    * Performs the specific asynchronous operation and returns an observable
@@ -64,7 +63,7 @@ export abstract class RoleDialogBaseComponent {
     try {
       this.performOperation().subscribe({
         next: () => {
-          this.toast.success(this.successTitle(), this.successMessage());
+          this.toast.success( this.successTitle() );
           this.emitResult(true);
           this.isLoading.set(false);
           this.close();
