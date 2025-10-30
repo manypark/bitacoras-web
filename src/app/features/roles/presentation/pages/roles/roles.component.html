@@ -18,7 +18,7 @@
 
   <pagination 
   [page]="page()"
-  [hasNextPage]="roles().length < 5"
+  [hasNextPage]="(updateResource.value()?.data ?? []).length < 5"
   (next)="nextPage()"
   (prev)="prevPage()"/>
 

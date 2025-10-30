@@ -4,7 +4,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { CreateTaksComponent } from "../../components/dialogs";
 import { GetAllTasksUsecase, TaskParamsEntity, } from '@app/tasks/domain';
 import { PaginationComponent } from "@app/roles/presentation/components";
-import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ToastService, ColumnConfig } from "@app/shared";
+import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ColumnConfig } from "@app/shared";
 
 const importsList = [TitleDescriptionCustomButtonComponent, CreateTaksComponent];
 
@@ -17,7 +17,6 @@ const importsList = [TitleDescriptionCustomButtonComponent, CreateTaksComponent]
 export default class TasksComponent {
 
   // #=============== dependencias ===============#
-  private readonly toast = inject(ToastService);
   private readonly getTaskListUsecase = inject(GetAllTasksUsecase);
 
   // #=============== variables ===============#

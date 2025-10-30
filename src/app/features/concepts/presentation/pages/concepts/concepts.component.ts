@@ -1,10 +1,10 @@
 import { FormsModule } from '@angular/forms';
 import { injectQuery } from '@tanstack/angular-query-experimental';
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 
 import { PaginationComponent } from "@app/roles/presentation/components";
 import { ConceptSelectedService } from '@app/concepts/presentation/signals';
-import { ColumnConfig, CustomTableComponent, ToastService } from "@app/shared";
+import { ColumnConfig, CustomTableComponent } from "@app/shared";
 import { ConceptEntity, GetAllConceptUsecase, GetConceptInfoUsecase } from '@app/concepts/domain';
 import { TitleDescriptionCustomButtonComponent, TotalsInfoComponent } from '@app/shared/containers';
 import { CreateDialogComponent, UpdateDialogConceptComponent, DeleteDialogConceptComponent } from "../../components/dialogs";
@@ -27,7 +27,6 @@ import { CreateDialogComponent, UpdateDialogConceptComponent, DeleteDialogConcep
 export default class ConceptsComponent {
 
   // #=============== dependencias ===============#
-  private readonly toast = inject(ToastService);
   private readonly getConceptsUsecase = inject(GetAllConceptUsecase);
   private readonly getConceptsInfoUsecase = inject(GetConceptInfoUsecase);
   private readonly conceptSelectedServices = inject(ConceptSelectedService);
@@ -47,16 +46,6 @@ export default class ConceptsComponent {
     if (!search) return dataConcepts;
     return dataConcepts.filter( role => role.description.toLowerCase().includes(search) );
   });
-  
-  // #=============== constructor ===============#
-  constructor() {
-    effect( () => {
-      const data = this.getConceptsQuery.data();
-      const err  = this.getConceptsQuery;
-      if (data) this.toast.success('Petición exitosa', 'Conceptos cargados correctamente');
-      if ( err.isError() ) this.toast.error('Petición fallida', err.error().message ?? 'Hubo algún error');
-    });
-  }
 
   // #=============== queries ===============#
   readonly getConceptsQuery = injectQuery( () => ({

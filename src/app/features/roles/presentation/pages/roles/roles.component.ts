@@ -1,11 +1,10 @@
 import { FormsModule } from '@angular/forms';
-import { Component, computed, effect, inject, resource, signal } from '@angular/core';
+import { Component, computed, inject, resource, signal } from '@angular/core';
 
-import { ToastService } from '@app/shared/toast';
 import { ColumnConfig, CustomTableComponent } from "@app/shared";
 import { PaginationComponent } from "../../components/pagination";
 import { RoleSelectionService } from '@app/roles/presentation/signals';
-import { GetAllRoles, GetAllRolesInfo, ROLES_KEYS, RolesEntity } from '@app/roles/domain';
+import { GetAllRoles, GetAllRolesInfo, RolesEntity } from '@app/roles/domain';
 import { TitleDescriptionCustomButtonComponent, TotalsInfoComponent } from '@app/shared/containers';
 import { 
   EditDialogComponent, 
@@ -22,62 +21,41 @@ import {
     CustomTableComponent,
     DeleteDialogComponent,
     CreateDialogComponent,
+    TotalsInfoComponent,
     TitleDescriptionCustomButtonComponent,
-    TotalsInfoComponent
 ],
   templateUrl : './roles.component.html',
   styleUrl    : './roles.component.css',
 })
 export default class RolesComponent {
 
-  // 🧠 Signals principales
-  roles = signal<RolesEntity[]>([]);
-  searchRol = signal<string>('');
-
-  private toast = inject(ToastService);
+  // #=============== dependencias ===============#
   private getAllRolesUsecase = inject(GetAllRoles);
   private getAllRolesUSecaseInfo = inject(GetAllRolesInfo);
   private roleSelectedServices = inject(RoleSelectionService);
 
-  // 🔢 Paginación
+  // #=============== variables ===============#
   page = signal(1);
+  searchRol = signal<string>('');
+  rolesInfo = this.getAllRolesUSecaseInfo.execute();
   columns:ColumnConfig[] = [
     { key: 'idRoles', header: 'ID', type: 'text' },
     { key: 'name', header: 'Nombre', type: 'text' },
     { key: 'active', header: 'Estatus', type: 'booleanBadge' }
   ];
-  rolesInfo = this.getAllRolesUSecaseInfo.execute();
-
-  // 🔍 Filtro local
   filteredRoles = computed( () => {
     const search = this.searchRol().toLowerCase().trim();
-    if (!search) return this.roles();
-    return this.roles().filter( role => role.name.toLowerCase().includes(search) );
+    if (!search) return (this.updateResource.value()?.data ?? [] );
+    return (this.updateResource.value()?.data ?? [] ).filter( role => role.name.toLowerCase().includes(search) );
   });
 
+  // #=============== resource ===============#
   readonly updateResource = resource({
     params: () => this.page(),
-    loader: async ( page ) => {
-      this.roles.set([]);
-      return this.getAllRolesUsecase.execute( 5, (this.page() - 1) * 5  );
-    },
+    loader: () => this.getAllRolesUsecase.execute( 5, (this.page() - 1) * 5  ),
   });
 
-  constructor() {
-    effect(() => {
-      const data = this.updateResource?.value()?.data;
-
-      if (data) {
-        this.roles.set( this.updateResource.value()?.data ?? [] );
-        this.toast.success('Petición exitosa', 'Roles cargados correctamente');
-      }
-
-      if (this.updateResource.error()) {
-        this.toast.error('Petición fallida', this.updateResource.value()?.message ?? 'Hubo algún error');
-      }
-    });
-  }
-
+  // #=============== funciones ===============#
   nextPage() { this.page.update(p => p + 1); }
 
   prevPage() { if (this.page() > 1) this.page.update(p => p - 1); }
@@ -93,7 +71,6 @@ export default class RolesComponent {
 
   retryGetAllRoles( value:boolean ) {
     if(value) {
-      this.roles.set([]);
       this.updateResource.reload();
       this.rolesInfo.reload();
     }
