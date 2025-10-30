@@ -26,9 +26,6 @@ export class RoleSelectionService {
     const current = this._selectedRole();
     if (!current) return;
 
-    this._selectedRole.set({
-      ...current,
-      ...partial,
-    });
+    this._selectedRole.set({ ...current, ...partial,});
   }
 }

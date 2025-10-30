@@ -1,16 +1,17 @@
 import { injectQuery } from '@tanstack/angular-query-experimental';
 import { Component, computed, inject, signal } from '@angular/core';
 
-import { CreateTaksComponent } from "../../components/dialogs";
 import { GetAllTasksUsecase, TaskParamsEntity, } from '@app/tasks/domain';
 import { PaginationComponent } from "@app/roles/presentation/components";
+import { CreateTaksComponent, DeleteTask } from "../../components/dialogs";
 import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ColumnConfig } from "@app/shared";
+import { TaskSelectedServices } from '@app/tasks/presentation/signals';
 
 const importsList = [TitleDescriptionCustomButtonComponent, CreateTaksComponent, CustomTableComponent, PaginationComponent];
 
 @Component({
   selector    : 'app-tasks',
-  imports     : [...importsList],
+  imports: [...importsList, DeleteTask],
   templateUrl : './tasks.component.html',
   styleUrl    : './tasks.component.css',
 })
@@ -18,6 +19,7 @@ export default class TasksComponent {
 
   // #=============== dependencias ===============#
   private readonly getTaskListUsecase = inject(GetAllTasksUsecase);
+  private readonly selectedTask = inject(TaskSelectedServices);
 
   // #=============== variables ===============#
   columns:ColumnConfig[] = [
@@ -59,7 +61,12 @@ export default class TasksComponent {
   }
 
   onTableAction(event:any) {
-
+    const modalId = event.action === 'edit' ? 'custom-edit-role' : event.action === 'delete' ? 'custom-delete-task': null;
+    if (modalId) {
+      const modal = document.getElementById(modalId) as HTMLDialogElement | null;
+      this.selectedTask.setSelectedTask(event.row);
+      modal?.showModal();
+    }
   }
 
   retryQueries( event:boolean ) {

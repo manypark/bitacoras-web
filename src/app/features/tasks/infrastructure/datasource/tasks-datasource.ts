@@ -1,4 +1,4 @@
-import { inject, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { catchError, firstValueFrom, throwError } from "rxjs";
 
 import { ApiResponse } from "@utils/api_response";
@@ -31,6 +31,14 @@ export class TaskDatasource {
 
     async getAllTasks( params:TaskParamsEntity ):Promise<ApiResponse<TaskListEntity[]>> {
         return await firstValueFrom( this.http.get<ApiResponse<TaskListEntity[]>>('/tasks', { params: { ...params } }).pipe(
+                catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
+            ) 
+        );
+    }
+
+    async deleteTask( idTask:number ) {
+        return await firstValueFrom(
+            this.http.delete<ApiResponse<any>>(`/tasks/${idTask}`).pipe(
                 catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
             ) 
         );

@@ -27,4 +27,8 @@ export class TaskRespoitoryImpl implements TaskRepository {
     getAllTasks(params: TaskParamsEntity): Promise<ApiResponse<TaskListEntity[]>> {
         return this.datasource.getAllTasks( params );
     }
+
+    deleteTask(idTask: number): Promise<ApiResponse<any>> {
+        return this.datasource.deleteTask( idTask );
+    }
 }
