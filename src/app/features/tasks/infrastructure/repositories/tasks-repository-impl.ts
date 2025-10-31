@@ -8,7 +8,8 @@ import {
     TaskRepository, 
     TaskListEntity, 
     TaskParamsEntity, 
-    TaskResponseEntity, 
+    TaskResponseEntity,
+    UpdateTaskEntity, 
 } from "@app/tasks/domain";
 
 @Injectable({ providedIn: 'root'})
@@ -30,5 +31,9 @@ export class TaskRespoitoryImpl implements TaskRepository {
 
     deleteTask(idTask: number): Promise<ApiResponse<any>> {
         return this.datasource.deleteTask( idTask );
+    }
+
+    updateTask(updateTask: UpdateTaskEntity): Promise<ApiResponse<UpdateTaskEntity>> {
+        return this.datasource.updateTask( updateTask );
     }
 }

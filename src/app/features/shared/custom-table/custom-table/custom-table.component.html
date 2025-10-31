@@ -47,6 +47,13 @@
                 @case ('date') {
                   <span class="badge badge-ghost p-4">{{ cell | date:'mediumDate' }}</span>
                 }
+                @case ('link') {
+                  @if (cell > 0) {
+                    <a class="link ml-2 bg-gray-200 p-2 rounded-md"> {{ cell }} </a>
+                  } @else {
+                    <span class="ml-2 bg-gray-200 p-2 rounded-md">{{ formatDisplay(cell) }}</span>
+                  }
+                }
                 @case ('booleanBadge') {
                   @if (cell) {
                     <span class="text-green-600">Activo</span>

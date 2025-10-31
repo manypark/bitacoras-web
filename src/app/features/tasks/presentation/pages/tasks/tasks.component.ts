@@ -30,6 +30,7 @@ export default class TasksComponent {
     { key: 'userAssigned', header: 'Asignada A', type: 'text' },
     { key: 'createdAt', header: 'Fecha creación', type: 'date' },
     { key: 'active', header: 'Estado', type: 'booleanBadge' },
+    { key: 'logsCount', header: 'Bitacoras', type: 'link' },
   ];
   searchTask = signal<string>('');
   page = signal(1);

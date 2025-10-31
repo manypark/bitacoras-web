@@ -3,7 +3,7 @@ import { catchError, firstValueFrom, throwError } from "rxjs";
 
 import { ApiResponse } from "@utils/api_response";
 import { HttpClientService } from "../../../../core/services";
-import { TaskEntity, TaskListEntity, TaskParamsEntity, TaskResponseEntity, UsersEntity } from "@app/tasks/domain";
+import { TaskEntity, TaskListEntity, TaskParamsEntity, TaskResponseEntity, UpdateTaskEntity, UsersEntity } from "@app/tasks/domain";
 
 @Injectable({ providedIn: 'root'})
 export class TaskDatasource {
@@ -39,6 +39,19 @@ export class TaskDatasource {
     async deleteTask( idTask:number ) {
         return await firstValueFrom(
             this.http.delete<ApiResponse<any>>(`/tasks/${idTask}`).pipe(
+                catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
+            ) 
+        );
+    }
+
+    async updateTask( task:UpdateTaskEntity ) {
+        return await firstValueFrom(
+            this.http.patch<ApiResponse<UpdateTaskEntity>>(`/tasks/${task.idTask}`,{
+                title       : task.title,
+                description : task.description,
+                active      : task.active,
+                userAssigned: task.userAssigned
+            }).pipe(
                 catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
             ) 
         );
