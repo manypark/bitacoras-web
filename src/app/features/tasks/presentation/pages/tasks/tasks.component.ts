@@ -1,17 +1,17 @@
 import { injectQuery } from '@tanstack/angular-query-experimental';
 import { Component, computed, inject, signal } from '@angular/core';
 
-import { GetAllTasksUsecase, TaskParamsEntity, } from '@app/tasks/domain';
-import { PaginationComponent } from "@app/roles/presentation/components";
-import { CreateTaksComponent, DeleteTask } from "../../components/dialogs";
-import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ColumnConfig } from "@app/shared";
 import { TaskSelectedServices } from '@app/tasks/presentation/signals';
+import { PaginationComponent } from "@app/roles/presentation/components";
+import { GetAllTasksUsecase, TaskListEntity, TaskParamsEntity, } from '@app/tasks/domain';
+import { CreateTaksComponent, DeleteTask, UpdateTaskComponent } from "../../components/dialogs";
+import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ColumnConfig } from "@app/shared";
 
 const importsList = [TitleDescriptionCustomButtonComponent, CreateTaksComponent, CustomTableComponent, PaginationComponent];
 
 @Component({
   selector    : 'app-tasks',
-  imports: [...importsList, DeleteTask],
+  imports: [...importsList, DeleteTask, UpdateTaskComponent],
   templateUrl : './tasks.component.html',
   styleUrl    : './tasks.component.css',
 })
@@ -61,8 +61,8 @@ export default class TasksComponent {
     this.tasksParams.set({ idUserAssigned:'', idUserCreated: '', limit: 5, offset: this.page() - 1});
   }
 
-  onTableAction(event:any) {
-    const modalId = event.action === 'edit' ? 'custom-edit-role' : event.action === 'delete' ? 'custom-delete-task': null;
+  onTableAction(event: { action:string; row:TaskListEntity }) {
+    const modalId = event.action === 'edit' ? 'custom-update-task' : event.action === 'delete' ? 'custom-delete-task': null;
     if (modalId) {
       const modal = document.getElementById(modalId) as HTMLDialogElement | null;
       this.selectedTask.setSelectedTask(event.row);

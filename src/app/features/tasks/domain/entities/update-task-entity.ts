@@ -1,7 +1,9 @@
+import { DescriptionVO, TitleVO } from "@app/tasks/domain";
+
 export interface UpdateTaskEntity {
     idTask:       number;
-    title:        string;
-    description:  string;
+    title:        TitleVO;
+    description:  DescriptionVO;
     active:       boolean;
     userAssigned: number;
 }

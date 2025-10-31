@@ -1,0 +1,100 @@
+<dialog  id="custom-update-task" class="modal modal-middle w-full">
+
+    <div class="modal-box">
+        <h3 class="text-lg font-bold">Actualización Tarea</h3>
+        <p class="text-sm opacity-70 mb-4">Actualizació de una tarea</p>
+
+        <form class="form flex flex-col gap-y-8" [formGroup]="taskForm">
+
+            <!-- Usuario creado -->
+             <div class="flex flex-col gap-2">
+                <span class="font-bold">Usuario creado</span>
+                 <select disabled="false" class="select select-primary border w-full">
+                     <option>
+                        {{ selectedTaskServices.selectedTask()?.userCreated?.firstName }} {{ selectedTaskServices.selectedTask()?.userCreated?.lastName }}
+                    </option>
+                </select>
+             </div>
+
+            <!-- Titulo-->
+            <div class="flex flex-col gap-2">
+                <label class="font-bold">Título</label>
+                    <input
+                    name="title"
+                    formControlName="title"
+                    class="input input-primary border w-full"
+                    autofocus
+                    type="text"/>
+                    @if (taskForm.get('title')?.touched && taskForm.get('title')?.errors) {
+                        <p class="text-red-500 text-sm"> {{ taskForm.get('title')?.errors?.['titleError'] }} </p>
+                    }
+            </div>
+
+            <!-- Description -->
+            <div class="flex flex-col gap-2">
+                <label class="font-bold">Descripción</label>
+                    <input
+                    name="description"
+                    formControlName="description"
+                    class="input input-primary border w-full"
+                    type="text"/>
+                    @if (taskForm.get('description')?.touched && taskForm.get('description')?.errors) {
+                        <p class="text-red-500 text-sm"> {{ taskForm.get('description')?.errors?.['descriptionError'] }} </p>
+                    }
+            </div>
+
+            <!-- Usuario asignado -->
+             @if ( usersList.error() ) {
+                <h3 class="text-red-400 font-bold"> {{ usersList.error()?.message  }} </h3>
+             } @else {
+
+                <div class="flex flex-col gap-2">
+                    <span class="font-bold">Usuario asignado</span>
+                    <select formControlName="assignedUser" class="select select-primary border w-full">
+                        @for ( item of usersList.data()?.data; track item.idUser ) {
+                            <option [ngValue]="item.idUser">{{ item.firstName }} {{ item.lastName }}</option>
+                        }
+                    </select>
+                    @if (taskForm.get('assignedUser')?.touched && taskForm.get('assignedUser')?.errors) {
+                        <p class="text-red-500 text-sm"> El usuario asignado es requerido </p>
+                    }
+                </div>
+             }
+
+             <div class="flex flex-col gap-4">
+                <label for="font-semibold">Estatus</label>
+                <label class="flex items-center gap-3 cursor-pointer w-12">
+                    <input
+                        type="checkbox" 
+                        name="switch" 
+                        role="switch" 
+                        formControlName="active"
+                        (input)="onStatusChange($event)"
+                        class="toggle toggle-primary w-12 border rounded-2xl">
+                        @if (selectedTaskServices.selectedTask()?.active) {
+                            <span> Activo </span>
+                        }
+                        @if (!selectedTaskServices.selectedTask()?.active) {
+                            <span> Inactivo</span>
+                        }
+                </label>
+            </div>
+        </form>
+
+        <div class="modal-action">
+            <button class="btn btn-outline" [disabled]="isLoading()" (click)="onClose()"> Cancelar </button>
+            <button class="btn btn-primary" [disabled]="isLoading() || !taskForm.valid" (click)="submitUpdateTask()">
+                @if ( !isLoading() ) { <p>Actualizar</p> }
+                @if ( isLoading() ) { <span class="loading loading-spinner"></span> Actualizando }
+            </button>
+        </div>
+
+        <button
+            type="button"
+            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            aria-label="Close dialog"
+            (click)="onClose()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z"></path></svg>
+        </button>
+    </div>
+</dialog>

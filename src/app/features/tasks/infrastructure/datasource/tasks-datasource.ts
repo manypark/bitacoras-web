@@ -47,8 +47,8 @@ export class TaskDatasource {
     async updateTask( task:UpdateTaskEntity ) {
         return await firstValueFrom(
             this.http.patch<ApiResponse<UpdateTaskEntity>>(`/tasks/${task.idTask}`,{
-                title       : task.title,
-                description : task.description,
+                title       : task.title.getValue(),
+                description : task.description.getValue(),
                 active      : task.active,
                 userAssigned: task.userAssigned
             }).pipe(
