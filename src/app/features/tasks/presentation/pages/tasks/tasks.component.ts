@@ -1,13 +1,14 @@
 import { injectQuery } from '@tanstack/angular-query-experimental';
+import { FormsModule } from '@angular/forms';
 import { Component, computed, inject, signal } from '@angular/core';
 
 import { TaskSelectedServices } from '@app/tasks/presentation/signals';
 import { PaginationComponent } from "@app/roles/presentation/components";
-import { GetAllTasksUsecase, TaskListEntity, TaskParamsEntity, } from '@app/tasks/domain';
+import { GetAllTasksUsecase, GetAllUsersUsecase, TaskListEntity, TaskParamsEntity, } from '@app/tasks/domain';
 import { CreateTaksComponent, DeleteTask, UpdateTaskComponent } from "../../components/dialogs";
 import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ColumnConfig } from "@app/shared";
 
-const importsList = [TitleDescriptionCustomButtonComponent, CreateTaksComponent, CustomTableComponent, PaginationComponent];
+const importsList = [TitleDescriptionCustomButtonComponent, CreateTaksComponent, CustomTableComponent, PaginationComponent, FormsModule];
 
 @Component({
   selector    : 'app-tasks',
@@ -18,23 +19,31 @@ const importsList = [TitleDescriptionCustomButtonComponent, CreateTaksComponent,
 export default class TasksComponent {
 
   // #=============== dependencias ===============#
-  private readonly getTaskListUsecase = inject(GetAllTasksUsecase);
   private readonly selectedTask = inject(TaskSelectedServices);
+  private readonly getUsersUsecase = inject(GetAllUsersUsecase);
+  private readonly getTaskListUsecase = inject(GetAllTasksUsecase);
 
   // #=============== variables ===============#
   columns:ColumnConfig[] = [
     { key: 'idTasks', header: 'ID', type: 'text' },
     { key: 'title', header: 'Tarea', type: 'text' },
     { key: 'description', header: 'Descripción', type: 'text' },
-    { key: 'userCreated', header: 'Asignada Por', type: 'text' },
+    { key: 'userCreated', header: 'Creada Por', type: 'text' },
     { key: 'userAssigned', header: 'Asignada A', type: 'text' },
     { key: 'createdAt', header: 'Fecha creación', type: 'date' },
     { key: 'active', header: 'Estado', type: 'booleanBadge' },
     { key: 'logsCount', header: 'Bitacoras', type: 'link' },
   ];
-  searchTask = signal<string>('');
   page = signal(1);
-  tasksParams = signal<TaskParamsEntity>({ idUserAssigned:'', idUserCreated: '', limit: 5, offset: 0 });
+  idUserCreatedSelected = signal<string>('');
+  idUserAsignedSelected = signal<string>('');
+  searchTask = signal<string>('');
+  tasksParams = computed(() => ({
+    idUserAssigned: this.idUserAsignedSelected(),
+    idUserCreated : this.idUserCreatedSelected(),
+    limit         : 5,
+    offset        : this.page() - 1,
+  }));
   filteredTask = computed( () => {
     const search = this.searchTask().toLowerCase().trim();
     if (!search) return this.taskQuery.data()?.data.sort( (a, b) => b.idTasks - a.idTasks );
@@ -50,15 +59,30 @@ export default class TasksComponent {
     queryFn : () => this.getTaskListUsecase.execute( this.tasksParams() ),
   }));
 
+  readonly usersList = injectQuery( () => ({
+    queryKey: ['getUsers'],
+    queryFn : () => this.getUsersUsecase.execute(),
+  }));
+
   // #=============== functions ===============#
   nextPage() { 
     this.page.update(p => p + 1);
-    this.tasksParams.set({ idUserAssigned:'', idUserCreated: '', limit: 5, offset: this.page() - 1});
   }
 
   prevPage() { 
     if (this.page() > 1) this.page.update(p => p - 1);
-    this.tasksParams.set({ idUserAssigned:'', idUserCreated: '', limit: 5, offset: this.page() - 1});
+  }
+
+  onChangeUserCreated(event:Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const value = selectElement.value;
+    this.idUserCreatedSelected.set(value);
+  }
+
+  onChangeUserAsigned(event:Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const value = selectElement.value;
+    this.idUserAsignedSelected.set(value);
   }
 
   onTableAction(event: { action:string; row:TaskListEntity }) {
