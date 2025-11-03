@@ -1,20 +1,24 @@
-import { injectQuery } from '@tanstack/angular-query-experimental';
 import { FormsModule } from '@angular/forms';
+import { injectQuery } from '@tanstack/angular-query-experimental';
 import { Component, computed, inject, signal } from '@angular/core';
 
 import { TaskSelectedServices } from '@app/tasks/presentation/signals';
 import { PaginationComponent } from "@app/roles/presentation/components";
-import { GetAllTasksUsecase, GetAllUsersUsecase, TaskListEntity, TaskParamsEntity, } from '@app/tasks/domain';
+import { GetAllTasksUsecase, GetAllUsersUsecase, TaskListEntity } from '@app/tasks/domain';
 import { CreateTaksComponent, DeleteTask, UpdateTaskComponent } from "../../components/dialogs";
 import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ColumnConfig } from "@app/shared";
+import { CustomSelectComponent } from "@app/shared/custom-selects/custom-select/custom-select.component";
 
-const importsList = [TitleDescriptionCustomButtonComponent, CreateTaksComponent, CustomTableComponent, PaginationComponent, FormsModule];
+const importsList = [
+  TitleDescriptionCustomButtonComponent, CreateTaksComponent, CustomTableComponent, 
+  PaginationComponent, FormsModule, CustomSelectComponent,
+];
 
 @Component({
   selector    : 'app-tasks',
-  imports: [...importsList, DeleteTask, UpdateTaskComponent],
-  templateUrl : './tasks.component.html',
   styleUrl    : './tasks.component.css',
+  templateUrl : './tasks.component.html',
+  imports     : [...importsList, DeleteTask, UpdateTaskComponent ],
 })
 export default class TasksComponent {
 
@@ -37,6 +41,8 @@ export default class TasksComponent {
   page = signal(1);
   idUserCreatedSelected = signal<string>('');
   idUserAsignedSelected = signal<string>('');
+  selectedUsersCreated  = signal<string[]>([]);
+  selectedUsersAsigned  = signal<string[]>([]);
   searchTask = signal<string>('');
   tasksParams = computed(() => ({
     idUserAssigned: this.idUserAsignedSelected(),
@@ -65,25 +71,15 @@ export default class TasksComponent {
   }));
 
   // #=============== functions ===============#
-  nextPage() { 
-    this.page.update(p => p + 1);
-  }
+  nextPage = () =>  this.page.update(p => p + 1);
 
   prevPage() { 
     if (this.page() > 1) this.page.update(p => p - 1);
   }
 
-  onChangeUserCreated(event:Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    const value = selectElement.value;
-    this.idUserCreatedSelected.set(value);
-  }
-
-  onChangeUserAsigned(event:Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    const value = selectElement.value;
-    this.idUserAsignedSelected.set(value);
-  }
+  onUserCreatedChange = (values:any) => this.idUserCreatedSelected.set(values);
+  
+  onUserAssignedChange = (values:any) => this.idUserAsignedSelected.set(values);
 
   onTableAction(event: { action:string; row:TaskListEntity }) {
     const modalId = event.action === 'edit' ? 'custom-update-task' : event.action === 'delete' ? 'custom-delete-task': null;

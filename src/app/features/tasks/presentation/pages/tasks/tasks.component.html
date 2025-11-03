@@ -5,30 +5,26 @@
   buttonName="Crear tarea" />
 
   <div class="flex flex-row gap-x-4 card border-0 shadow-md p-4 mb-6">
-    
     <div class="basis-1/2">
-      <input class="input border shadow-md w-full" type="email" placeholder="Buscar..." [(ngModel)]="searchTask">
+      <input class="input border shadow-md w-full" type="email" placeholder="Buscar" [(ngModel)]="searchTask">
     </div>
 
     @if ( usersList.error() ) {
       <h3 class="text-red-400 font-bold"> {{ usersList.error()?.message  }} </h3>
     } @else {
-      <div class="flex flex-col gap-2 basis-1/2">
-          <select (change)="onChangeUserCreated($event)" class="select border w-full">
-            <option selected value="0"> Usuario creado </option>
-              @for ( item of usersList.data()?.data; track item.idUser ) {
-                  <option [value]="item.idUser">{{ item.firstName }} {{ item.lastName }}</option>
-              }
-          </select>
-      </div>
-      <div class="flex flex-col gap-2 basis-1/2">
-          <select multiple (change)="onChangeUserAsigned($event)" class="select border w-full">
-            <option selected value="0"> Usuario asignado </option>
-              @for ( item of usersList.data()?.data; track item.idUser ) {
-                  <option [value]="item.idUser">{{ item.firstName }} {{ item.lastName }}</option>
-              }
-          </select>
-      </div>
+      <custom-select
+        class="flex flex-col gap-2 basis-1/2"
+        [users]="usersList.data()?.data || []"
+        [selected]="selectedUsersCreated"
+        (selectionChange)="onUserCreatedChange($event)"
+        placeholder="Seleccionar usuarios creados"/>
+
+      <custom-select
+        class="flex flex-col gap-2 basis-1/2"
+        [users]="usersList.data()?.data || []"
+        [selected]="selectedUsersAsigned"
+        (selectionChange)="onUserAssignedChange($event)"
+        placeholder="Seleccionar usuarios asignados"/>
     }
   </div>
 
