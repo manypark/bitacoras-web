@@ -2,48 +2,37 @@ import { FormsModule } from '@angular/forms';
 import { injectQuery } from '@tanstack/angular-query-experimental';
 import { Component, computed, inject, signal } from '@angular/core';
 
+import { headersColumns } from "./../../headers-table";
+import { GetAllTasksUsecase, TaskListEntity } from '@app/tasks/domain';
 import { TaskSelectedServices } from '@app/tasks/presentation/signals';
 import { PaginationComponent } from "@app/roles/presentation/components";
-import { GetAllTasksUsecase, GetAllUsersUsecase, TaskListEntity } from '@app/tasks/domain';
+import { TitleDescriptionCustomButtonComponent, CustomTableComponent } from "@app/shared";
 import { CreateTaksComponent, DeleteTask, UpdateTaskComponent } from "../../components/dialogs";
-import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ColumnConfig } from "@app/shared";
-import { CustomSelectComponent } from "@app/shared/custom-selects/custom-select/custom-select.component";
+import { SearchAndSelectsFiltersComponent } from '@app/tasks/presentation/components/container-selects/SearchAndSelectsFilters/SearchAndSelectsFilters.component';
 
-const importsList = [
+const importsList:any[] = [
   TitleDescriptionCustomButtonComponent, CreateTaksComponent, CustomTableComponent, 
-  PaginationComponent, FormsModule, CustomSelectComponent,
+  PaginationComponent, FormsModule, DeleteTask, UpdateTaskComponent, SearchAndSelectsFiltersComponent,
 ];
 
 @Component({
   selector    : 'app-tasks',
   styleUrl    : './tasks.component.css',
   templateUrl : './tasks.component.html',
-  imports     : [...importsList, DeleteTask, UpdateTaskComponent ],
+  imports     : [ ...importsList ],
 })
 export default class TasksComponent {
 
   // #=============== dependencias ===============#
   private readonly selectedTask = inject(TaskSelectedServices);
-  private readonly getUsersUsecase = inject(GetAllUsersUsecase);
   private readonly getTaskListUsecase = inject(GetAllTasksUsecase);
 
   // #=============== variables ===============#
-  columns:ColumnConfig[] = [
-    { key: 'idTasks', header: 'ID', type: 'text' },
-    { key: 'title', header: 'Tarea', type: 'text' },
-    { key: 'description', header: 'Descripción', type: 'text' },
-    { key: 'userCreated', header: 'Creada Por', type: 'text' },
-    { key: 'userAssigned', header: 'Asignada A', type: 'text' },
-    { key: 'createdAt', header: 'Fecha creación', type: 'date' },
-    { key: 'active', header: 'Estado', type: 'booleanBadge' },
-    { key: 'logsCount', header: 'Bitacoras', type: 'link' },
-  ];
+  columns = headersColumns;
   page = signal(1);
+  searchTask = signal<string>('');
   idUserCreatedSelected = signal<string>('');
   idUserAsignedSelected = signal<string>('');
-  selectedUsersCreated  = signal<string[]>([]);
-  selectedUsersAsigned  = signal<string[]>([]);
-  searchTask = signal<string>('');
   tasksParams = computed(() => ({
     idUserAssigned: this.idUserAsignedSelected(),
     idUserCreated : this.idUserCreatedSelected(),
@@ -65,17 +54,10 @@ export default class TasksComponent {
     queryFn : () => this.getTaskListUsecase.execute( this.tasksParams() ),
   }));
 
-  readonly usersList = injectQuery( () => ({
-    queryKey: ['getUsers'],
-    queryFn : () => this.getUsersUsecase.execute(),
-  }));
-
   // #=============== functions ===============#
   nextPage = () =>  this.page.update(p => p + 1);
 
-  prevPage() { 
-    if (this.page() > 1) this.page.update(p => p - 1);
-  }
+  prevPage = () => (this.page() > 1) ? this.page.update(p => p - 1) : null;
 
   onUserCreatedChange = (values:any) => this.idUserCreatedSelected.set(values);
   
@@ -91,8 +73,6 @@ export default class TasksComponent {
   }
 
   retryQueries( event:boolean ) {
-    if(event) {
-      this.taskQuery.refetch();
-    }
+    if(event) { this.taskQuery.refetch(); }
   }
 }

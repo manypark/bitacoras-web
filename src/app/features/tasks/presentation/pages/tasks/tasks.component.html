@@ -1,40 +1,21 @@
-  <title-description-custom-button
+<title-description-custom-button
   title="Gestión de tareas"
   description="Crear, administrar y controlar tareas."
   idModal="custom-create-task"
   buttonName="Crear tarea" />
 
-  <div class="flex flex-row gap-x-4 card border-0 shadow-md p-4 mb-6">
-    <div class="basis-1/2">
-      <input class="input border shadow-md w-full" type="email" placeholder="Buscar" [(ngModel)]="searchTask">
-    </div>
+<search-and-selects-filters
+  [searchTask]="searchTask"
+  (userCreatedChange)="onUserCreatedChange($event)"
+  (userAssignedChange)="onUserAssignedChange($event)" />
 
-    @if ( usersList.error() ) {
-      <h3 class="text-red-400 font-bold"> {{ usersList.error()?.message  }} </h3>
-    } @else {
-      <custom-select
-        class="flex flex-col gap-2 basis-1/2"
-        [users]="usersList.data()?.data || []"
-        [selected]="selectedUsersCreated"
-        (selectionChange)="onUserCreatedChange($event)"
-        placeholder="Seleccionar usuarios creados"/>
-
-      <custom-select
-        class="flex flex-col gap-2 basis-1/2"
-        [users]="usersList.data()?.data || []"
-        [selected]="selectedUsersAsigned"
-        (selectionChange)="onUserAssignedChange($event)"
-        placeholder="Seleccionar usuarios asignados"/>
-    }
-  </div>
-
-  <app-custom-table
+<app-custom-table
   [columns]="columns"
   [data]="filteredTask() ?? []"
   [isLoading]="taskQuery.isLoading()"
   (actionClick)="onTableAction($event)"/>
 
-  <pagination
+<pagination
   [page]="page()"
   [hasNextPage]="(taskQuery.data()?.data ?? []).length < 5"
   (next)="nextPage()"
