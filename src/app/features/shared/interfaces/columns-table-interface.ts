@@ -1,5 +1,5 @@
 export interface ColumnConfig {
   key   : string;
   header: string;
-  type? : 'text' | 'date' | 'booleanBadge' | 'link';
+  type? : 'text' | 'date' | 'booleanBadge' | 'link' | 'image';
 }

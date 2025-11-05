@@ -1,0 +1,17 @@
+<div class="flex flex-row gap-x-4 card border-0 shadow-md p-4 mb-6">
+  <input class="input border shadow-md w-full" type="email" placeholder="Buscar" [(ngModel)]="logsListServices.searchLogs">
+
+  <custom-select
+    class="flex flex-col gap-2 basis-1/2"
+    [users]="usersList.data()?.data || []"
+    [selected]="selectedUsers"
+    (selectionChange)="onUserCreatedChange($event)"
+    placeholder="Filtrar por usuarios"/>
+
+  <custom-select-concept
+    class="flex flex-col gap-2 basis-1/2"
+    [data]="conceptsList.data()?.data || []"
+    [selected]="selectedConcepts"
+    (selectionChange)="onConceptsChangeChange($event)"
+    placeholder="Filtrar por conceptos"/>
+</div>

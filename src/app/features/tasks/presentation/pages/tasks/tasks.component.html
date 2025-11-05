@@ -10,6 +10,7 @@
   (userAssignedChange)="taskServices.setAssignedUsers($event)" />
 
 <app-custom-table
+  [showActions]='true'
   [columns]="columns"
   [data]="taskServices.filteredTasks()"
   [isLoading]="taskServices.taskQuery.isLoading()"

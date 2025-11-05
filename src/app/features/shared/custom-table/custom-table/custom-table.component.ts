@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, EventEmitter, input, Input, Output } from '@angular/core';
 
 import { ColumnConfig } from '@app/shared';
@@ -7,9 +7,11 @@ import { ColumnConfig } from '@app/shared';
   selector    : 'app-custom-table',
   templateUrl : './custom-table.component.html',
   styleUrl    : './custom-table.component.css',
-  imports     : [CommonModule],
+  imports     : [CommonModule, NgOptimizedImage ],
 })
 export class CustomTableComponent {
+
+  showActions = input.required<boolean>();
 
   /** Datos del cuerpo */
   @Input() data: any[] = [];
@@ -33,19 +35,6 @@ export class CustomTableComponent {
   getValueByPath(obj: any, path: string): any {
     if (!obj || !path) return undefined;
     return path.split('.').reduce((acc, key) => (acc != null ? acc[key] : undefined), obj);
-  }
-
-  formatCell(row: any, column: ColumnConfig): string {
-    const raw = this.getValueByPath(row, column.key);
-    switch (column.type) {
-      case 'date':
-        return raw ? new Date(raw).toLocaleDateString() : '';
-      case 'booleanBadge':
-        return raw ? 'true' : 'false';
-      case 'text':
-      default:
-        return this.formatDisplay(raw);
-    }
   }
 
   /** Formatea para mostrar: concatena firstName + lastName si es objeto de usuario */

@@ -11,6 +11,7 @@
   </div>
 
   <app-custom-table
+    [showActions]='true'
     [columns]="columns"
     [data]="filteredRoles()"
     [isLoading]="updateResource.isLoading()"

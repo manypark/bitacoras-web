@@ -1,0 +1,63 @@
+<details class="dropdown w-full">
+    <summary class="btn w-full justify-between bg-base-100 border border-gray-300 hover:bg-base-200 flex-wrap">
+    <div class="flex flex-wrap gap-1 items-center">
+        @if (selected().length === 0) {
+        <span class="opacity-70"> {{ placeholder() }} </span>
+        } @else if (selected().length <= 3) {
+            @for (id of selected(); track id) {
+                @let user = getUserById(id);
+                @if (user !== null) {
+                <span class="badge px-2 py-2.5 badge-primary badge-sm">
+                    {{ user.description }}
+                </span>
+                }
+            }
+        } @else {
+        <span class="badge px-2 py-2.5 badge-primary badge-sm">
+            {{ selected().length }} seleccionados
+        </span>
+        }
+    </div>
+
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-4 w-4 opacity-70 ml-2"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M19 9l-7 7-7-7" />
+    </svg>
+    </summary>
+
+    <ul class="menu dropdown-content bg-base-100 rounded-box shadow-md mt-2 w-full max-h-96 overflow-auto border border-gray-200 z-[1]">
+    @for (item of data; track item.idConcept) {
+        <li>
+        <label
+            class="flex items-center justify-between gap-3 px-3 py-2 hover:bg-base-200 cursor-pointer rounded-md"
+            [class.bg-primary/10]="selected().includes(item.idConcept+'')">
+            <div class="flex items-center gap-3">
+            <input
+                type="checkbox"
+                class="checkbox checkbox-primary"
+                [checked]="selected().includes(item.idConcept+'')"
+                (change)="onToggleUser(item.idConcept+'', $event)"
+            />
+            <span>{{ item.description }}</span>
+            </div>
+            @if (selected().includes(item.idConcept+'') ) {
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4 text-primary"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5 13l4 4L19 7" />
+            </svg>
+            }
+        </label>
+        </li>
+    }
+    </ul>
+</details>

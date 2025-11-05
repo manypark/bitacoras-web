@@ -1,3 +1,4 @@
+import { provideCloudinaryLoader } from '@angular/common';
 import { provideRouter, withViewTransitions } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { withDevtools } from '@tanstack/angular-query-experimental/devtools'
@@ -32,6 +33,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter( routes, withViewTransitions() ),
     provideHttpClient( withInterceptors([authInterceptor]), ),
     provideTanStackQuery( new QueryClient(), withDevtools() ),
+    provideCloudinaryLoader('https://res.cloudinary.com/dev9hfkoh/'),
     { provide: RolesRepository, useClass: RolesRepositoryImpl },
     { provide: SignInRepository,  useClass: SignInRepositoryImpl },
     { provide: ConceptRepository, useClass: ConceptRepositoryImpl },

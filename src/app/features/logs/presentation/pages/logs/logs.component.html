@@ -1,5 +1,14 @@
+<search-users-concepts-filters />
+
 <app-custom-table
+  [showActions]='false'
   [columns]="columns"
-  [data]="filteredLogs()"
-  [isLoading]="logsQuery.isLoading()"
+  [data]="logsListServices.filteredLogs()"
+  [isLoading]="logsListServices.logsQuery.isLoading()"
   (actionClick)="onTableAction($event)"/>
+
+<pagination
+  [page]="logsListServices.page()"
+  [hasNextPage]="(logsListServices.logsQuery.data()?.data ?? []).length < 5"
+  (next)="logsListServices.nextPage()"
+  (prev)="logsListServices.prevPage()"/>

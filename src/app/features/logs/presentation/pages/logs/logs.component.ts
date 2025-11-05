@@ -1,58 +1,31 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { injectQuery } from '@tanstack/angular-query-experimental';
+import { Component, inject } from '@angular/core';
 
+import { LogsService } from '@app/logs/presentation/services';
 import { ColumnConfig, CustomTableComponent } from '@app/shared';
-import { GetLogsListUsecase, LogsParamsEntity } from '@app/logs/domain';
+import { PaginationComponent } from "@app/roles/presentation/components";
+import { SearchUsersConceptsFiltersComponent } from '@app/logs/presentation/components/container-filter/search-users-concepts-filters/search-users-concepts-filters.component';
 
 @Component({
   selector    : 'app-logs',
   styleUrl    : './logs.component.css',
   templateUrl : './logs.component.html',
-  imports     : [CustomTableComponent],
+  imports: [CustomTableComponent, PaginationComponent, SearchUsersConceptsFiltersComponent],
 })
 export default class LogsComponent {
 
-  private readonly getLogsList = inject(GetLogsListUsecase);
+  readonly logsListServices = inject(LogsService);
 
-  readonly page = signal(1);
-  readonly rageDate = signal('');
-  readonly searchLogs = signal('');
-  readonly idConcepts = signal('');
-  readonly idUserAssigned = signal('');
   columns:ColumnConfig[] = [
       { key: 'idLogs', header: 'ID', type: 'text' },
       { key: 'idUser', header: 'Usuario', type: 'text' },
-      { key: 'image_url', header: 'Imagen', type: 'text' },
+      { key: 'image_url', header: 'Imagen', type: 'image' },
       { key: 'idConcept', header: 'Concepto', type: 'text' },
       { key: 'description', header: 'Descripción', type: 'text' },
-      { key: 'location', header: 'Localización', type: 'text' },
   ];
 
-  readonly logsParams = computed<LogsParamsEntity>(() => ({
-    limit           : 5,
-    offset          : this.page() - 1,
-    endDate         : this.rageDate(),
-    startDate       : this.rageDate(),
-    idConcepts      : this.idConcepts(),
-    idUserAssigned  : this.idUserAssigned()
-  }));
+  onTableAction(event:any) {}
 
-  readonly logsQuery = injectQuery(() => ({
-    queryKey: ['logsList', this.logsParams()],
-    queryFn: () => this.getLogsList.execute( this.logsParams() ),
-  }));
-
-  readonly filteredLogs = computed(() => {
-    const search = this.searchLogs().toLowerCase().trim();
-    const logs = this.logsQuery.data()?.data ?? [];
-    return logs.filter( (task) => 
-      task.description.toLowerCase().includes(search) || 
-      task.idConcept.description.toLowerCase().includes(search)
-    );
-  });
-
-  onTableAction( event:any ) {
-
+  retryQueries( event:boolean ) {
+    if(event) { this.logsListServices.retry() }
   }
-
 }
