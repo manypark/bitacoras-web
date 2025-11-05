@@ -1,10 +1,9 @@
 import { FormsModule } from '@angular/forms';
-import { injectQuery } from '@tanstack/angular-query-experimental';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
+import { TaskListEntity } from '@app/tasks/domain';
 import { headersColumns } from "./../../headers-table";
 import { TasklistService } from '@app/tasks/presentation/services';
-import { GetAllTasksUsecase, TaskListEntity } from '@app/tasks/domain';
 import { TaskSelectedServices } from '@app/tasks/presentation/signals';
 import { PaginationComponent } from "@app/roles/presentation/components";
 import { TitleDescriptionCustomButtonComponent, CustomTableComponent } from "@app/shared";
@@ -12,8 +11,14 @@ import { CreateTaksComponent, DeleteTask, UpdateTaskComponent } from "../../comp
 import { SearchAndSelectsFiltersComponent } from '@app/tasks/presentation/components/container-selects/SearchAndSelectsFilters/SearchAndSelectsFilters.component';
 
 const importsList:any[] = [
-  TitleDescriptionCustomButtonComponent, CreateTaksComponent, CustomTableComponent, 
-  PaginationComponent, FormsModule, DeleteTask, UpdateTaskComponent, SearchAndSelectsFiltersComponent,
+  DeleteTask,
+  FormsModule,
+  PaginationComponent,
+  UpdateTaskComponent,
+  CreateTaksComponent,
+  CustomTableComponent,
+  SearchAndSelectsFiltersComponent,
+  TitleDescriptionCustomButtonComponent,
 ];
 
 @Component({
@@ -39,6 +44,6 @@ export default class TasksComponent {
   }
 
   retryQueries( event:boolean ) {
-    if(event) { this.taskServices.taskQuery.refetch(); }
+    if(event) { this.taskServices.retry() }
   }
 }
