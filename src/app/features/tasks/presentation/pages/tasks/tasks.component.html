@@ -5,21 +5,21 @@
   buttonName="Crear tarea" />
 
 <search-and-selects-filters
-  [searchTask]="searchTask"
-  (userCreatedChange)="onUserCreatedChange($event)"
-  (userAssignedChange)="onUserAssignedChange($event)" />
+  [searchTask]="taskServices.searchTask"
+  (userCreatedChange)="taskServices.setCreatedUsers($event)"
+  (userAssignedChange)="taskServices.setAssignedUsers($event)" />
 
 <app-custom-table
   [columns]="columns"
-  [data]="filteredTask() ?? []"
-  [isLoading]="taskQuery.isLoading()"
+  [data]="taskServices.filteredTasks()"
+  [isLoading]="taskServices.taskQuery.isLoading()"
   (actionClick)="onTableAction($event)"/>
 
 <pagination
-  [page]="page()"
-  [hasNextPage]="(taskQuery.data()?.data ?? []).length < 5"
-  (next)="nextPage()"
-  (prev)="prevPage()"/>
+  [page]="taskServices.page()"
+  [hasNextPage]="(taskServices.taskQuery.data()?.data ?? []).length < 5"
+  (next)="taskServices.nextPage()"
+  (prev)="taskServices.prevPage()"/>
 
 <create-dialog-task (taskCreated)="retryQueries($event)" />
 <update-dialog-task (taskUpdated)="retryQueries($event)" />
