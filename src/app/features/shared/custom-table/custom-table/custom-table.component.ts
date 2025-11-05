@@ -39,9 +39,8 @@ export class CustomTableComponent {
     const raw = this.getValueByPath(row, column.key);
     switch (column.type) {
       case 'date':
-        return raw ? /* usar pipe aquí o manual */ new Date(raw).toLocaleDateString() : '';
+        return raw ? new Date(raw).toLocaleDateString() : '';
       case 'booleanBadge':
-        // devolvemos algún indicador interno, el template lo mostrará
         return raw ? 'true' : 'false';
       case 'text':
       default:
@@ -56,6 +55,9 @@ export class CustomTableComponent {
       const fn = value.firstName;
       const ln = value.lastName;
       if (fn || ln) return `${fn ?? ''} ${ln ?? ''}`.trim();
+
+      const desc = value.description;
+      if (desc) return desc;
       return '';
     }
     return String(value);

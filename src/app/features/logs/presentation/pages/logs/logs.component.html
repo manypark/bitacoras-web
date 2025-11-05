@@ -1,1 +1,5 @@
-<p>logs works!</p>,
+<app-custom-table
+  [columns]="columns"
+  [data]="filteredLogs()"
+  [isLoading]="logsQuery.isLoading()"
+  (actionClick)="onTableAction($event)"/>
