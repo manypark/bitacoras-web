@@ -1,0 +1,33 @@
+<div class="w-full m-6 h-[800px] rounded-xl shadow-lg overflow-hidden">
+  @if ( center() !== null ) {
+      <google-map
+        width="100%"
+        height="100%"
+        [zoom]="zoom"
+        mapId="angular-map"
+        [center]="center()!">
+        @for ( marker of markers(); track marker.idLog ) {
+            <map-advanced-marker 
+            [position]="marker.position"
+            [title]="marker.title"
+            #markerElem="mapAdvancedMarker"
+            (mapClick)="onMarkerClick(marker, markerElem)"/>
+        }
+    
+        <map-info-window>
+          <div class="p-2">
+            <h3 class="font-bold text-gray-800">{{ selectedMarker?.title }}</h3>
+            <p class="text-sm text-gray-600">{{ selectedMarker?.description }}</p>
+            <p class="text-xs text-gray-500 italic">{{ selectedMarker?.user }}</p>
+            @if (selectedMarker?.image) {
+                <div class="avatar">
+                    <div class="w-32">
+                        <img ngSrc="{{ selectedMarker.image }}" fill alt="Log image" class="rounded-xl" priority/>
+                    </div>
+                </div>
+            }
+          </div>
+        </map-info-window>
+      </google-map>
+  }
+</div>

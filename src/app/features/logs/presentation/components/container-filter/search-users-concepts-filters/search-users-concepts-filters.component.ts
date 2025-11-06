@@ -1,9 +1,9 @@
 import { FormsModule } from '@angular/forms';
 import { Component, inject, signal } from '@angular/core';
-import { GetAllConceptUsecase } from '@app/concepts/domain';
 import { injectQuery } from '@tanstack/angular-query-experimental';
 
 import { GetAllUsersUsecase } from '@app/tasks/domain';
+import { GetAllConceptUsecase } from '@app/concepts/domain';
 import { LogsService } from '@app/logs/presentation/services';
 import { CustomSelectConceptsComponent, CustomSelectComponent } from "@app/shared";
 
@@ -11,7 +11,7 @@ import { CustomSelectConceptsComponent, CustomSelectComponent } from "@app/share
   selector    : 'search-users-concepts-filters',
   styleUrl    : './search-users-concepts-filters.component.css',
   templateUrl : './search-users-concepts-filters.component.html',
-  imports     : [CustomSelectConceptsComponent, CustomSelectComponent, FormsModule ],
+  imports     : [ CustomSelectConceptsComponent, CustomSelectComponent, FormsModule ],
 })
 export class SearchUsersConceptsFiltersComponent {
 
@@ -21,7 +21,7 @@ export class SearchUsersConceptsFiltersComponent {
   private readonly getConceptsUsecase = inject(GetAllConceptUsecase);
 
   // #=============== dependencias ===============#
-  selectedUsers  = signal<string[]>([]);
+  selectedUsers     = signal<string[]>([]);
   selectedConcepts  = signal<string[]>([]);
 
   // #=============== queries ===============#
@@ -36,10 +36,6 @@ export class SearchUsersConceptsFiltersComponent {
   }));
   
   // #=============== funciones ===============#
-  onUserCreatedChange(values:any) {
-    this.logsListServices.idUserAssigned.set( values );
-  }
-  onConceptsChangeChange(values:any) {
-    this.logsListServices.idConcepts.set( values );
-  }
+  onUserCreatedChange = (values:any) => this.logsListServices.idUserAssigned.set( values );
+  onConceptsChangeChange = (values:any) => this.logsListServices.idConcepts.set( values );
 }
