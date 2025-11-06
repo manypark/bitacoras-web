@@ -22,21 +22,24 @@ export class SearchUsersConceptsFiltersComponent {
 
   // #=============== dependencias ===============#
   selectedUsers  = signal<string[]>([]);
-    selectedConcepts  = signal<string[]>([]);
+  selectedConcepts  = signal<string[]>([]);
 
   // #=============== queries ===============#
-    readonly usersList = injectQuery( () => ({
-      queryKey: ['getUsers'],
-      queryFn : () => this.getUsersUsecase.execute(),
-    }));
-
-    readonly conceptsList = injectQuery( () => ({
-      queryKey: ['getConcepts'],
-      queryFn : () => this.getConceptsUsecase.execute(  50, 0 ),
-    }));
-
-  onTableAction( event:any ) {}
-
-  onUserCreatedChange(values:any) {}
-  onConceptsChangeChange(values:any) {}
+  readonly usersList = injectQuery( () => ({
+    queryKey: ['getUsers'],
+    queryFn : () => this.getUsersUsecase.execute(),
+  }));
+  
+  readonly conceptsList = injectQuery( () => ({
+    queryKey: ['getConcepts'],
+    queryFn : () => this.getConceptsUsecase.execute(  50, 0 ),
+  }));
+  
+  // #=============== funciones ===============#
+  onUserCreatedChange(values:any) {
+    this.logsListServices.idUserAssigned.set( values );
+  }
+  onConceptsChangeChange(values:any) {
+    this.logsListServices.idConcepts.set( values );
+  }
 }

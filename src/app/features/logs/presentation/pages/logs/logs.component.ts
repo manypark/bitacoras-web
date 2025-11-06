@@ -9,7 +9,11 @@ import { SearchUsersConceptsFiltersComponent } from '@app/logs/presentation/comp
   selector    : 'app-logs',
   styleUrl    : './logs.component.css',
   templateUrl : './logs.component.html',
-  imports: [CustomTableComponent, PaginationComponent, SearchUsersConceptsFiltersComponent],
+  imports     : [
+    CustomTableComponent, 
+    PaginationComponent, 
+    SearchUsersConceptsFiltersComponent,
+  ],
 })
 export default class LogsComponent {
 
@@ -21,9 +25,8 @@ export default class LogsComponent {
       { key: 'image_url', header: 'Imagen', type: 'image' },
       { key: 'idConcept', header: 'Concepto', type: 'text' },
       { key: 'description', header: 'Descripción', type: 'text' },
+      { key: 'createdAt', header: 'Fecha creación', type: 'date' },
   ];
-
-  onTableAction(event:any) {}
 
   retryQueries( event:boolean ) {
     if(event) { this.logsListServices.retry() }

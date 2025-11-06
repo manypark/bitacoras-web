@@ -11,7 +11,8 @@ export class LogsService {
   
   // #================ variables ================#
   readonly page = signal(1);
-  readonly rageDate = signal('');
+  readonly endDate = signal('');
+  readonly startDate = signal('');
   readonly searchLogs = signal('');
   readonly idConcepts = signal('');
   readonly idUserAssigned = signal('');
@@ -20,8 +21,8 @@ export class LogsService {
   readonly logsParams = computed<LogsParamsEntity>(() => ({
     limit           : 5,
     offset          : this.page() - 1,
-    endDate         : this.rageDate(),
-    startDate       : this.rageDate(),
+    endDate         : this.endDate(),
+    startDate       : this.startDate(),
     idConcepts      : this.idConcepts(),
     idUserAssigned  : this.idUserAssigned()
   }));

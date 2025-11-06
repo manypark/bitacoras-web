@@ -14,4 +14,9 @@
     [selected]="selectedConcepts"
     (selectionChange)="onConceptsChangeChange($event)"
     placeholder="Filtrar por conceptos"/>
+    
+    <div class="flex flex-row gap-2 basis-1/2">
+      <input type="date" class="input border rounded-md" [(ngModel)]="logsListServices.startDate"/>
+      <input type="date" class="input border rounded-md" [(ngModel)]="logsListServices.endDate"/>
+    </div>
 </div>

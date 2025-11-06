@@ -4,8 +4,7 @@
   [showActions]='false'
   [columns]="columns"
   [data]="logsListServices.filteredLogs()"
-  [isLoading]="logsListServices.logsQuery.isLoading()"
-  (actionClick)="onTableAction($event)"/>
+  [isLoading]="logsListServices.logsQuery.isLoading()"/>
 
 <pagination
   [page]="logsListServices.page()"
