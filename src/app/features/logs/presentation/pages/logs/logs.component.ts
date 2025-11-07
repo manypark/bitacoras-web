@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 
 import { LogsService } from '@app/logs/presentation/services';
-import { ColumnConfig, CustomTableComponent } from '@app/shared';
+import { ColumnConfig, CustomTableComponent, TitleDescriptionCustomButtonComponent } from '@app/shared';
 import { PaginationComponent } from "@app/roles/presentation/components";
 import { LogsMapComponent } from "../../components/logs-maps/LogsMap/logs-map.component";
 import { SearchUsersConceptsFiltersComponent } from '@app/logs/presentation/components/container-filter/search-users-concepts-filters/search-users-concepts-filters.component';
@@ -15,6 +15,7 @@ import { SearchUsersConceptsFiltersComponent } from '@app/logs/presentation/comp
     PaginationComponent,
     CustomTableComponent,
     SearchUsersConceptsFiltersComponent,
+    TitleDescriptionCustomButtonComponent
 ],
 })
 export default class LogsComponent {

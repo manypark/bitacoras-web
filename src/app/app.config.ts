@@ -32,7 +32,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter( routes, withViewTransitions() ),
     provideHttpClient( withInterceptors([authInterceptor]), ),
-    provideTanStackQuery( new QueryClient(), withDevtools() ),
+    provideTanStackQuery( new QueryClient() ),
     provideCloudinaryLoader('https://res.cloudinary.com/dev9hfkoh/'),
     { provide: RolesRepository, useClass: RolesRepositoryImpl },
     { provide: SignInRepository,  useClass: SignInRepositoryImpl },
