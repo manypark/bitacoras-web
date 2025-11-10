@@ -21,7 +21,7 @@ export class TaskRespoitoryImpl implements TaskRepository {
         return this.datasource.postTasks( task );
     }
 
-    getAllUsers(): Promise<ApiResponse<UsersEntity[]>> {
+    async getAllUsers(): Promise<ApiResponse<UsersEntity[]>> {
         return this.datasource.getAllUsers();
     }
 

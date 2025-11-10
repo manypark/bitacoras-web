@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
-import { catchError, firstValueFrom, throwError } from "rxjs";
+import { catchError, firstValueFrom, map, throwError } from "rxjs";
 
 import { ApiResponse } from "@utils/api_response";
 import { HttpClientService } from "../../../../core/services";
+import { UserMapper } from "@app/tasks/infrastructure/mappers/user-mapper";
 import { TaskEntity, TaskListEntity, TaskParamsEntity, TaskResponseEntity, UpdateTaskEntity, UsersEntity } from "@app/tasks/domain";
 
 @Injectable({ providedIn: 'root'})
@@ -24,6 +25,7 @@ export class TaskDatasource {
 
     async getAllUsers():Promise<ApiResponse<UsersEntity[]>> {
         return await firstValueFrom( this.http.get<ApiResponse<UsersEntity[]>>('/users').pipe(
+                map( response => { return { ...response, data: response.data.map( UserMapper.fromDto ) } } ),
                 catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
             ) 
         )

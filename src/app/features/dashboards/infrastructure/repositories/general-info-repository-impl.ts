@@ -20,11 +20,11 @@ export class GeneralInfoRepositoryImpl implements GeneralInfoRepository {
     }
 
     async getRolesInfo(): Promise<ApiResponse<GeneralInfoEntity>> {
-        return this.datasource.getUsersInfo();
+        return this.datasource.getRolesInfo();
     }
 
     async getTasksInfo(): Promise<ApiResponse<GeneralInfoEntity>> {
-        const res = await this.datasource.getUsersInfo();
+        const res = await this.datasource.getTasksInfo();
         const dataMapped = GeneralInfoMapper.fromResponseDto(res.data);
         return {
             data    : dataMapped,
@@ -34,7 +34,7 @@ export class GeneralInfoRepositoryImpl implements GeneralInfoRepository {
     }
 
     async getLogsInfo(): Promise<ApiResponse<GeneralInfoEntity>> {
-        const res = await this.datasource.getUsersInfo();
+        const res = await this.datasource.getLogsInfo();
         const dataMapped = GeneralInfoMapper.fromResponseDto(res.data);
         return {
             data    : dataMapped,

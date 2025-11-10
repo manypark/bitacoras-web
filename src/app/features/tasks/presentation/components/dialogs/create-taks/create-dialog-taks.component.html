@@ -49,7 +49,7 @@
                     <span class="font-bold">Usuario asignado</span>
                     <select formControlName="assignedUser" class="select select-primary border w-full">
                         @for ( item of usersList.data()?.data; track item.idUser ) {
-                            <option [ngValue]="item.idUser">{{ item.firstName }} {{ item.lastName }}</option>
+                            <option [ngValue]="item.idUser">{{ item.fullName }} </option>
                         }
                     </select>
                     @if (taskForm.get('assignedUser')?.touched && taskForm.get('assignedUser')?.errors) {

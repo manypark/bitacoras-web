@@ -1,7 +1,7 @@
 import { provideCloudinaryLoader } from '@angular/common';
 import { provideRouter, withViewTransitions } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { withDevtools } from '@tanstack/angular-query-experimental/devtools'
+// import { withDevtools } from '@tanstack/angular-query-experimental/devtools'
 import { ApplicationConfig, provideZonelessChangeDetection, } from '@angular/core';
 import { provideTanStackQuery, QueryClient, } from '@tanstack/angular-query-experimental'
 
@@ -27,6 +27,9 @@ import { TaskRespoitoryImpl } from '@app/tasks/infrastructure';
 import { LogsRepository } from '@app/logs/domain';
 import { LogsListRepositoryImpl } from '@app/logs/infrastructure/repositories';
 
+import { GeneralInfoRepository } from '@app/dashboards/domain';
+import { GeneralInfoRepositoryImpl } from '@app/dashboards/infrastructure';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
@@ -40,5 +43,6 @@ export const appConfig: ApplicationConfig = {
     { provide: RegisterRepository, useClass: RegsiterRepositoryImpl },
     { provide: TaskRepository, useClass: TaskRespoitoryImpl },
     { provide: LogsRepository, useClass: LogsListRepositoryImpl },
+    { provide: GeneralInfoRepository, useClass: GeneralInfoRepositoryImpl },
   ]
 };
