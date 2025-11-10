@@ -1,9 +1,17 @@
-<div class="flex flex-row gap-x-6 flex-wrap">
-    <users-info />
-    <tasks-info />
-    <roles-info />
-    <logs-info />
+<div class="w-full flex flex-col">
+
+    <div class="flex flex-row gap-x-6 flex-wrap">
+        <users-info />
+        <tasks-info />
+        <roles-info />
+        <logs-info />
+    </div>
+    
+    <div class="flex flex-row gap-x-6 flex-wrap">
+        <users-chart />
+        <tasks-chart />
+        <roles-chart />
+        <logs-chart />
+    </div>
+    
 </div>
-
-<canvas baseChart [data]="barChartData" chartType="pie"></canvas>
-
