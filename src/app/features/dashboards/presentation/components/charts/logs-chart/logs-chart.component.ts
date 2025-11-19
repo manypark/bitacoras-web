@@ -1,6 +1,5 @@
 import { BaseChartDirective } from 'ng2-charts';
 import { Component, inject } from '@angular/core';
-import { injectQuery } from '@tanstack/angular-query-experimental';
 
 import { GetLogsInfoUsecase } from '@app/dashboards/domain';
 import { BasePieChartComponent } from '@app/dashboards/presentation/components';
@@ -9,6 +8,12 @@ import { BasePieChartComponent } from '@app/dashboards/presentation/components';
   selector  : 'logs-chart',
   imports   : [BaseChartDirective],
   template  : `
+  @if  ( query!.isError() ) {
+      <div class="card bg-base-100 w-96 h-96 shadow-md p-8 border border-gray-100 flex justify-center items-center">
+          <span class="loading loading-ring loading-xl"> {{ query.error() }} </span>
+      </div>
+  }
+
   @if  ( query!.isLoading() ) {
       <div class="card bg-base-100 w-96 h-96 shadow-md p-8 border border-gray-100 flex justify-center items-center">
           <span class="loading loading-ring loading-xl"></span>
@@ -26,19 +31,9 @@ export class LogsChartComponent extends BasePieChartComponent {
     // #=============== dependencias ==============#
   private readonly logsInfoUsecase = inject(GetLogsInfoUsecase);
   
-    // #=============== ciclo de vida ==============#
-  constructor() {
-    super();
-    this.setQuery();
-  }
+  protected override queryKey = () => ['logsInfoChart'];
 
-  // #=============== query ==============#
-  protected override getQuery() {
-    return injectQuery( () => ({
-      queryKey: ['logsInfoChart'],
-      queryFn : () => this.logsInfoUsecase.execute(),
-    }));
-  }
+  protected override queryFn = () => this.logsInfoUsecase.execute();
 
   protected override getLabel = (): string => 'Bitacoras';
 }

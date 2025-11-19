@@ -1,6 +1,5 @@
 import { BaseChartDirective } from 'ng2-charts';
 import { Component, inject } from '@angular/core';
-import { injectQuery } from '@tanstack/angular-query-experimental';
 
 import { BasePieChartComponent } from '@app/dashboards/presentation/components';
 import { GetRolesInfoUsecase } from '@app/dashboards/domain';
@@ -26,26 +25,15 @@ import { GetRolesInfoUsecase } from '@app/dashboards/domain';
           <h1 class="text-2xl font-bold"> {{ getLabel() }} </h1>
           <canvas baseChart [data]="barChartData()" type="pie"></canvas>
       </div>
-  }
-  `,
+  }`,
 })
 export class RolesChartComponent extends BasePieChartComponent {
   // #=============== dependencias ==============#
   private readonly rolesInfoUsecase = inject(GetRolesInfoUsecase);
   
-  // #=============== ciclo de vida ==============#
-  constructor() {
-    super();
-    this.setQuery();
-  }
-  
-  // #=============== query ==============#
-  protected override getQuery() {
-    return injectQuery( () => ({
-      queryKey: ['rolesInfoChart'],
-      queryFn : () => this.rolesInfoUsecase.execute(),
-    }));
-  }
+  protected override queryKey = () => ['rolesInfoChart'];
+
+  protected override queryFn = () => this.rolesInfoUsecase.execute();
   
   protected override getLabel = (): string => 'Roles';
 }

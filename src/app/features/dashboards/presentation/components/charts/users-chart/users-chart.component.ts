@@ -1,6 +1,5 @@
 import { BaseChartDirective } from 'ng2-charts';
 import { Component, inject } from '@angular/core';
-import { injectQuery } from '@tanstack/angular-query-experimental';
 
 import { GetUsersInfoUsecase } from '@app/dashboards/domain';
 import { BasePieChartComponent } from '@app/dashboards/presentation/components';
@@ -32,19 +31,9 @@ export class UsersChartComponent extends BasePieChartComponent {
   // #=============== dependencias ==============#
   private readonly usersInfoUsecase = inject(GetUsersInfoUsecase);
 
-  // #=============== ciclo de vida ==============#
-  constructor() {
-    super();
-    this.setQuery();
-  }
+  protected override queryKey = () => ['usersInfoChart'];
 
-  // #=============== query ==============#
-  protected override getQuery() {
-    return injectQuery( () => ({
-      queryKey: ['usersInfoChart'],
-      queryFn : () => this.usersInfoUsecase.execute(),
-    }));
-  }
+  protected override queryFn = () => this.usersInfoUsecase.execute();
 
   protected override getLabel = (): string => 'Usuarios';
 }

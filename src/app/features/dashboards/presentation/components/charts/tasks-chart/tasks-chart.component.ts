@@ -1,6 +1,5 @@
 import { BaseChartDirective } from 'ng2-charts';
 import { Component, inject } from '@angular/core';
-import { injectQuery } from '@tanstack/angular-query-experimental';
 
 import { GetTasksInfoUsecase } from '@app/dashboards/domain';
 import { BasePieChartComponent } from '@app/dashboards/presentation/components';
@@ -29,22 +28,12 @@ import { BasePieChartComponent } from '@app/dashboards/presentation/components';
   }`,
 })
 export class TasksChartComponent extends BasePieChartComponent {
-  // #=============== dependencias ==============#
-private readonly tasksInfoUsecase = inject(GetTasksInfoUsecase);
+  // #=============== dependencias ============== #
+  private readonly tasksInfoUsecase = inject(GetTasksInfoUsecase);
 
-// #=============== ciclo de vida ==============#
-  constructor() {
-    super();
-    this.setQuery();
-  }
+  protected override queryKey = () => ['tasksInfoChart'];
 
-  // #=============== query ==============#
-  protected override getQuery() {
-    return injectQuery( () => ({
-      queryKey: ['tasksInfoChart'],
-      queryFn : () => this.tasksInfoUsecase.execute(),
-    }));
-  }
+  protected override queryFn = () => this.tasksInfoUsecase.execute();
 
   protected override getLabel = (): string => 'Tareas';
 }

@@ -1,7 +1,7 @@
 import { computed } from '@angular/core';
 import { ChartConfiguration } from 'chart.js';
 import { Chart, registerables } from 'chart.js';
-import { CreateQueryResult } from '@tanstack/angular-query-experimental';
+import { CreateQueryResult, injectQuery } from '@tanstack/angular-query-experimental';
 
 import { ApiResponse } from '@utils/api_response';
 import { GeneralInfoEntity } from '@app/dashboards/domain/entities';
@@ -12,16 +12,19 @@ export abstract class BasePieChartComponent {
 
     query?:CreateQueryResult<ApiResponse<GeneralInfoEntity>, Error>;
 
-    protected abstract getQuery():CreateQueryResult<ApiResponse<GeneralInfoEntity>, Error>;
-
+    protected abstract queryKey(): string[];
+    protected abstract queryFn(): Promise<ApiResponse<GeneralInfoEntity>>;
     protected abstract getLabel(): string;
-
-    protected setQuery() {
-        this.query = this.getQuery();
-    }
 
     protected getBackgroundColors(): string[] {
         return ['rgb(54, 162, 235)', 'rgb(255, 99, 132)'];
+    }
+
+    constructor() {
+        this.query = injectQuery(() => ({
+            queryKey: this.queryKey(),
+            queryFn : () => this.queryFn(),
+        }));
     }
 
     barChartData = computed<ChartConfiguration<'pie'>['data']>( () => {
