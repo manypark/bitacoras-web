@@ -20,7 +20,7 @@ export class SearchUsersConceptsFiltersComponent {
   private readonly getUsersUsecase = inject(GetAllUsersUsecase);
   private readonly getConceptsUsecase = inject(GetAllConceptUsecase);
 
-  // #=============== dependencias ===============#
+  // #=============== variables ===============#
   selectedUsers     = signal<string[]>([]);
   selectedConcepts  = signal<string[]>([]);
 

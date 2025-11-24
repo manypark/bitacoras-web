@@ -12,6 +12,18 @@
 
   @if ( query!.data() && !query!.isLoading() ) {
       <div class="card bg-base-100 w-full shadow-md p-8 border border-gray-100">
+        <div class="flex flex-row gap-x-4">
+            <custom-select-concept
+                class="w-full mb-4"
+                [data]="getConceptsQuery.data()?.data || []"
+                [selected]="selectedConcepts"
+                (selectionChange)="($event)"
+                placeholder="Seleccionar conceptos"/>
+                
+                <button class="btn btn-outline btn-primary" [disabled]="selectedConcepts().length < 1" (click)="clearSelect()">
+                    Limpiar
+                </button>
+        </div>
           <h1 class="text-2xl font-bold"> Bitacoras por conceptos </h1>
           <canvas baseChart [data]="barChartData()" type="bar"></canvas>
       </div>
