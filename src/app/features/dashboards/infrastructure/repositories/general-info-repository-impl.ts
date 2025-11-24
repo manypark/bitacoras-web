@@ -43,13 +43,13 @@ export class GeneralInfoRepositoryImpl implements GeneralInfoRepository {
         } as ApiResponse<GeneralInfoEntity>;
     }
     
-    async getLogsByConcept(idConcepts: string): Promise<ApiResponse<LogsByConceptEntity>> {
+    async getLogsByConcept(idConcepts: string): Promise<ApiResponse<LogsByConceptEntity[]>> {
         const res = await this.datasource.getLogsByConcept( idConcepts );
-        const dataMapped = LogsByConceptsMapper.fromResponseDto(res.data);
+        const dataMapped = res.data.map( ( logs ) => LogsByConceptsMapper.fromResponseDto(logs) );
         return {
             data    : dataMapped,
             message : res.message,
             status  : res.status,
-        } as ApiResponse<LogsByConceptEntity>;
+        } as ApiResponse<LogsByConceptEntity[]>;
     }
 }

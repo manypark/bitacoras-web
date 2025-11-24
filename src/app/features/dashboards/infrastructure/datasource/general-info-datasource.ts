@@ -42,9 +42,9 @@ export class GeneralInfoDatasource {
         );
     }   
 
-    async getLogsByConcept( idConcepts:string ):Promise<ApiResponse<LogsByConceptDTO>> {
+    async getLogsByConcept( idConcepts:string ):Promise<ApiResponse<LogsByConceptDTO[]>> {
         return await firstValueFrom(
-            this.httpClient.get<ApiResponse<LogsByConceptDTO>>(`/logs/analytics/by-concept?idConcepts=${idConcepts}}`).pipe(
+            this.httpClient.get<ApiResponse<LogsByConceptDTO[]>>(`/logs/analytics/by-concept?idConcepts=${idConcepts}`).pipe(
                 catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
             ),
         );

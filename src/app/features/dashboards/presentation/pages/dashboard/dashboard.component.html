@@ -1,17 +1,18 @@
 <div class="w-full flex flex-col">
 
-    <div class="flex flex-row gap-x-6 flex-wrap">
+    <div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <users-info />
         <tasks-info />
         <roles-info />
         <logs-info />
     </div>
     
-    <div class="flex flex-row gap-6 flex-wrap">
+    <div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <users-chart />
         <tasks-chart />
         <roles-chart />
         <logs-chart />
+        <logs-by-concepts-chart class="col-span-1 md:col-span-2 lg:col-span-2"/>
     </div>
     
 </div>

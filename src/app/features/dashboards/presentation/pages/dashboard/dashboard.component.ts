@@ -5,7 +5,9 @@ import {
   TasksChartComponent, 
   RolesChartComponent, 
   LogsChartComponent,
+  LogsByConceptsChartComponent,
 } from "../../components";
+
 import { 
   LogsInfoComponent, 
   RolesInfoComponent, 
@@ -25,6 +27,7 @@ import {
     UsersChartComponent,
     TasksChartComponent,
     RolesChartComponent,
+    LogsByConceptsChartComponent
 ],
 })
 export default class DashboardComponent {}

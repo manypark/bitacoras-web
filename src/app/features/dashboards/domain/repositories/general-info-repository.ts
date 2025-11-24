@@ -7,5 +7,5 @@ export abstract class GeneralInfoRepository {
     abstract getTasksInfo():Promise<ApiResponse<GeneralInfoEntity>>;
     abstract getLogsInfo():Promise<ApiResponse<GeneralInfoEntity>>;
 
-    abstract getLogsByConcept( idConcepts:string ):Promise<ApiResponse<LogsByConceptEntity>>;
+    abstract getLogsByConcept( idConcepts:string ):Promise<ApiResponse<LogsByConceptEntity[]>>;
 }
