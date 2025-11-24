@@ -29,11 +29,10 @@ import { BasePieChartComponent } from '@app/dashboards/presentation/components';
 })
 export class LogsChartComponent extends BasePieChartComponent {
     // #=============== dependencias ==============#
-  private readonly logsInfoUsecase = inject(GetLogsInfoUsecase);
-  
-  protected override queryKey = () => ['logsInfoChart'];
+    private readonly logsInfoUsecase = inject(GetLogsInfoUsecase);
 
-  protected override queryFn = () => this.logsInfoUsecase.execute();
-
-  protected override getLabel = (): string => 'Bitacoras';
+    // #=============== funciones heredadas ==============#
+    protected override queryKey = () => ['logsInfoChart'];
+    protected override queryFn  = () => this.logsInfoUsecase.execute();
+    protected override getLabel = (): string => 'Bitacoras';
 }

@@ -28,12 +28,11 @@ import { GetRolesInfoUsecase } from '@app/dashboards/domain';
   }`,
 })
 export class RolesChartComponent extends BasePieChartComponent {
-  // #=============== dependencias ==============#
-  private readonly rolesInfoUsecase = inject(GetRolesInfoUsecase);
-  
-  protected override queryKey = () => ['rolesInfoChart'];
+    // #=============== dependencias ==============#
+    private readonly rolesInfoUsecase = inject(GetRolesInfoUsecase);
 
-  protected override queryFn = () => this.rolesInfoUsecase.execute();
-  
-  protected override getLabel = (): string => 'Roles';
+    // #=============== funciones heredadas ==============#
+    protected override queryKey = () => ['rolesInfoChart'];
+    protected override queryFn  = () => this.rolesInfoUsecase.execute();
+    protected override getLabel = (): string => 'Roles';
 }

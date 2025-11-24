@@ -3,7 +3,7 @@ import { catchError, firstValueFrom, throwError } from "rxjs";
 
 import { ApiResponse } from "@utils/api_response";
 import { HttpClientService } from "../../../../core/services";
-import { GeneralInfoResponseDto } from "@app/dashboards/infrastructure/dtos";
+import { GeneralInfoResponseDto, LogsByConceptDTO } from "@app/dashboards/infrastructure/dtos";
 
 @Injectable({ providedIn: 'root'})
 export class GeneralInfoDatasource {
@@ -37,6 +37,14 @@ export class GeneralInfoDatasource {
     async getLogsInfo():Promise<ApiResponse<GeneralInfoResponseDto>> {
         return await firstValueFrom(
             this.httpClient.get<ApiResponse<GeneralInfoResponseDto>>('/logs/info').pipe(
+                catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
+            ),
+        );
+    }   
+
+    async getLogsByConcept( idConcepts:string ):Promise<ApiResponse<LogsByConceptDTO>> {
+        return await firstValueFrom(
+            this.httpClient.get<ApiResponse<LogsByConceptDTO>>(`/logs/analytics/by-concept?idConcepts=${idConcepts}}`).pipe(
                 catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
             ),
         );

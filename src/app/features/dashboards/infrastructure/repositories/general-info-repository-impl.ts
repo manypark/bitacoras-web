@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 
 import { ApiResponse } from "@utils/api_response";
-import { GeneralInfoEntity, GeneralInfoRepository } from "@app/dashboards/domain";
-import { GeneralInfoMapper, GeneralInfoDatasource } from "@app/dashboards/infrastructure";
+import { GeneralInfoEntity, GeneralInfoRepository, LogsByConceptEntity } from "@app/dashboards/domain";
+import { GeneralInfoMapper, GeneralInfoDatasource, LogsByConceptsMapper } from "@app/dashboards/infrastructure";
 
 @Injectable({ providedIn: 'root'})
 export class GeneralInfoRepositoryImpl implements GeneralInfoRepository {
@@ -41,5 +41,15 @@ export class GeneralInfoRepositoryImpl implements GeneralInfoRepository {
             message : res.message,
             status  : res.status,
         } as ApiResponse<GeneralInfoEntity>;
-    }   
+    }
+    
+    async getLogsByConcept(idConcepts: string): Promise<ApiResponse<LogsByConceptEntity>> {
+        const res = await this.datasource.getLogsByConcept( idConcepts );
+        const dataMapped = LogsByConceptsMapper.fromResponseDto(res.data);
+        return {
+            data    : dataMapped,
+            message : res.message,
+            status  : res.status,
+        } as ApiResponse<LogsByConceptEntity>;
+    }
 }

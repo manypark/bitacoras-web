@@ -28,12 +28,11 @@ import { BasePieChartComponent } from '@app/dashboards/presentation/components';
   }`,
 })
 export class UsersChartComponent extends BasePieChartComponent {
-  // #=============== dependencias ==============#
-  private readonly usersInfoUsecase = inject(GetUsersInfoUsecase);
+    // #=============== dependencias ==============#
+    private readonly usersInfoUsecase = inject(GetUsersInfoUsecase);
 
-  protected override queryKey = () => ['usersInfoChart'];
-
-  protected override queryFn = () => this.usersInfoUsecase.execute();
-
-  protected override getLabel = (): string => 'Usuarios';
+    // #=============== funciones heredadas ==============#
+    protected override queryKey = () => ['usersInfoChart'];
+    protected override queryFn  = () => this.usersInfoUsecase.execute();
+    protected override getLabel = (): string => 'Usuarios';
 }
