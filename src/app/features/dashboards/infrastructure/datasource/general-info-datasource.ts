@@ -3,7 +3,7 @@ import { catchError, firstValueFrom, throwError } from "rxjs";
 
 import { ApiResponse } from "@utils/api_response";
 import { HttpClientService } from "../../../../core/services";
-import { GeneralInfoResponseDto, LogsByConceptDTO } from "@app/dashboards/infrastructure/dtos";
+import { GeneralInfoResponseDto, LogsByConceptDTO, LogsByUserDto } from "@app/dashboards/infrastructure/dtos";
 
 @Injectable({ providedIn: 'root'})
 export class GeneralInfoDatasource {
@@ -45,6 +45,14 @@ export class GeneralInfoDatasource {
     async getLogsByConcept( idConcepts:string ):Promise<ApiResponse<LogsByConceptDTO[]>> {
         return await firstValueFrom(
             this.httpClient.get<ApiResponse<LogsByConceptDTO[]>>(`/logs/analytics/by-concept?idConcepts=${idConcepts}`).pipe(
+                catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
+            ),
+        );
+    }   
+
+    async getLogsByUser( date:string, idUserAssigned:string ):Promise<ApiResponse<LogsByUserDto[]>> {
+        return await firstValueFrom(
+            this.httpClient.get<ApiResponse<LogsByUserDto[]>>(`/performance/users?startDate=${date}&idUserAssigned=${idUserAssigned}`).pipe(
                 catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
             ),
         );
