@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
 
-import { 
-  UsersChartComponent, 
-  TasksChartComponent, 
-  RolesChartComponent, 
-  LogsChartComponent,
-  LogsByConceptsChartComponent,
-} from "../../components";
+import { UsersChartComponent, TasksChartComponent, RolesChartComponent, LogsChartComponent, LogsByConceptsChartComponent, LogsByUserChartComponent } from "../../components";
 
 import { 
   LogsInfoComponent, 
@@ -18,7 +12,7 @@ import {
 @Component({
   selector    : 'app-dashboard',
   templateUrl : './dashboard.component.html',
-  imports     : [
+  imports: [
     LogsInfoComponent,
     UsersInfoComponent,
     TasksInfoComponent,
@@ -27,7 +21,8 @@ import {
     UsersChartComponent,
     TasksChartComponent,
     RolesChartComponent,
-    LogsByConceptsChartComponent
+    LogsByUserChartComponent,
+    LogsByConceptsChartComponent,
 ],
 })
 export default class DashboardComponent {}

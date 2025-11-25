@@ -52,7 +52,7 @@ export class GeneralInfoDatasource {
 
     async getLogsByUser( date:string, idUserAssigned:string ):Promise<ApiResponse<LogsByUserDto[]>> {
         return await firstValueFrom(
-            this.httpClient.get<ApiResponse<LogsByUserDto[]>>(`/performance/users?startDate=${date}&idUserAssigned=${idUserAssigned}`).pipe(
+            this.httpClient.get<ApiResponse<LogsByUserDto[]>>(`/logs/performance/users?startDate=${date}&idUserAssigned=${idUserAssigned}`).pipe(
                 catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
             ),
         );

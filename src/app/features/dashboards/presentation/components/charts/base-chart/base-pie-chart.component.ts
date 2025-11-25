@@ -17,7 +17,10 @@ export abstract class BasePieChartComponent {
     protected abstract getLabel(): string;
 
     protected getBackgroundColors(): string[] {
-        return ['rgb(54, 162, 235)', 'rgb(255, 99, 132)'];
+        return [
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+        ];
     }
 
     constructor() {
