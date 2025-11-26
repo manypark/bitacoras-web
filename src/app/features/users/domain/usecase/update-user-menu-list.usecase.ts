@@ -5,5 +5,5 @@ import { UsersMenuRolesRepository } from "@app/users/domain/repositories";
 @Injectable({providedIn: 'root'})
 export class UpdateUserMenuListUsecase {
     constructor( private repository:UsersMenuRolesRepository ) {}
-    execute( data:CreateUserMenuRolesEntity ) { return this.repository.updateUserMenuList( data ); }
+    execute( data:CreateUserMenuRolesEntity ) { return this.repository.updateUserMenuRoles( data ); }
 }

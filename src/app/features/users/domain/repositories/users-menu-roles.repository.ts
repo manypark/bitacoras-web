@@ -1,9 +1,9 @@
 import { ApiResponse } from "@utils/api_response";
-import { CreateUserMenuRolesEntity, MenuListEntity, UsersMenuRolesEntity } from "@app/users/domain/entities";
+import { CreateUserMenuRolesEntity, MenuListResponseEntity, UsersMenuRolesEntity } from "@app/users/domain/entities";
 
 export abstract class UsersMenuRolesRepository {
-    abstract getMenuList():Promise<ApiResponse<MenuListEntity[]>>;
-    abstract getUsersList():Promise<ApiResponse<UsersMenuRolesEntity[]>>;
-    abstract createUserMenuList( data:CreateUserMenuRolesEntity ):Promise<ApiResponse<any[]>>;
-    abstract updateUserMenuList( data:CreateUserMenuRolesEntity ):Promise<ApiResponse<any[]>>;
+    abstract getUsersRolesList():Promise<ApiResponse<UsersMenuRolesEntity[]>>;
+    abstract getMenuList():Promise<ApiResponse<MenuListResponseEntity[]>>;
+    abstract createUserMenuRoles( data:CreateUserMenuRolesEntity ):Promise<ApiResponse<any[]>>;
+    abstract updateUserMenuRoles( data:CreateUserMenuRolesEntity ):Promise<ApiResponse<any[]>>;
 }

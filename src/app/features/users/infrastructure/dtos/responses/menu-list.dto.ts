@@ -1,4 +1,4 @@
-export interface MenuListDto {
+export interface MenuListResponseDto {
     idMenu: number;
     name:   string;
     route:  string;

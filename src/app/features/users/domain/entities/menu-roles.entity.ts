@@ -1,4 +1,4 @@
-export interface MenuListEntity {
+export interface MenuListResponseEntity {
     idMenu: number;
     name:   string;
     route:  string;
