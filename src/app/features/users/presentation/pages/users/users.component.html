@@ -1,0 +1,34 @@
+<title-description-custom-button
+  title="Gestión de usuarios"
+  description="Crear, administrar y controlar usuarios."
+  idModal="custom-create-user"
+  [showButton]='true'
+  buttonName="Crear usuario" />
+
+  <div class="flex flex-row gap-x-4 card border-0 shadow-md p-4 mb-6">
+    <div class="basis-1/2">
+        <input class="input border shadow-md w-full" type="email" placeholder="Buscar" [(ngModel)]="searchUsers">
+    </div>
+
+    @if ( usersList.error() ) {
+        <h3 class="text-red-400 font-bold"> {{ usersList.error()?.message  }} </h3>
+    } @else {
+        <custom-select
+        class="flex flex-col gap-2 basis-1/2"
+        [users]="usersList.data()?.data || []"
+        [selected]="selectedUsers"
+        (selectionChange)="($event)"
+        placeholder="Seleccionar usuarios"/>
+    }
+    
+    @if ( rolesList.error() ) {
+        <h3 class="text-red-400 font-bold"> {{ rolesList.error()?.message  }} </h3>
+    } @else {
+        <custom-select-roles
+        class="flex flex-col gap-2 basis-1/2"
+        [roles]="rolesList.data()?.data ?? []"
+        [selected]="selectedRoles"
+        (selectionChange)="($event)"
+        placeholder="Seleccionar roles"/>
+    }
+</div>

@@ -53,6 +53,12 @@ export const routes: Routes = [
                 canActivate: [checkAuthGuard]
             },
             { 
+                path: 'users',
+                loadComponent: () => import('./features/users/presentation/pages/users/users.component'),
+                title: 'Usuarios',
+                canActivate: [checkAuthGuard]
+            },
+            { 
                 path: '**',
                 redirectTo: '/dashboard',
             },
