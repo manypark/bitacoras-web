@@ -8,7 +8,7 @@
                 @let user = getUserById(id);
                 @if (user !== null) {
                 <span class="badge px-2 py-2.5 badge-primary badge-sm">
-                    {{ user.firstName }} {{ user.lastName }}
+                    {{ user.user.firstName }} {{ user.user.lastName }}
                 </span>
                 }
             }
@@ -43,7 +43,7 @@
                 [checked]="selected().includes(item.idUser+'')"
                 (change)="onToggleUser(item.idUser+'', $event)"
             />
-            <span>{{ item.firstName }} {{ item.lastName }}</span>
+            <span>{{ item.user.firstName }} {{ item.user.lastName }}</span>
             </div>
             @if (selected().includes(item.idUser+'') ) {
             <svg
