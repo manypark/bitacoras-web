@@ -33,9 +33,15 @@
     }
 </div>
 
-<app-custom-table
-  [showActions]='true'
-  [columns]="columns"
-  [data]="usersList.data()?.data ?? []"
-  [isLoading]="false"
-  (actionClick)="($event)"/>
+    <app-custom-table
+    [showActions]='true'
+    [columns]="columns"
+    [data]="usersListSelect.data()?.data ?? []"
+    [isLoading]="false"
+    (actionClick)="($event)"/>
+
+    <pagination
+    [page]="page()"
+    [hasNextPage]="(usersListSelect.data()?.data ?? []).length < 5"
+    (next)="nextPage()"
+    (prev)="prevPage()"/>

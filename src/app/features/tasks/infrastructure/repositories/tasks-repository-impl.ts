@@ -9,7 +9,8 @@ import {
     TaskListEntity, 
     TaskParamsEntity, 
     TaskResponseEntity,
-    UpdateTaskEntity, 
+    UpdateTaskEntity,
+    UsersFilterEntity, 
 } from "@app/tasks/domain";
 
 @Injectable({ providedIn: 'root'})
@@ -23,6 +24,10 @@ export class TaskRespoitoryImpl implements TaskRepository {
 
     async getAllUsers(): Promise<ApiResponse<UsersEntity[]>> {
         return this.datasource.getAllUsers();
+    }
+
+    async getAllUsersFiltered( params:UsersFilterEntity ): Promise<ApiResponse<UsersEntity[]>> {
+        return this.datasource.getAllUsersFiltered( params );
     }
 
     getAllTasks(params: TaskParamsEntity): Promise<ApiResponse<TaskListEntity[]>> {
