@@ -1,0 +1,27 @@
+<div class="flex flex-row gap-x-4 card border-0 shadow-md p-4 mb-6">
+    <div class="basis-1/2">
+        <input class="input border shadow-md w-full" type="email" placeholder="Buscar" [(ngModel)]="selectAndFilterServices.searchUsers">
+    </div>
+
+    @if ( selectAndFilterServices.usersList.error() ) {
+        <h3 class="text-red-400 font-bold"> {{ selectAndFilterServices.usersList.error()?.message  }} </h3>
+    } @else {
+        <custom-select
+        class="flex flex-col gap-2 basis-1/2"
+        [users]="selectAndFilterServices.usersList.data()?.data || []"
+        [selected]="selectAndFilterServices.selectedUsers"
+        (selectionChange)="($event)"
+        placeholder="Seleccionar usuarios"/>
+    }
+    
+    @if ( selectAndFilterServices.rolesList.error() ) {
+        <h3 class="text-red-400 font-bold"> {{ selectAndFilterServices.rolesList.error()?.message  }} </h3>
+    } @else {
+        <custom-select-roles
+        class="flex flex-col gap-2 basis-1/2"
+        [roles]="selectAndFilterServices.rolesList.data()?.data ?? []"
+        [selected]="selectAndFilterServices.selectedRoles"
+        (selectionChange)="($event)"
+        placeholder="Seleccionar roles"/>
+    }
+</div>

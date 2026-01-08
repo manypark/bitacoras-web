@@ -1,42 +1,28 @@
 import { FormsModule } from '@angular/forms';
-import { Component, computed, inject, signal } from '@angular/core';
-import { injectQuery } from '@tanstack/angular-query-experimental';
+import { Component, inject } from '@angular/core';
 
-import { GetAllRoles } from '@app/roles/domain';
-import { GetAllUsersFilteredUsecase, GetAllUsersUsecase } from '@app/tasks/domain';
-import { TitleDescriptionCustomButtonComponent, CustomSelectComponent, CustomSelectRolesComponent, CustomTableComponent, ColumnConfig } from "@app/shared";
+import { FiltersSelectsComponent } from "../../components";
 import { PaginationComponent } from "@app/roles/presentation/components";
+import { SelectFiltersUsersService } from '@app/users/presentation/services';
+import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ColumnConfig } from "@app/shared";
 
 @Component({
   selector    : 'app-users',
   styleUrl    : './users.component.css',
   templateUrl : './users.component.html',
-  imports     : [
+  imports: [
     FormsModule,
     PaginationComponent,
     CustomTableComponent,
-    CustomSelectComponent,
-    CustomSelectRolesComponent,
+    FiltersSelectsComponent,
     TitleDescriptionCustomButtonComponent,
-  ],
+],
 })
 export default class UsersComponent {
   // #=============== dependencias ===============#
-  private readonly getAllRolesUsecase = inject(GetAllRoles);
-  private readonly getUsersUsecase = inject(GetAllUsersUsecase);
-  private readonly getUsersFiltertedUsecase = inject(GetAllUsersFilteredUsecase);
-
+  readonly selectAndFilterServices = inject(SelectFiltersUsersService);
+  
   // ============ Variables ============
-  readonly searchUsers = signal('');
-  readonly page = signal(1);
-  selectedUsers = signal<string[]>([]);
-  selectedRoles = signal<string[]>([]);
-  readonly usersParams = computed(() => ({
-    idUsers : this.selectedUsers(),
-    idRoles : this.selectedRoles(),
-    limit   : 5,
-    offset  : this.page() - 1,
-  }));
   columns:ColumnConfig[] = [
       { key: 'idUser', header: 'ID', type: 'text' },
       { key: 'user', header: 'Usuario', type: 'text' },
@@ -44,24 +30,4 @@ export default class UsersComponent {
       { key: 'active', header: 'Estatus', type: 'booleanBadge' },
       { key: 'avatarUrl', header: 'Avatar', type: 'image' },
   ];
-
-  // #=============== funciones ===============#
-  nextPage = () => this.page.update((p) => p + 1);
-  prevPage = () => (this.page() > 1 ? this.page.update((p) => p - 1) : null);
-
-  // #=============== queries ===============#
-  readonly usersList = injectQuery( () => ({
-    queryKey: ['getUsersList'],
-    queryFn : () => this.getUsersUsecase.execute(),
-  }));
-
-  readonly usersListSelect = injectQuery( () => ({
-    queryKey: ['getUsersListSelect', this.usersParams()],
-    queryFn : () => this.getUsersFiltertedUsecase.execute( this.usersParams() ),
-  }));
-
-  readonly rolesList = injectQuery( () => ({
-    queryKey: ['getRolesList'],
-    queryFn : () => this.getAllRolesUsecase.execute( 100, 0 ),
-  }));
 }

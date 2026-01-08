@@ -4,7 +4,7 @@ import { Component, computed, inject, resource, signal } from '@angular/core';
 import { ColumnConfig, CustomTableComponent } from "@app/shared";
 import { PaginationComponent } from "../../components/pagination";
 import { RoleSelectionService } from '@app/roles/presentation/signals';
-import { GetAllRoles, GetAllRolesInfo, RolesEntity } from '@app/roles/domain';
+import { GetAllRolesUsecase, GetAllRolesInfo, RolesEntity } from '@app/roles/domain';
 import { TitleDescriptionCustomButtonComponent, TotalsInfoComponent } from '@app/shared/containers';
 import { 
   EditDialogComponent, 
@@ -30,7 +30,7 @@ import {
 export default class RolesComponent {
 
   // #=============== dependencias ===============#
-  private getAllRolesUsecase = inject(GetAllRoles);
+  private getAllRolesUsecase = inject(GetAllRolesUsecase);
   private getAllRolesUSecaseInfo = inject(GetAllRolesInfo);
   private roleSelectedServices = inject(RoleSelectionService);
 
