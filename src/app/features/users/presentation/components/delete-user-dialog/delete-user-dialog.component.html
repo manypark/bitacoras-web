@@ -1,0 +1,37 @@
+<dialog id="custom-delete-user" class="modal modal-middle w-full" (cancel)="$event.preventDefault()">
+
+  <div class="modal-box">
+    <h3 class="text-lg font-bold text-error mb-2">Eliminar Usuario</h3>
+    <p class="text-sm opacity-70 mb-4">
+      Una vez eliminado será necesario hablar con el administrador para restablecer el usuario.
+    </p>
+
+    <form class="form grid gap-3">
+      <div class="flex flex-col gap-2">
+        <label for="delete-user-name" class="font-semibold">Usuario</label>
+        <input
+          type="text"
+          id="delete-user-name"
+          class="input w-full"
+          [value]="'value'"
+          disabled/>
+      </div>
+    </form>
+
+    <div class="modal-action">
+      <button class="btn btn-outline" [disabled]="isLoading()" (click)="onClose()">Cancelar</button>
+      <button class="btn btn-error" [disabled]="isLoading()">
+        @if (isLoading()) { <span class="loading loading-spinner"></span> Eliminando }
+        @if (!isLoading()) { Eliminar}
+      </button>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+      aria-label="Close dialog"
+      (click)="onClose()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z"></path></svg>
+    </button>
+  </div>
+</dialog>
