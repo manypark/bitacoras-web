@@ -42,4 +42,10 @@ export class UserMenuRolesDatasource {
             )
         );
     }
+
+    deleteUser( idUser:number  ) {
+        return this.httpClient.delete<ApiResponse<void>>(`/users/${idUser}`).pipe(
+            catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
+        );
+    }
 }

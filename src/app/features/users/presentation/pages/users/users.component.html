@@ -20,4 +20,4 @@ buttonName="Crear usuario" />
 (next)="selectAndFilterServices.nextPage()"
 (prev)="selectAndFilterServices.prevPage()"/>
 
-<delete-user-dialog (userDeleted)="{}" />
+<delete-user-dialog (userDeleted)="retryGetAllRoles($event)" />

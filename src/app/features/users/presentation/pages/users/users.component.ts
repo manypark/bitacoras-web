@@ -2,7 +2,7 @@ import { FormsModule } from '@angular/forms';
 import { Component, inject } from '@angular/core';
 
 import { PaginationComponent } from "@app/roles/presentation/components";
-import { SelectFiltersUsersService } from '@app/users/presentation/services';
+import { SelectFiltersUsersService, UserSelectedService } from '@app/users/presentation/services';
 import { FiltersSelectsComponent, DeleteUserDialogComponent } from "../../components";
 import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ColumnConfig } from "@app/shared";
 
@@ -21,6 +21,7 @@ import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ColumnConf
 })
 export default class UsersComponent {
   // #=============== dependencias ===============#
+  readonly userSelectedServices = inject(UserSelectedService);
   readonly selectAndFilterServices = inject(SelectFiltersUsersService);
   
   // ============ Variables ======================#
@@ -37,9 +38,12 @@ export default class UsersComponent {
     const modalId = event.action === 'edit' ? 'custom-edit-user' : event.action === 'delete' ? 'custom-delete-user': null;
     if (modalId) {
       const modal = document.getElementById(modalId) as HTMLDialogElement | null;
-      // TODO: crear servicio para guardar el usuario a eliminar
-      // this.roleSelectedServices.setSelectedRole(event.row);
+      this.userSelectedServices.setSelectedUser(event.row);
       modal?.showModal();
     }
+  }
+
+  retryGetAllRoles( value:boolean ) {
+    if(value) { this.selectAndFilterServices.usersListSelect.refetch(); }
   }
 }

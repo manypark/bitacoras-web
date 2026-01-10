@@ -28,8 +28,10 @@ export class UsersMenuRolesRepositoryImpl implements UsersMenuRolesRepository {
         return this.datasource.createUserMenuRoles( createMenuUserRoleMapped );
     }
 
-    async updateUserMenuRoles( updateMenuUserRole: CreateUserMenuRolesEntity): Promise<ApiResponse<any[]>> {
+    async updateUserMenuRoles( updateMenuUserRole: CreateUserMenuRolesEntity) : Promise<ApiResponse<any[]>> {
         const createMenuUserRoleMapped = CreateUserMenuRolesMapper.fromResponseDto( updateMenuUserRole );
         return this.datasource.updateUserMenuRoles( createMenuUserRoleMapped );
     }
+
+    deleteUser = ( idUser:number ) => this.datasource.deleteUser(idUser);
 }

@@ -13,14 +13,14 @@
           type="text"
           id="delete-user-name"
           class="input w-full"
-          [value]="'value'"
+          [value]="userSelectedServices.selectedUser()?.fullName"
           disabled/>
       </div>
     </form>
 
     <div class="modal-action">
       <button class="btn btn-outline" [disabled]="isLoading()" (click)="onClose()">Cancelar</button>
-      <button class="btn btn-error" [disabled]="isLoading()">
+      <button class="btn btn-error" [disabled]="isLoading()" (click)="submitDeletedUser()">
         @if (isLoading()) { <span class="loading loading-spinner"></span> Eliminando }
         @if (!isLoading()) { Eliminar}
       </button>
