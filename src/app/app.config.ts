@@ -38,7 +38,14 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter( routes, withViewTransitions() ),
     provideHttpClient( withInterceptors([authInterceptor]), ),
-    provideTanStackQuery( new QueryClient() ),
+    provideTanStackQuery( new QueryClient({
+      defaultOptions: {
+        queries: {
+          refetchOnMount: false,
+          refetchOnWindowFocus: false,
+        },
+      }
+    }) ),
     provideCloudinaryLoader('https://res.cloudinary.com/dev9hfkoh/'),
 
     { provide: TaskRepository, useClass: TaskRespoitoryImpl },

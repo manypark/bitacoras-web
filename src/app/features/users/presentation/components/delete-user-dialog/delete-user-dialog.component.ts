@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 
 import { DeleteUserUsecase } from '@app/users/domain';
 import { DialogBaseComponent } from '@app/shared/custom-dialog';
@@ -15,9 +15,14 @@ export class DeleteUserDialogComponent extends DialogBaseComponent {
 
   // #=================== variables ===================#
   public readonly userDeleted = output<boolean>();
+  public canDeleteUser =signal<boolean>(false);
   
   // #=================== funciones ===================#
-  submitDeletedUser = (): void => this.submit();
+  submitDeletedUser() : void {
+    const idUserLocalStorage = parseInt(localStorage.getItem('idUser') ?? '0');
+    const idUserCloud = this.userSelectedServices.selectedUser()?.idUser;
+    ( idUserLocalStorage === idUserCloud) ? this.canDeleteUser.set(true) : this.submit();
+  }
 
   protected performOperation = () => this.deleteUserUsecase.execute( this.userSelectedServices.selectedUser()?.idUser ?? 0 );
 
@@ -31,6 +36,7 @@ export class DeleteUserDialogComponent extends DialogBaseComponent {
 
   protected override onClose() { 
     this.userSelectedServices.clearSelectedRole();
+    this.canDeleteUser.set(false);
     this.close(); 
   }
 }
