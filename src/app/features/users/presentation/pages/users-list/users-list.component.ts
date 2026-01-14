@@ -1,15 +1,15 @@
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Component, inject } from '@angular/core';
 
 import { PaginationComponent } from "@app/roles/presentation/components";
-import { SelectFiltersUsersService, UserSelectedService } from '@app/users/presentation/services';
 import { FiltersSelectsComponent, DeleteUserDialogComponent } from "../../components";
+import { SelectFiltersUsersService, UserSelectedService } from '@app/users/presentation/services';
 import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ColumnConfig } from "@app/shared";
 
 @Component({
-  selector    : 'app-users',
-  styleUrl    : './users.component.css',
-  templateUrl : './users.component.html',
+  selector    : 'users-list',
+  templateUrl : './users-list.component.html',
   imports     : [
     FormsModule,
     PaginationComponent,
@@ -19,8 +19,9 @@ import { TitleDescriptionCustomButtonComponent, CustomTableComponent, ColumnConf
     TitleDescriptionCustomButtonComponent,
   ],
 })
-export default class UsersComponent {
+export default class UsersListComponent {
   // #=============== dependencias ===============#
+  readonly router = inject(Router);
   readonly userSelectedServices = inject(UserSelectedService);
   readonly selectAndFilterServices = inject(SelectFiltersUsersService);
   
@@ -46,4 +47,6 @@ export default class UsersComponent {
   retryGetAllRoles( value:boolean ) {
     if(value) { this.selectAndFilterServices.usersListSelect.refetch(); }
   }
+
+  goToCreateUpdateUser() { this.router.navigate(['/home/users/create-update']); }
 }

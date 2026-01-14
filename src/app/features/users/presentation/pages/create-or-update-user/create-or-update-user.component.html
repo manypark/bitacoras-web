@@ -1,0 +1,43 @@
+<div class="flex">
+    <div class="card w-full shadow-md">
+        <form class="flex flex-row" [formGroup]="createOrUpdateUserForm" (ngSubmit)="{}">
+            <div class="flex-1">
+
+                <div class="card-body"> <h1 class="text-2xl font-bold"> Creación de usuario </h1> </div>
+        
+                <div class="flex flex-col gap-y-8 px-6 pb-8">
+
+                    <div class="flex flex-col gap-2">
+                        <label for="create-update-user-name" class="">Nombre(s)</label>
+                        <input formControlName="name" type="text" id="create-update-user-name" class="input input-primary border w-full"/>
+                    </div>
+        
+                    <div class="flex flex-col gap-2">
+                        <label for="create-update-user-first-name" class="">Apellido Paterno</label>
+                        <input formControlName="firstName" type="text" id="create-update-user-first-name" class="input input-primary border w-full"/>
+                    </div>
+        
+                    <div class="flex flex-col gap-2">
+                        <label for="create-update-user-last-name" class="">Apellido Materno</label>
+                        <input formControlName="lastName" type="text" id="create-update-user-last-name" class="input input-primary border w-full"/>
+                    </div>
+        
+                    <div class="flex flex-col gap-2">
+                        <label for="create-update-user-email" class="">Correo</label>
+                        <input formControlName="email" type="text" id="create-update-user-email" class="input input-primary border w-full"/>
+                    </div>
+        
+                    <div class="flex flex-col gap-2">
+                        <label for="create-update-user-password" class="">Contraseña</label>
+                        <input formControlName="password" type="text" id="create-update-user-password" class="input input-primary border w-full"/>
+                    </div>
+        
+                </div>
+            </div>
+
+            <div class="p-20 flex flex-1 items-start">
+                <input type="file" accept="image/png,image/jpeg" class="file-input file-input-lg w-full"/>
+            </div>
+        </form>
+    </div>
+</div>
