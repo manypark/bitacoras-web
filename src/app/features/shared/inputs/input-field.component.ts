@@ -31,7 +31,7 @@ export class InputGenericFieldComponent {
   @Input() label!: string;
   @Input() type = 'text';
   @Input() id!: string;
-  @Input() placeholder!: string;
+  @Input() placeholder:string = '';
   @Input() controlName!: string;
   @Input() formGroup!: FormGroup;
 

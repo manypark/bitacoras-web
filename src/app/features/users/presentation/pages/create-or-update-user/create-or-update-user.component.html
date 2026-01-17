@@ -1,38 +1,47 @@
 <div class="flex flex-col gap-y-10">
 
     <div class="card w-full shadow-md border border-gray-200">
-        <form class="flex flex-row" [formGroup]="createOrUpdateUserForm" (ngSubmit)="{}">
+        <form class="flex flex-row" [formGroup]="createOrUpdateUserForm" autocomplete="off">
             <div class="flex-1">
 
                 <div class="card-body"> <h1 class="text-2xl font-bold"> Creación de usuario </h1> </div>
         
                 <div class="flex flex-col gap-y-8 px-6 pb-8">
 
-                    <div class="flex flex-col gap-2">
-                        <label for="create-update-user-name" class="">Nombre(s)</label>
-                        <input formControlName="name" type="text" id="create-update-user-name" class="input input-primary border w-full"/>
-                    </div>
+                    <app-generic-input
+                        label="Nombre(s)"
+                        id="name"
+                        controlName="name"
+                        [formGroup]="createOrUpdateUserForm">
+                    </app-generic-input>
         
-                    <div class="flex flex-col gap-2">
-                        <label for="create-update-user-first-name" class="">Apellido Paterno</label>
-                        <input formControlName="firstName" type="text" id="create-update-user-first-name" class="input input-primary border w-full"/>
-                    </div>
-        
-                    <div class="flex flex-col gap-2">
-                        <label for="create-update-user-last-name" class="">Apellido Materno</label>
-                        <input formControlName="lastName" type="text" id="create-update-user-last-name" class="input input-primary border w-full"/>
-                    </div>
-        
-                    <div class="flex flex-col gap-2">
-                        <label for="create-update-user-email" class="">Correo</label>
-                        <input formControlName="email" type="text" id="create-update-user-email" class="input input-primary border w-full"/>
-                    </div>
-        
-                    <div class="flex flex-col gap-2">
-                        <label for="create-update-user-password" class="">Contraseña</label>
-                        <input formControlName="password" type="text" id="create-update-user-password" class="input input-primary border w-full"/>
-                    </div>
-        
+                    <app-generic-input
+                        label="Apellido Paterno"
+                        id="firstName"
+                        controlName="firstName"
+                        [formGroup]="createOrUpdateUserForm">
+                    </app-generic-input>
+
+                    <app-generic-input
+                        label="Apellido Materno"
+                        id="lastName"
+                        controlName="lastName"
+                        [formGroup]="createOrUpdateUserForm">
+                    </app-generic-input>
+
+                    <app-generic-input
+                        label="Correo"
+                        id="email"
+                        controlName="email"
+                        [formGroup]="createOrUpdateUserForm">
+                    </app-generic-input>
+
+                    <app-password-input
+                        label="Contraseña"
+                        id="password"
+                        controlName="password"
+                        [formGroup]="createOrUpdateUserForm">
+                    </app-password-input>
                 </div>
             </div>
 
@@ -56,29 +65,51 @@
     <div class="flex flex-row gap-x-8">
 
         @if ( rolesList.isLoading() ) {
-            <div class="card w-full shadow-md p-8 border border-gray-200 justify-center items-center">
+            <div class="card flex-1 shadow-md p-8 border border-gray-200 justify-center items-center">
                 <span class="loading loading-ring loading-xl"></span>
             </div>
         } @else {
-            <div class="card w-full shadow-md p-8 border border-gray-200">
+            <div class="card flex-1 shadow-md p-8 border border-gray-200">
                 <div class="flex gap-x-4">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 text-blue-700" fill="currentColor"><path d="M3.78307 2.82598L12 1L20.2169 2.82598C20.6745 2.92766 21 3.33347 21 3.80217V13.7889C21 15.795 19.9974 17.6684 18.3282 18.7812L12 23L5.6718 18.7812C4.00261 17.6684 3 15.795 3 13.7889V3.80217C3 3.33347 3.32553 2.92766 3.78307 2.82598ZM5 4.60434V13.7889C5 15.1263 5.6684 16.3752 6.7812 17.1171L12 20.5963L17.2188 17.1171C18.3316 16.3752 19 15.1263 19 13.7889V4.60434L12 3.04879L5 4.60434ZM12 11C10.6193 11 9.5 9.88071 9.5 8.5C9.5 7.11929 10.6193 6 12 6C13.3807 6 14.5 7.11929 14.5 8.5C14.5 9.88071 13.3807 11 12 11ZM7.52746 16C7.77619 13.75 9.68372 12 12 12C14.3163 12 16.2238 13.75 16.4725 16H7.52746Z"></path></svg>
                     <p class="text-2xl"> Selección de Roles </p>
                 </div>
                 @for (item of rolesList.data()?.data; track item.idRoles) {
                     <label class="label mt-6 w-1/4">
-                        <input type="checkbox" class="checkbox checkbox-primary" />
+                        <input type="checkbox" class="checkbox checkbox-primary" (change)="onRoleToggle(item.idRoles, $event.target.checked)"/>
                          {{ item.name }}
                     </label>
                 }
             </div>
         }
 
-        <div class="card w-full shadow-md p-8 border border-gray-200">
-            <div class="flex gap-x-4">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 text-blue-700" fill="currentColor"><path d="M3 4H21V6H3V4ZM3 11H21V13H3V11ZM3 18H21V20H3V18Z"></path></svg>
-                <p class="text-2xl"> Selección de Menu </p>
+        @if ( menuList.isLoading() ) {
+            <div class="card flex-1 shadow-md p-8 border border-gray-200 justify-center items-center">
+                <span class="loading loading-ring loading-xl"></span>
             </div>
-        </div>
+        } @else {
+            <div class="card flex-1 shadow-md p-8 border border-gray-200">
+                <div class="flex gap-x-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 text-blue-700" fill="currentColor"><path d="M3 4H21V6H3V4ZM3 11H21V13H3V11ZM3 18H21V20H3V18Z"></path></svg>
+                    <p class="text-2xl"> Selección de Roles </p>
+                </div>
+                @for (item of menuList.data()?.data; track item.idMenu) {
+                    <label class="label mt-6 w-1/4">
+                        <input type="checkbox" class="checkbox checkbox-primary" (change)="onMenuToggle(item.idMenu, $event.target.checked)"/>
+                         {{ item.name }}
+                    </label>
+                }
+            </div>
+        }
+
+    </div>
+
+    <div class="flex w-full justify-end">
+        <app-button
+            label="Crear usuario"
+            [disabled]="!createOrUpdateUserForm.valid"
+            [loading]="false"
+            (onClick)="onSubmit()">
+        </app-button>
     </div>
 </div>
