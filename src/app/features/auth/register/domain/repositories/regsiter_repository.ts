@@ -1,12 +1,7 @@
 import { ApiResponse } from "@utils/index";
-import { PasswordVO, EmailVO } from "@app/auth/login/domain";
-import { FirstNameVO, LastNameVO, RegisterResponseEntity } from "@app/auth/register/domain";
+import { RegisterEntity, RegisterResponseEntity, RegisterCompleteEntity } from "@app/auth/register/domain/entities";
 
 export abstract class RegisterRepository {
-    abstract register( 
-        firstName   :FirstNameVO,
-        lastName    :LastNameVO,
-        email       :EmailVO, 
-        password    :PasswordVO,
-    ):Promise<ApiResponse<RegisterResponseEntity>>;
+    abstract register( userNew:RegisterEntity ):Promise<ApiResponse<RegisterResponseEntity>>;
+    abstract registerComplete( userNewComplete:RegisterCompleteEntity ):Promise<ApiResponse<RegisterResponseEntity>>;
 }

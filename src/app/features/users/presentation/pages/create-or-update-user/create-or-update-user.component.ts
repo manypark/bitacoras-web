@@ -1,12 +1,14 @@
-import { injectQuery } from '@tanstack/angular-query-experimental';
+import { toast } from 'ngx-sonner';
+import { Router } from '@angular/router';
+import { injectMutation, injectQuery } from '@tanstack/angular-query-experimental';
 import { Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { GetAllRolesUsecase } from '@app/roles/domain';
 import { GetMenuListUsecase } from '@app/users/domain';
 import { EmailVO, PasswordVO } from '@app/auth/login/domain';
-import { FirstNameVO, LastNameVO } from '@app/auth/register/domain';
 import { InputGenericFieldComponent, PasswordInputComponent, SubmitButtonComponent } from "@app/shared";
+import { FirstNameVO, LastNameVO, RegisterCompleteEntity, RegisterCompleteUsecase } from '@app/auth/register/domain';
 import { emailVOValidator, firstNameVOValidator, lastNameVOValidator, passwordVOValidator } from '@app/shared/validators';
 
 @Component({
@@ -22,10 +24,13 @@ import { emailVOValidator, firstNameVOValidator, lastNameVOValidator, passwordVO
 export default class CreateOrUpdateUserComponent implements OnInit {
   // #=============== dependencias ===============#
   private fb  = inject(FormBuilder);
+  readonly router = inject(Router);
   private getAllRolesUsecase = inject(GetAllRolesUsecase);
   private getMenuListUsecase = inject(GetMenuListUsecase);
+  private creteUserCompleteUsecase = inject(RegisterCompleteUsecase);
 
   // #=============== variables ===============#
+  readonly toast = toast;
   createOrUpdateUserForm!:FormGroup;
   imagePreview = signal<string>('');
   selectedFile = signal<File | null>(null);
@@ -41,16 +46,29 @@ export default class CreateOrUpdateUserComponent implements OnInit {
     queryKey: ['rolesList'],
     queryFn : () => this.getAllRolesUsecase.execute( 100, 0 ),
   }));
-
+  
   menuList = injectQuery( () => ({
     queryKey: ['menuList'],
     queryFn : () => this.getMenuListUsecase.execute( 100, 0 ),
+  }));
+
+  // #=============== mutations ===============#
+  createUserCompleteMutation = injectMutation( () => ({
+    mutationFn  : async ( newUserComplete:RegisterCompleteEntity ) => await this.creteUserCompleteUsecase.execute(newUserComplete),
+    onSuccess   : () => {
+      this.toast.success( 'Usuario creado correctamente' , { description: 'Felicidades creaste un usuario nuevo' });
+      this.router.navigate(['/home/users']);
+    },
+    onError : (error: any) => {
+      console.log(error);
+      const message = typeof error === 'string' ? error : error?.message ?? 'Error en la petición';
+      this.toast.error('Error', { description: message });
+    },
   }));
   
   // #=============== funciones ===============#
   initForm() {
     this.createOrUpdateUserForm = this.fb.group({
-      name      : ['', [Validators.required, firstNameVOValidator() ]],
       firstName : ['', [Validators.required, firstNameVOValidator() ] ],
       lastName  : ['', [Validators.required, lastNameVOValidator() ] ],
       email     : ['', [Validators.required, emailVOValidator() ] ],
@@ -114,16 +132,24 @@ export default class CreateOrUpdateUserComponent implements OnInit {
   }
 
   onSubmit() {
-    this.createOrUpdateUserForm.valid;
-    console.log(this.createOrUpdateUserForm.value);
-    return;
-
     if (this.createOrUpdateUserForm.valid) {
-      const nameVO = new FirstNameVO(this.createOrUpdateUserForm.value.firstName);
       const firstNameVO = new FirstNameVO(this.createOrUpdateUserForm.value.firstName);
       const lastNameVO  = new LastNameVO(this.createOrUpdateUserForm.value.lastName);
       const emailVO     = new EmailVO(this.createOrUpdateUserForm.value.email);
       const passwordVO  = new PasswordVO(this.createOrUpdateUserForm.value.password);
+      const idMenus = this.createOrUpdateUserForm.value.menuArrays;
+      const idRoles = this.createOrUpdateUserForm.value.rolesArray;
+
+      const dataUserNewComplete:RegisterCompleteEntity = {
+        email     : emailVO,
+        firstName : firstNameVO,
+        lastName  : lastNameVO,
+        password  : passwordVO,
+        idMenu    : idMenus,
+        idRoles   : idRoles ,
+      };
+
+      this.createUserCompleteMutation.mutate( dataUserNewComplete );
     }
   }
 }

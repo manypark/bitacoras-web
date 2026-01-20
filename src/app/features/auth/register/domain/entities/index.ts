@@ -1,1 +1,3 @@
-export * from './register_entity';
+export * from './register-complete.entity';
+export * from './register-entity';
+export * from './register-response.entity';

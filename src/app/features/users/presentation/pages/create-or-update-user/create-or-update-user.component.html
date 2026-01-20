@@ -10,20 +10,13 @@
 
                     <app-generic-input
                         label="Nombre(s)"
-                        id="name"
-                        controlName="name"
-                        [formGroup]="createOrUpdateUserForm">
-                    </app-generic-input>
-        
-                    <app-generic-input
-                        label="Apellido Paterno"
                         id="firstName"
                         controlName="firstName"
                         [formGroup]="createOrUpdateUserForm">
                     </app-generic-input>
 
                     <app-generic-input
-                        label="Apellido Materno"
+                        label="Apellidos"
                         id="lastName"
                         controlName="lastName"
                         [formGroup]="createOrUpdateUserForm">
@@ -107,8 +100,8 @@
     <div class="flex w-full justify-end">
         <app-button
             label="Crear usuario"
-            [disabled]="!createOrUpdateUserForm.valid"
-            [loading]="false"
+            [disabled]="!createOrUpdateUserForm.valid || createUserCompleteMutation.isPending()"
+            [loading]="createUserCompleteMutation.isPending()"
             (onClick)="onSubmit()">
         </app-button>
     </div>
