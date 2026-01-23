@@ -45,7 +45,7 @@ export default class LoginComponent implements OnInit {
         const data = this.signInResource.value();
         localStorage.setItem('token', data.data.token);
         localStorage.setItem('idUser', data.data.idUser+'');
-        localStorage.setItem('username', data.data.firstName + ' ' +data.data.lastName);
+        localStorage.setItem('username', data.data.user.firstName + ' ' +data.data.user.lastName);
         localStorage.setItem('imageUrl', data.data.avatarUrl);
         this.router.navigate(['/home/dashboard']);
         // this.toast.success('Login exitoso', 'Bienvenido de vuelta!');
