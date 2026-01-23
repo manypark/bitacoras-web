@@ -3,7 +3,7 @@ import { catchError, firstValueFrom, throwError } from "rxjs";
 
 import { ApiResponse } from "@utils/api_response";
 import { HttpClientService } from "../../../../../core/services";
-import { RegisterCompleteEntity, RegisterDatasource, RegisterEntity, RegisterResponseEntity } from "@app/auth/register/domain";
+import { RegisterCompleteEntity, RegisterDatasource, RegisterEntity, RegisterResponseEntity, UploadImageEntity, UploadImageResponseEntity } from "@app/auth/register/domain";
 
 @Injectable({ providedIn: 'root' })
 export class RegisterDatasourceImpl implements RegisterDatasource {
@@ -29,6 +29,21 @@ export class RegisterDatasourceImpl implements RegisterDatasource {
                 idMenu,
                 idRoles
             }).pipe( catchError(error =>  throwError( () => new Error(error.error.message) ) ), )
+        );
+    }
+
+    async uploadImageProfile(data: UploadImageEntity): Promise<ApiResponse<UploadImageResponseEntity>> {
+        const formData = new FormData();
+
+        formData.append('upload_preset', data.uploadPreset);
+        formData.append('public_id', data.publicId);
+        formData.append('api_key', data.apiKey);
+        formData.append('folder', data.folder);
+        formData.append('file', data.file);
+
+        return await firstValueFrom( this.httpClient.uploadIamge<ApiResponse<UploadImageResponseEntity>>('', formData).pipe( 
+                catchError(error =>  throwError( () => new Error(error.error) ) ), 
+            )
         );
     }
 }
