@@ -9,6 +9,6 @@ import {
 
 export interface RegisterDatasource {
     register( userNew:RegisterEntity ):Promise<ApiResponse<RegisterResponseEntity>>;
-    uploadImageProfile( data:UploadImageEntity ):Promise<ApiResponse<UploadImageResponseEntity>>;
+    uploadImageProfile( data:UploadImageEntity ):Promise<UploadImageResponseEntity>;
     registerComplete( userNewComplete:RegisterCompleteEntity ):Promise<ApiResponse<RegisterResponseEntity>>;
 }

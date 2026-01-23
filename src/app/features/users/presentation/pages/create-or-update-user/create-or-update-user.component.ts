@@ -8,8 +8,9 @@ import { GetAllRolesUsecase } from '@app/roles/domain';
 import { GetMenuListUsecase } from '@app/users/domain';
 import { EmailVO, PasswordVO } from '@app/auth/login/domain';
 import { InputGenericFieldComponent, PasswordInputComponent, SubmitButtonComponent } from "@app/shared";
-import { FirstNameVO, LastNameVO, RegisterCompleteEntity, RegisterCompleteUsecase } from '@app/auth/register/domain';
 import { emailVOValidator, firstNameVOValidator, lastNameVOValidator, passwordVOValidator } from '@app/shared/validators';
+import { FirstNameVO, LastNameVO, RegisterCompleteEntity, RegisterCompleteUsecase, UploadImageEntity, UploadImageProfileUsecase } from '@app/auth/register/domain';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector    : 'create-or-update-user',
@@ -27,12 +28,14 @@ export default class CreateOrUpdateUserComponent implements OnInit {
   readonly router = inject(Router);
   private getAllRolesUsecase = inject(GetAllRolesUsecase);
   private getMenuListUsecase = inject(GetMenuListUsecase);
+  private uploadImageUsecase = inject(UploadImageProfileUsecase);
   private creteUserCompleteUsecase = inject(RegisterCompleteUsecase);
 
   // #=============== variables ===============#
   readonly toast = toast;
   createOrUpdateUserForm!:FormGroup;
   imagePreview = signal<string>('');
+  avatarUrlImageProfile = signal<string>('');
   selectedFile = signal<File | null>(null);
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
@@ -63,6 +66,14 @@ export default class CreateOrUpdateUserComponent implements OnInit {
       console.log(error);
       const message = typeof error === 'string' ? error : error?.message ?? 'Error en la petición';
       this.toast.error('Error', { description: message });
+    },
+  }));
+
+  uploadImageProfileMutation = injectMutation( () => ({
+    mutationFn  : async ( data:UploadImageEntity ) => await this.uploadImageUsecase.execute(data),
+    onSuccess   : ( dataResponse ) => {
+      const shortUrlImageProfile = dataResponse.secure_url.split('upload')[1];
+      this.avatarUrlImageProfile.set(shortUrlImageProfile);
     },
   }));
   
@@ -131,8 +142,25 @@ export default class CreateOrUpdateUserComponent implements OnInit {
     }
   }
 
-  onSubmit() {
+  uploadImage() {
+    const username = `${this.createOrUpdateUserForm.value.firstName}-${this.createOrUpdateUserForm.value.lastName}`;
+    
+    const data:UploadImageEntity = {
+      uploadPreset: 'ml_default',
+      publicId    : username ?? 'image-default',
+      apiKey      : environment.api_key_image_storage,
+      file        : this.selectedFile()!,
+      folder      : `${username ?? 'image-default'}-Image-Profile`,
+    };
+
+    return this.uploadImageProfileMutation.mutateAsync( data );
+  }
+
+  async onSubmit() {
     if (this.createOrUpdateUserForm.valid) {
+
+      if( this.selectedFile() ) await this.uploadImage();
+
       const firstNameVO = new FirstNameVO(this.createOrUpdateUserForm.value.firstName);
       const lastNameVO  = new LastNameVO(this.createOrUpdateUserForm.value.lastName);
       const emailVO     = new EmailVO(this.createOrUpdateUserForm.value.email);
@@ -146,7 +174,8 @@ export default class CreateOrUpdateUserComponent implements OnInit {
         lastName  : lastNameVO,
         password  : passwordVO,
         idMenu    : idMenus,
-        idRoles   : idRoles ,
+        idRoles   : idRoles,
+        imageUrl  : this.avatarUrlImageProfile(),
       };
 
       this.createUserCompleteMutation.mutate( dataUserNewComplete );

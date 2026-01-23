@@ -17,7 +17,7 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
   const token = localStorage.getItem('token');
 
   // Rutas donde no queremos agregar el token
-  const skipUrls = ['/auth/signIn', '/auth/signUp', '/auth/refreshToken'];
+  const skipUrls = ['/auth/signIn', '/auth/signUp', '/auth/refreshToken', 'api.cloudinary.com'];
 
   const isSkip = skipUrls.some(u => req.url.includes(u));
 

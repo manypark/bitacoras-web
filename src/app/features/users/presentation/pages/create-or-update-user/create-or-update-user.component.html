@@ -100,7 +100,9 @@
     <div class="flex w-full justify-end">
         <app-button
             label="Crear usuario"
-            [disabled]="!createOrUpdateUserForm.valid || createUserCompleteMutation.isPending()"
+            [disabled]="!createOrUpdateUserForm.valid ||
+            uploadImageProfileMutation.isPending() ||
+            createUserCompleteMutation.isPending()"
             [loading]="createUserCompleteMutation.isPending()"
             (onClick)="onSubmit()">
         </app-button>

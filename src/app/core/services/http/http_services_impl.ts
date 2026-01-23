@@ -21,7 +21,7 @@ export class HttpClientService implements HttpAdapter {
   }
 
   uploadIamge<T>(url: string, body: unknown, options?: object): Observable<T> {
-    return this.http.post<T>(`https://api.cloudinary.com/v1_1/dev9hfkoh/image/upload`, body, options);
+    return this.http.post<T>(`https://api.cloudinary.com/v1_1/${environment.cloud_name_image_storage}/image/upload`, body, options);
   }
 
   put<T>(url: string, body: unknown, options?: object): Observable<T> {

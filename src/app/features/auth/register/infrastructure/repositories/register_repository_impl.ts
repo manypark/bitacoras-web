@@ -16,7 +16,7 @@ export class RegsiterRepositoryImpl implements RegisterRepository {
 
     constructor( private registerDatasource:RegisterDatasourceImpl) {}
 
-    uploadImageProfile(data: UploadImageEntity): Promise<ApiResponse<UploadImageResponseEntity>> {
+    uploadImageProfile(data: UploadImageEntity): Promise<UploadImageResponseEntity> {
         return this.registerDatasource.uploadImageProfile(data);
     }
 

@@ -9,6 +9,6 @@ import {
 
 export abstract class RegisterRepository {
     abstract register( userNew:RegisterEntity ):Promise<ApiResponse<RegisterResponseEntity>>;
-    abstract uploadImageProfile( data:UploadImageEntity ):Promise<ApiResponse<UploadImageResponseEntity>>;
+    abstract uploadImageProfile( data:UploadImageEntity ):Promise<UploadImageResponseEntity>;
     abstract registerComplete( userNewComplete:RegisterCompleteEntity ):Promise<ApiResponse<RegisterResponseEntity>>;
 }
