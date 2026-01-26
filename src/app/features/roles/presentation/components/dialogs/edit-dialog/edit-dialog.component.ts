@@ -1,21 +1,32 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
+import { injectQuery } from '@tanstack/angular-query-experimental';
 
-import { UpdateRolesUsecase } from '@app/roles/domain';
+import { CustomSelectMenusComponent } from "@app/shared";
 import { DialogBaseComponent } from '@app/shared/custom-dialog';
 import { RoleSelectionService } from '@app/roles/presentation/signals';
+import { GetMenuListUsecase, UpdateRolesUsecase } from '@app/roles/domain';
 
 @Component({
   selector    : 'edit-dialog',
   templateUrl : './edit-dialog.component.html',
   styleUrl    : './edit-dialog.component.css',
+  imports     : [ CustomSelectMenusComponent ],
 })
 export class EditDialogComponent extends DialogBaseComponent {
   // #=================== dependencias ===================#
   roleSelectedServices  = inject(RoleSelectionService);
+  readonly getMenuListUsecase = inject(GetMenuListUsecase);
   private readonly roleUpdateUsecase  = inject(UpdateRolesUsecase);
 
   // #=================== variables ===================#
   public readonly roleUpdated  = output<boolean>();
+  selectedMenus = signal<string[]>([]);
+
+  // #=================== queries ===================#
+  readonly menuList = injectQuery( () => ({
+    queryKey: ['getMenuList'],
+    queryFn : () => this.getMenuListUsecase.execute( 10, 0),
+  }));
 
   // #=================== funciones ===================#
   protected performOperation() {
@@ -34,11 +45,17 @@ export class EditDialogComponent extends DialogBaseComponent {
 
   protected override onClose(): void {
     this.roleSelectedServices.clearSelectedRole();
+    this.selectedMenus.set([]);
     this.close();
   }
 
   onNameChange(value: string) {
     this.roleSelectedServices.updateSelectedRole({ name: value });
+  }
+
+  onMenusChange() {
+    const idMenusNumber = this.selectedMenus().map( menu => parseInt(menu) );
+    this.roleSelectedServices.updateSelectedRole({ idMenus: idMenusNumber });
   }
   
   onStatusChange(event:Event) {

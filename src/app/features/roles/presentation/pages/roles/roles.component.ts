@@ -25,7 +25,6 @@ import {
     TitleDescriptionCustomButtonComponent,
 ],
   templateUrl : './roles.component.html',
-  styleUrl    : './roles.component.css',
 })
 export default class RolesComponent {
 

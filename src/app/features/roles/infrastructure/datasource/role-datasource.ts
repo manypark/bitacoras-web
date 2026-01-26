@@ -39,8 +39,8 @@ export class RolesDatasource {
         );
     }
 
-    updateRole( {name, active, idRoles}:RolesEntity ):Observable<ApiResponse<RolesEntity>> {
-        return this.httpClient.patch<ApiResponse<RolesEntity>>(`/roles/${idRoles}`, { name, active }).pipe(
+    updateRole( { name, active, idRoles, idMenus }:RolesEntity ):Observable<ApiResponse<RolesEntity>> {
+        return this.httpClient.patch<ApiResponse<RolesEntity>>(`/roles/${idRoles}`, { name, active, idMenus }).pipe(
             catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
         );
     }
