@@ -40,6 +40,7 @@ export default class RolesComponent {
   columns:ColumnConfig[] = [
     { key: 'idRoles', header: 'ID', type: 'text' },
     { key: 'name', header: 'Nombre', type: 'text' },
+    { key: 'menus', header: 'Menus', type: 'array' },
     { key: 'active', header: 'Estatus', type: 'booleanBadge' }
   ];
   filteredRoles = computed( () => {

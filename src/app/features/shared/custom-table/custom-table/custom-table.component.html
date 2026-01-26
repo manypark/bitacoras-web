@@ -43,7 +43,6 @@
         <tr class="border-y border-gray-200">
           @for (col of columns(); track $index) {
             @let cell = getValueByPath(row, col.key);
-
             <td>
               @switch (col.type) {
                 @case ('date') {
@@ -78,6 +77,13 @@
                     <span class="text-red-600">Inactivo</span>
                   }
                 }
+
+                @case ('array') {
+                  @for (item of cell; track $index) {
+                    <span class="badge badge-ghost p-4 mr-2">{{ item.name }}</span>
+                  }
+                }
+
                 @default {
                   <span class="ml-2">{{ formatDisplay(cell) }}</span>
                 }

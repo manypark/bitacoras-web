@@ -44,8 +44,8 @@
           <custom-select-menus
           class="flex flex-col gap-2 basis-1/2"
           [menus]="menuList.data()?.data || []"
-          [selected]="selectedMenus"
-          (selectionChange)="onMenusChange()"
+          [selected]="roleSelectedServices.selectedRole()?.menus ?? []"
+          (selectionChange)="onMenusChange($event)"
           placeholder="Selecciona menus"/>
         </div>
       </div>

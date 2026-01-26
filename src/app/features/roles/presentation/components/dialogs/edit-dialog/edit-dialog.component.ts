@@ -1,10 +1,10 @@
-import { Component, inject, output, signal } from '@angular/core';
+import { Component, inject, OnInit, output, signal } from '@angular/core';
 import { injectQuery } from '@tanstack/angular-query-experimental';
 
 import { CustomSelectMenusComponent } from "@app/shared";
 import { DialogBaseComponent } from '@app/shared/custom-dialog';
 import { RoleSelectionService } from '@app/roles/presentation/signals';
-import { GetMenuListUsecase, UpdateRolesUsecase } from '@app/roles/domain';
+import { GetMenuListUsecase, MenuEntity, UpdateRolesUsecase } from '@app/roles/domain';
 
 @Component({
   selector    : 'edit-dialog',
@@ -20,7 +20,6 @@ export class EditDialogComponent extends DialogBaseComponent {
 
   // #=================== variables ===================#
   public readonly roleUpdated  = output<boolean>();
-  selectedMenus = signal<string[]>([]);
 
   // #=================== queries ===================#
   readonly menuList = injectQuery( () => ({
@@ -45,7 +44,6 @@ export class EditDialogComponent extends DialogBaseComponent {
 
   protected override onClose(): void {
     this.roleSelectedServices.clearSelectedRole();
-    this.selectedMenus.set([]);
     this.close();
   }
 
@@ -53,9 +51,8 @@ export class EditDialogComponent extends DialogBaseComponent {
     this.roleSelectedServices.updateSelectedRole({ name: value });
   }
 
-  onMenusChange() {
-    const idMenusNumber = this.selectedMenus().map( menu => parseInt(menu) );
-    this.roleSelectedServices.updateSelectedRole({ idMenus: idMenusNumber });
+  onMenusChange( value:MenuEntity[] ) {
+    this.roleSelectedServices.updateSelectedRole({ menus:value });
   }
   
   onStatusChange(event:Event) {
