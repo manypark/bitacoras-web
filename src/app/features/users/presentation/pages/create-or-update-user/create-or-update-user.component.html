@@ -76,25 +76,6 @@
             </div>
         }
 
-        @if ( menuList.isLoading() ) {
-            <div class="card flex-1 shadow-md p-8 border border-gray-200 justify-center items-center">
-                <span class="loading loading-ring loading-xl"></span>
-            </div>
-        } @else {
-            <div class="card flex-1 shadow-md p-8 border border-gray-200">
-                <div class="flex gap-x-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 text-blue-700" fill="currentColor"><path d="M3 4H21V6H3V4ZM3 11H21V13H3V11ZM3 18H21V20H3V18Z"></path></svg>
-                    <p class="text-2xl"> Selección de Roles </p>
-                </div>
-                @for (item of menuList.data()?.data; track item.idMenu) {
-                    <label class="label mt-6 w-1/4">
-                        <input type="checkbox" class="checkbox checkbox-primary" (change)="onMenuToggle(item.idMenu, $event.target.checked)"/>
-                         {{ item.name }}
-                    </label>
-                }
-            </div>
-        }
-
     </div>
 
     <div class="flex w-full justify-end">

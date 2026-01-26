@@ -4,7 +4,7 @@ import { catchError, firstValueFrom, throwError } from "rxjs";
 import { ApiResponse } from "@utils/api_response";
 import { HttpClientService } from "../../../../core/services";
 import { CreateUserMenuRolesDto } from "@app/users/infrastructure/dtos";
-import { MenuListResponseDto, UsersMenuRolesDto } from "@app/users/infrastructure/dtos/responses";
+import { UsersMenuRolesDto } from "@app/users/infrastructure/dtos/responses";
 
 @Injectable({ providedIn: 'root'})
 export class UserMenuRolesDatasource {
@@ -14,14 +14,6 @@ export class UserMenuRolesDatasource {
     async getUserMenuList(limit: number = 5, offset: number):Promise<ApiResponse<UsersMenuRolesDto[]>> {
         return await firstValueFrom(
             this.httpClient.get<ApiResponse<UsersMenuRolesDto[]>>(`/users?limit=${limit}&offset=${offset}`).pipe(
-                catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
-            )
-        );
-    }
-
-    async getMenuList(limit: number = 5, offset: number):Promise<ApiResponse<MenuListResponseDto[]>> {
-        return await firstValueFrom(
-            this.httpClient.get<ApiResponse<MenuListResponseDto[]>>(`/menu?limit=${limit}&offset=${offset}`).pipe(
                 catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
             )
         );

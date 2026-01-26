@@ -5,7 +5,6 @@ import { Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angul
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { GetAllRolesUsecase } from '@app/roles/domain';
-import { GetMenuListUsecase } from '@app/users/domain';
 import { EmailVO, PasswordVO } from '@app/auth/login/domain';
 import { InputGenericFieldComponent, PasswordInputComponent, SubmitButtonComponent } from "@app/shared";
 import { emailVOValidator, firstNameVOValidator, lastNameVOValidator, passwordVOValidator } from '@app/shared/validators';
@@ -27,7 +26,6 @@ export default class CreateOrUpdateUserComponent implements OnInit {
   private fb  = inject(FormBuilder);
   readonly router = inject(Router);
   private getAllRolesUsecase = inject(GetAllRolesUsecase);
-  private getMenuListUsecase = inject(GetMenuListUsecase);
   private uploadImageUsecase = inject(UploadImageProfileUsecase);
   private creteUserCompleteUsecase = inject(RegisterCompleteUsecase);
 
@@ -48,11 +46,6 @@ export default class CreateOrUpdateUserComponent implements OnInit {
   rolesList = injectQuery( () => ({
     queryKey: ['rolesList'],
     queryFn : () => this.getAllRolesUsecase.execute( 100, 0 ),
-  }));
-  
-  menuList = injectQuery( () => ({
-    queryKey: ['menuList'],
-    queryFn : () => this.getMenuListUsecase.execute( 100, 0 ),
   }));
 
   // #=============== mutations ===============#

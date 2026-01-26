@@ -4,15 +4,15 @@ import { catchError, firstValueFrom, Observable, throwError } from "rxjs";
 import { ApiResponse } from "@utils/api_response";
 import { HttpClientService } from "../../../../core/services";
 import { RolesEntity, RolesInfoEntity } from "@app/roles/domain";
-import { RolesResponseDto } from "@app/roles/infrastructure/dtos";
 import { httpResource, HttpResourceRef } from "@angular/common/http";
 import { environment } from "../../../../../environments/environment";
+import { MenuListResponseDto, RolesResponseDto } from "@app/roles/infrastructure/dtos";
 
 @Injectable({ providedIn: 'root'})
 export class RolesDatasource {
 
+    private injector = inject(Injector);
     private httpClient = inject(HttpClientService);
-    constructor( private injector:Injector ) {}
 
     async getAllRoles(limit: number = 5, offset: number):Promise<ApiResponse<RolesResponseDto[]>> {
         return await firstValueFrom( 
@@ -29,6 +29,14 @@ export class RolesDatasource {
                 injector: this.injector,
             }
         ) as HttpResourceRef<ApiResponse<RolesInfoEntity>>;
+    }
+
+    async getMenuList(limit: number = 5, offset: number = 0):Promise<ApiResponse<MenuListResponseDto[]>> {
+        return await firstValueFrom(
+            this.httpClient.get<ApiResponse<MenuListResponseDto[]>>(`/menu?limit=${limit}&offset=${offset}`).pipe(
+                catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
+            )
+        );
     }
 
     updateRole( {name, active, idRoles}:RolesEntity ):Observable<ApiResponse<RolesEntity>> {
