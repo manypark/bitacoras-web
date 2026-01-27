@@ -52,6 +52,7 @@ export class EditDialogComponent extends DialogBaseComponent {
   }
 
   onMenusChange( value:MenuEntity[] ) {
+    console.log(value);
     this.roleSelectedServices.updateSelectedRole({ menus:value });
   }
   

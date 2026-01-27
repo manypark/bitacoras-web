@@ -49,17 +49,23 @@ export class RolesDatasource {
         );
     }
 
-    async createRole( rol:string ):Promise<ApiResponse<RolesEntity>> {
+    async createRole( { name, menus }:RolesEntity ):Promise<ApiResponse<RolesEntity>> {
         return await firstValueFrom(
-            this.httpClient.post<Promise<ApiResponse<RolesEntity>> >(`/roles`, { name: rol }).pipe(
+            this.httpClient.post<Promise<ApiResponse<RolesEntity>> >(`/roles`, { 
+                name    : name, 
+                idMenus : menus.map( m => m.idMenu )
+            }).pipe(
                 catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
             ),
         );
     }
 
-    createRoleObs( rol:string ):Observable<ApiResponse<RolesEntity>> {
-        return  this.httpClient.post<ApiResponse<RolesEntity>>(`/roles`, { name: rol }).pipe(
-            catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
+    createRoleObs( { name, menus }:RolesEntity ):Observable<ApiResponse<RolesEntity>> {
+        return  this.httpClient.post<ApiResponse<RolesEntity>>(`/roles`, { 
+                name    : name, 
+                idMenus : menus.map( m => m.idMenu )
+            }).pipe(
+                catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
         );
     }
 

@@ -30,8 +30,8 @@ export class RolesRepositoryImpl implements RolesRepository {
         return { message, status, data: dataMapped } as ApiResponse<MenuListResponseEntity[]>;
     }
 
-    createNewRol(newRol: string): Observable<ApiResponse<RolesEntity>> {
-        return this.datasource.createRoleObs( newRol );
+    createNewRol( rol : RolesEntity ) : Observable<ApiResponse<RolesEntity>> {
+        return this.datasource.createRoleObs( rol );
     }
 
     deleteRole( idRole:number ): Observable<void> {

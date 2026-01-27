@@ -31,7 +31,7 @@ export class CustomSelectMenusComponent {
   onToggleUser( menu:MenuEntity, event: Event) {
     const checked = (event.target as HTMLInputElement).checked;
     const current = this.selected;
-    const updated = checked ? [...current, menu] : current.filter( (id:any) => id !== menu);
+    const updated = checked ? [...current, menu] : current.filter( (menuC) => menuC.idMenu !== menu.idMenu );
     this.selected = updated;
     this.selectionChange.emit( updated );
   }
