@@ -1,4 +1,4 @@
-<div class="flex flex-col gap-y-10">
+<div class="flex flex-col gap-y-10 w-2/4">
 
     <div class="card w-full shadow-md border border-gray-200">
         <form class="flex flex-row" [formGroup]="createOrUpdateUserForm" autocomplete="off">
@@ -55,7 +55,7 @@
         </form>
     </div>
 
-    <div class="flex flex-row gap-x-8">
+    <div class="flex flex-row gap-x-8 w-2/5">
 
         @if ( rolesList.isLoading() ) {
             <div class="card flex-1 shadow-md p-8 border border-gray-200 justify-center items-center">
@@ -69,7 +69,7 @@
                 </div>
                 @for (item of rolesList.data()?.data; track item.idRoles) {
                     <label class="label mt-6 w-1/4">
-                        <input type="checkbox" class="checkbox checkbox-primary" (change)="onRoleToggle(item.idRoles, $event.target.checked)"/>
+                        <input type="checkbox" class="checkbox checkbox-primary" [checked]="isRolChecked().includes(item.idRoles)" (change)="onRoleToggle(item.idRoles, $event.target.checked)"/>
                          {{ item.name }}
                     </label>
                 }

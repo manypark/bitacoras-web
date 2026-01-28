@@ -5,6 +5,7 @@ import { ApiResponse } from "@utils/api_response";
 import { HttpClientService } from "../../../../core/services";
 import { CreateUserMenuRolesDto } from "@app/users/infrastructure/dtos";
 import { UsersMenuRolesDto } from "@app/users/infrastructure/dtos/responses";
+import { UserResponseDto } from "@app/tasks/infrastructure/dtos/response/user_response.dto";
 
 @Injectable({ providedIn: 'root'})
 export class UserMenuRolesDatasource {
@@ -14,6 +15,14 @@ export class UserMenuRolesDatasource {
     async getUserMenuList(limit: number = 5, offset: number):Promise<ApiResponse<UsersMenuRolesDto[]>> {
         return await firstValueFrom(
             this.httpClient.get<ApiResponse<UsersMenuRolesDto[]>>(`/users?limit=${limit}&offset=${offset}`).pipe(
+                catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
+            )
+        );
+    }
+
+    async getUserInfo( idUser : number ) : Promise<ApiResponse<UserResponseDto>> {
+        return await firstValueFrom(
+            this.httpClient.get<ApiResponse<UserResponseDto>>(`/users/${idUser}`).pipe(
                 catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
             )
         );

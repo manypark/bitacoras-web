@@ -1,6 +1,6 @@
-import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { PaginationComponent } from "@app/roles/presentation/components";
 import { FiltersSelectsComponent, DeleteUserDialogComponent } from "../../components";
@@ -36,6 +36,10 @@ export default class UsersListComponent {
 
   // ============ funciones ======================#
   onTableAction(event: { action: string; row:any }) {
+    if( event.action === 'edit' ) {
+      this.goToCreateUpdateUser(event.row.idUser);
+      return;
+    }
     const modalId = event.action === 'edit' ? 'custom-edit-user' : event.action === 'delete' ? 'custom-delete-user': null;
     if (modalId) {
       const modal = document.getElementById(modalId) as HTMLDialogElement | null;
@@ -48,5 +52,8 @@ export default class UsersListComponent {
     if(value) { this.selectAndFilterServices.usersListSelect.refetch(); }
   }
 
-  goToCreateUpdateUser() { this.router.navigate(['/home/users/create-update']); }
+  goToCreateUpdateUser( idUser?:number ) {
+    if(idUser) this.router.navigate([`/home/users/create-update/${idUser}`]);
+    if(!idUser) this.router.navigate([`/home/users/create-update`]);
+  }
 }

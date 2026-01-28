@@ -43,6 +43,7 @@ export class CreateDialogComponent extends DialogBaseComponent {
 
   protected override onClose(): void {
     (this.newRolInput) ? this.newRolInput.nativeElement.value = '' : null;
+    this.menusSelected.set([]);
     this.close();
   }
 
