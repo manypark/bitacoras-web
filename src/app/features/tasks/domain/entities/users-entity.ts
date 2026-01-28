@@ -7,6 +7,7 @@ export class UsersEntity {
         public readonly avatarUrl: string,
         public readonly menuList:  MenuListEntity[],
         public readonly rolesList: RolesListEntity[],
+        public readonly password?:  string,
     ) {}
 
     get fullName():string { return `${this.user.firstName} ${this.user.lastName}` }

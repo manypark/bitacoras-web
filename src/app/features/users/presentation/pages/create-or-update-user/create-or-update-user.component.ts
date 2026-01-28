@@ -5,14 +5,17 @@ import { Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angul
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { GetAllRolesUsecase } from '@app/roles/domain';
-import { EmailVO, PasswordVO } from '@app/auth/login/domain';
-
-import { UsersEntity } from '@app/tasks/domain';
+import { GetUserInfoUsecase, UpdateUserEntity, UpdateUserUsecase } from '@app/users/domain';
 import { environment } from '@environment/environment';
-import { GetUserInfoUsecase } from '@app/users/domain';
+import { EmailVO, PasswordVO } from '@app/auth/login/domain';
 import { InputGenericFieldComponent, PasswordInputComponent, SubmitButtonComponent } from "@app/shared";
 import { emailVOValidator, firstNameVOValidator, lastNameVOValidator, passwordVOValidator } from '@app/shared/validators';
 import { FirstNameVO, LastNameVO, RegisterCompleteEntity, RegisterCompleteUsecase, UploadImageEntity, UploadImageProfileUsecase } from '@app/auth/register/domain';
+
+interface UpdateUserDataEntity {
+  idUser:number;
+  data:UpdateUserEntity
+}
 
 @Component({
   selector    : 'create-or-update-user',
@@ -29,6 +32,7 @@ export default class CreateOrUpdateUserComponent implements OnInit {
   readonly router = inject(Router);
   private fb  = inject(FormBuilder);
   readonly activatedRoute = inject(ActivatedRoute);
+  private updateUserUsecase = inject(UpdateUserUsecase);
   private getAllRolesUsecase = inject(GetAllRolesUsecase);
   private getUserInfoUsecase = inject(GetUserInfoUsecase);
   private uploadImageUsecase = inject(UploadImageProfileUsecase);
@@ -41,13 +45,19 @@ export default class CreateOrUpdateUserComponent implements OnInit {
   avatarUrlImageProfile = signal<string>('');
   selectedFile = signal<File | null>(null);
   isRolChecked = signal<number[]>([]);
+  isUpdateUser = signal<boolean>(false);
+  idUserParam = signal<number>(0);
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   // #=============== ciclo de vida ===============#
   ngOnInit(): void {
     this.initForm();
     this.activatedRoute.params.subscribe( ({id}) => {
-      if(id) this.getUserInfo.mutate(id);
+      if(id) {
+        this.getUserInfo.mutate(id);
+        this.isUpdateUser.set(true);
+        this.idUserParam.set(id);
+      }
     });
   }
   
@@ -92,6 +102,14 @@ export default class CreateOrUpdateUserComponent implements OnInit {
       rolesList.map( ({ idRoles }) => this.onRoleToggle( idRoles, true ) );
 
       this.isRolChecked.set( rolesList.map( rol => rol.idRoles ) );
+    },
+  }));
+
+  updateUser = injectMutation( () => ({
+    mutationFn  : async ( data:UpdateUserDataEntity ) => await this.updateUserUsecase.execute( data.idUser, data.data ),
+    onSuccess   : () => {
+      this.toast.success( 'Usuario actualizado correctamente' , { description: 'Felicidades actualizaste un usuario correctamente' });
+      this.router.navigate(['/home/users']);
     },
   }));
   
@@ -147,7 +165,7 @@ export default class CreateOrUpdateUserComponent implements OnInit {
   }
 
   uploadImage() {
-    const username = `${this.createOrUpdateUserForm.value.firstName}-${this.createOrUpdateUserForm.value.lastName}`;
+    const username = `${this.createOrUpdateUserForm.value.firstName}-${this.createOrUpdateUserForm.value.lastName}`.replaceAll(' ', '-');
     
     const data:UploadImageEntity = {
       uploadPreset: 'ml_default',
@@ -162,27 +180,55 @@ export default class CreateOrUpdateUserComponent implements OnInit {
 
   async onSubmit() {
     if (this.createOrUpdateUserForm.valid) {
-
-      if( this.selectedFile() ) await this.uploadImage();
-
-      const firstNameVO = new FirstNameVO(this.createOrUpdateUserForm.value.firstName);
-      const lastNameVO  = new LastNameVO(this.createOrUpdateUserForm.value.lastName);
-      const emailVO     = new EmailVO(this.createOrUpdateUserForm.value.email);
-      const passwordVO  = new PasswordVO(this.createOrUpdateUserForm.value.password);
-      const idMenus = this.createOrUpdateUserForm.value.menuArrays;
-      const idRoles = this.createOrUpdateUserForm.value.rolesArray;
-
-      const dataUserNewComplete:RegisterCompleteEntity = {
-        email     : emailVO,
-        firstName : firstNameVO,
-        lastName  : lastNameVO,
-        password  : passwordVO,
-        idMenu    : idMenus,
-        idRoles   : idRoles,
-        imageUrl  : this.avatarUrlImageProfile(),
-      };
-
-      this.createUserCompleteMutation.mutate( dataUserNewComplete );
+      this.isUpdateUser() ? this.onUpdateUser() : this.onCreateUser();
     }
+  }
+
+  async onUpdateUser() {
+
+    if( this.selectedFile() ) await this.uploadImage();
+    const { firstName, lastName, email, password, idRoles, imageUrl } = this.getUserFormInfo();
+
+    this.updateUser.mutate({
+      idUser: this.idUserParam(),
+      data  : {
+        user    : {
+          active    : true,
+          avatarUrl : imageUrl,
+          email     : email.getValue(),
+          password  : password.getValue(),
+          user      : {
+            firstName:firstName.getValue(),
+            lastName:lastName.getValue()
+          }
+        },
+        idRoles : idRoles
+      }
+    });
+  }
+
+  async onCreateUser() {
+    if( this.selectedFile() ) await this.uploadImage();
+      const dataUserNew = this.getUserFormInfo();
+      this.createUserCompleteMutation.mutate( dataUserNew );
+  }
+
+  getUserFormInfo() {
+    const firstNameVO = new FirstNameVO(this.createOrUpdateUserForm.value.firstName);
+    const lastNameVO  = new LastNameVO(this.createOrUpdateUserForm.value.lastName);
+    const emailVO     = new EmailVO(this.createOrUpdateUserForm.value.email);
+    const passwordVO  = new PasswordVO(this.createOrUpdateUserForm.value.password);
+    const idRoles = this.createOrUpdateUserForm.value.rolesArray;
+
+    const dataUserNewComplete:RegisterCompleteEntity = {
+      email     : emailVO,
+      firstName : firstNameVO,
+      lastName  : lastNameVO,
+      password  : passwordVO,
+      idRoles   : idRoles,
+      imageUrl  : this.avatarUrlImageProfile(),
+    };
+
+    return dataUserNewComplete;
   }
 }

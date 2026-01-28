@@ -31,7 +31,13 @@ export class UserMenuRolesDatasource {
     async updateUser( idUser:number, data:UpdateUserEntity ):Promise<ApiResponse<any>> {
         return await firstValueFrom(
             this.httpClient.patch<ApiResponse<any>>(`/users/${idUser}`,{
-                ...data
+                firstName   : data.user.user?.firstName ?? '',
+                lastName    : data.user.user?.lastName ?? '',
+                email       : data.user.email,
+                password    : data.user.password,
+                active      : data.user.active,
+                avatarUrl   : data.user.avatarUrl,
+                idRoles     : data.idRoles 
             }).pipe( catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ) )
         );
     }

@@ -7,6 +7,6 @@ import { UpdateUserEntity, UsersMenuRolesEntity } from "@app/users/domain/entiti
 export abstract class UsersMenuRolesRepository {
     abstract getUsersRolesList():Promise<ApiResponse<UsersMenuRolesEntity[]>>;
     abstract getUserInfo( idUser:number ):Promise<ApiResponse<UsersEntity>>;
-    abstract updateUser( idUser:number, data:UpdateUserEntity ):Promise<ApiResponse<UsersEntity>>;
+    abstract updateUser( idUser:number, data:UpdateUserEntity ):Promise<ApiResponse<any>>;
     abstract deleteUser( idUser:number ):Observable<ApiResponse<void>>;
 }

@@ -20,13 +20,12 @@ export class RegisterDatasourceImpl implements RegisterDatasource {
         );
     }
 
-    async registerComplete( {email, firstName, idMenu, idRoles, lastName, password, imageUrl }: RegisterCompleteEntity): Promise<ApiResponse<RegisterResponseEntity>> {
+    async registerComplete( { email, firstName, idRoles, lastName, password, imageUrl }: RegisterCompleteEntity): Promise<ApiResponse<RegisterResponseEntity>> {
         return await firstValueFrom( this.httpClient.post<ApiResponse<RegisterResponseEntity>>('/auth/singUpComplete', {
                 firstName   : firstName.getValue(),
                 lastName    : lastName.getValue(),
                 email       : email.getValue(), 
                 password    : password.getValue(),
-                idMenu,
                 idRoles,
                 avatarUrl   : imageUrl
             }).pipe( catchError(error =>  throwError( () => new Error(error.error.message) ) ), )

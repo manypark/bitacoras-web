@@ -80,7 +80,7 @@
 
     <div class="flex w-full justify-end">
         <app-button
-            label="Crear usuario"
+            [label]="isUpdateUser() ? 'Actualizar usuario' : 'Crear usuario'"
             [disabled]="!createOrUpdateUserForm.valid ||
             uploadImageProfileMutation.isPending() ||
             createUserCompleteMutation.isPending()"
