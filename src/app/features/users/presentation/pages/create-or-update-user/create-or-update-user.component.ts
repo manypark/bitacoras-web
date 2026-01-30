@@ -1,13 +1,15 @@
 import { toast } from 'ngx-sonner';
+import { NgOptimizedImage } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { injectMutation, injectQuery } from '@tanstack/angular-query-experimental';
 import { Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { GetAllRolesUsecase } from '@app/roles/domain';
-import { GetUserInfoUsecase, UpdateUserEntity, UpdateUserUsecase } from '@app/users/domain';
 import { environment } from '@environment/environment';
 import { EmailVO, PasswordVO } from '@app/auth/login/domain';
+import { SelectFiltersUsersService } from '@app/users/presentation/services';
+import { GetUserInfoUsecase, UpdateUserEntity, UpdateUserUsecase } from '@app/users/domain';
 import { InputGenericFieldComponent, PasswordInputComponent, SubmitButtonComponent } from "@app/shared";
 import { emailVOValidator, firstNameVOValidator, lastNameVOValidator, passwordVOValidator } from '@app/shared/validators';
 import { FirstNameVO, LastNameVO, RegisterCompleteEntity, RegisterCompleteUsecase, UploadImageEntity, UploadImageProfileUsecase } from '@app/auth/register/domain';
@@ -21,6 +23,7 @@ interface UpdateUserDataEntity {
   selector    : 'create-or-update-user',
   templateUrl : './create-or-update-user.component.html',
   imports: [
+    NgOptimizedImage,
     ReactiveFormsModule,
     SubmitButtonComponent,
     PasswordInputComponent,
@@ -37,6 +40,7 @@ export default class CreateOrUpdateUserComponent implements OnInit {
   private getUserInfoUsecase = inject(GetUserInfoUsecase);
   private uploadImageUsecase = inject(UploadImageProfileUsecase);
   private creteUserCompleteUsecase = inject(RegisterCompleteUsecase);
+  readonly selectAndFilterServices = inject(SelectFiltersUsersService);
 
   // #=============== variables ===============#
   readonly toast = toast;
@@ -93,7 +97,7 @@ export default class CreateOrUpdateUserComponent implements OnInit {
 
   getUserInfo = injectMutation( () => ({
     mutationFn  : async ( idUser:number ) => await this.getUserInfoUsecase.execute( idUser ),
-    onSuccess   : ( { data: { user : { firstName, lastName }, email, rolesList, active } } ) => {
+    onSuccess   : ( { data: { user : { firstName, lastName }, email, rolesList, active,  avatarUrl } } ) => {
 
       this.createOrUpdateUserForm.patchValue({
         firstName : firstName,
@@ -101,6 +105,8 @@ export default class CreateOrUpdateUserComponent implements OnInit {
         email     : email,
         active    : active,
       });
+
+      this.imagePreview.set(avatarUrl);
 
       rolesList.map( ({ idRoles }) => this.onRoleToggle( idRoles, true ) );
 
@@ -112,6 +118,7 @@ export default class CreateOrUpdateUserComponent implements OnInit {
     mutationFn  : async ( data:UpdateUserDataEntity ) => await this.updateUserUsecase.execute( data.idUser, data.data ),
     onSuccess   : () => {
       this.toast.success( 'Usuario actualizado correctamente' , { description: 'Felicidades actualizaste un usuario correctamente' });
+      this.selectAndFilterServices.usersListSelect.refetch();
       this.router.navigate(['/home/users']);
     },
   }));
@@ -243,7 +250,7 @@ export default class CreateOrUpdateUserComponent implements OnInit {
       lastName  : lastNameVO,
       password  : passwordVO,
       idRoles   : idRoles,
-      imageUrl  : this.avatarUrlImageProfile(),
+      imageUrl  : this.avatarUrlImageProfile().length === 0 ? this.imagePreview() : this.avatarUrlImageProfile(),
     };
 
     return dataUserNewComplete;

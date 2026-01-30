@@ -30,6 +30,7 @@ export default class UsersListComponent {
     { key: 'idUser', header: 'ID', type: 'text' },
     { key: 'user', header: 'Usuario', type: 'text' },
     { key: 'email', header: 'Correo', type: 'text' },
+    { key: 'rolesList', header: 'Roles', type: 'array' },
     { key: 'active', header: 'Estatus', type: 'booleanBadge' },
     { key: 'avatarUrl', header: 'Avatar', type: 'image' },
   ];
@@ -48,7 +49,7 @@ export default class UsersListComponent {
     }
   }
 
-  retryGetAllRoles( value:boolean ) {
+  retryGetAllUsers( value:boolean ) {
     if(value) { this.selectAndFilterServices.usersListSelect.refetch(); }
   }
 
