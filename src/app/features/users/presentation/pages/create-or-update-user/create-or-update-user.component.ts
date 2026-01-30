@@ -57,6 +57,8 @@ export default class CreateOrUpdateUserComponent implements OnInit {
         this.getUserInfo.mutate(id);
         this.isUpdateUser.set(true);
         this.idUserParam.set(id);
+      } else {
+        this.addPasswordValidate(true);
       }
     });
   }
@@ -91,12 +93,13 @@ export default class CreateOrUpdateUserComponent implements OnInit {
 
   getUserInfo = injectMutation( () => ({
     mutationFn  : async ( idUser:number ) => await this.getUserInfoUsecase.execute( idUser ),
-    onSuccess   : ( { data: { user : { firstName, lastName }, email, rolesList } } ) => {
+    onSuccess   : ( { data: { user : { firstName, lastName }, email, rolesList, active } } ) => {
 
       this.createOrUpdateUserForm.patchValue({
         firstName : firstName,
         lastName  : lastName,
         email     : email,
+        active    : active,
       });
 
       rolesList.map( ({ idRoles }) => this.onRoleToggle( idRoles, true ) );
@@ -105,7 +108,7 @@ export default class CreateOrUpdateUserComponent implements OnInit {
     },
   }));
 
-  updateUser = injectMutation( () => ({
+  updateUserMutation = injectMutation( () => ({
     mutationFn  : async ( data:UpdateUserDataEntity ) => await this.updateUserUsecase.execute( data.idUser, data.data ),
     onSuccess   : () => {
       this.toast.success( 'Usuario actualizado correctamente' , { description: 'Felicidades actualizaste un usuario correctamente' });
@@ -119,13 +122,22 @@ export default class CreateOrUpdateUserComponent implements OnInit {
       firstName : ['', [Validators.required, firstNameVOValidator() ] ],
       lastName  : ['', [Validators.required, lastNameVOValidator() ] ],
       email     : ['', [Validators.required, emailVOValidator() ] ],
-      password  : ['', [Validators.required, passwordVOValidator() ] ],
-      rolesArray: this.fb.array<number>([]),
+      password  : ['', [] ],
+      active    : [false, [] ],
+      rolesArray: this.fb.array<number>([], { validators: [ Validators.required ] }),
     });
+  }
+
+  addPasswordValidate( canAddValidator:boolean = false) {
+    if( canAddValidator ) this.createOrUpdateUserForm.get('password')?.addValidators([ passwordVOValidator() ]);
   }
 
   get rolesArray() {
     return this.createOrUpdateUserForm.get('rolesArray') as FormArray;
+  }
+
+  get isActive() {
+    return this.createOrUpdateUserForm.get('active')?.value;
   }
 
   onRoleToggle(roleId: number, checked: boolean) {
@@ -188,22 +200,23 @@ export default class CreateOrUpdateUserComponent implements OnInit {
 
     if( this.selectedFile() ) await this.uploadImage();
     const { firstName, lastName, email, password, idRoles, imageUrl } = this.getUserFormInfo();
-
-    this.updateUser.mutate({
+    const dataUpdateUser = {
+      user    : {
+        active    : this.createOrUpdateUserForm.value.active,
+        avatarUrl : imageUrl,
+        email     : email.getValue(),
+        password  : password?.getValue(),
+        user      : {
+          firstName:firstName.getValue(),
+          lastName:lastName.getValue()
+        }
+      },
+      idRoles : idRoles
+    };
+    
+    this.updateUserMutation.mutate({
       idUser: this.idUserParam(),
-      data  : {
-        user    : {
-          active    : true,
-          avatarUrl : imageUrl,
-          email     : email.getValue(),
-          password  : password.getValue(),
-          user      : {
-            firstName:firstName.getValue(),
-            lastName:lastName.getValue()
-          }
-        },
-        idRoles : idRoles
-      }
+      data  : dataUpdateUser
     });
   }
 
@@ -214,11 +227,15 @@ export default class CreateOrUpdateUserComponent implements OnInit {
   }
 
   getUserFormInfo() {
+    let passwordVO;
+
     const firstNameVO = new FirstNameVO(this.createOrUpdateUserForm.value.firstName);
     const lastNameVO  = new LastNameVO(this.createOrUpdateUserForm.value.lastName);
     const emailVO     = new EmailVO(this.createOrUpdateUserForm.value.email);
-    const passwordVO  = new PasswordVO(this.createOrUpdateUserForm.value.password);
     const idRoles = this.createOrUpdateUserForm.value.rolesArray;
+    if( this.createOrUpdateUserForm.value.password ) {
+      passwordVO  = new PasswordVO(this.createOrUpdateUserForm.value.password);
+    }
 
     const dataUserNewComplete:RegisterCompleteEntity = {
       email     : emailVO,
@@ -230,5 +247,18 @@ export default class CreateOrUpdateUserComponent implements OnInit {
     };
 
     return dataUserNewComplete;
+  }
+
+  isDiabled() : boolean {
+    return !this.createOrUpdateUserForm.valid || 
+    this.uploadImageProfileMutation.isPending() ||
+    this.updateUserMutation.isPending() ||
+    this.createUserCompleteMutation.isPending();
+  }
+
+  isLoading() : boolean {
+    return this.uploadImageProfileMutation.isPending() ||
+    this.updateUserMutation.isPending() ||
+    this.createUserCompleteMutation.isPending();
   }
 }

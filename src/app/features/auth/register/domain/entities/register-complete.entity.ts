@@ -5,7 +5,7 @@ export interface RegisterCompleteEntity {
     firstName   :FirstNameVO;
     lastName    :LastNameVO;
     email       :EmailVO; 
-    password    :PasswordVO;
+    password?   :PasswordVO;
     imageUrl    :string;
     idRoles     :number[];
 }

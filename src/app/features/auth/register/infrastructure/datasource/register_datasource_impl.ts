@@ -25,7 +25,7 @@ export class RegisterDatasourceImpl implements RegisterDatasource {
                 firstName   : firstName.getValue(),
                 lastName    : lastName.getValue(),
                 email       : email.getValue(), 
-                password    : password.getValue(),
+                password    : password?.getValue(),
                 idRoles,
                 avatarUrl   : imageUrl
             }).pipe( catchError(error =>  throwError( () => new Error(error.error.message) ) ), )

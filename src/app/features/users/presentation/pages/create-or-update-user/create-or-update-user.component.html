@@ -2,7 +2,7 @@
 
     <div class="card w-full shadow-md border border-gray-200">
         <form class="flex flex-row" [formGroup]="createOrUpdateUserForm" autocomplete="off">
-            <div class="flex-1">
+            <div class="flex-1 w-full">
 
                 <div class="card-body"> <h1 class="text-2xl font-bold"> Creación de usuario </h1> </div>
         
@@ -28,6 +28,27 @@
                         controlName="email"
                         [formGroup]="createOrUpdateUserForm">
                     </app-generic-input>
+
+                    @if (isUpdateUser()) {
+                        <div class="flex flex-col gap-4">
+                            <label class="font-semibold">Estatus</label>
+                            <label class="flex items-center gap-3 cursor-pointer w-12">
+                            <input 
+                                type="checkbox"
+                                formControlName="active"
+                                class="toggle toggle-primary w-12 border rounded-2xl"
+                                [checked]="isActive"
+                                (change)="($event)"/>
+                            <span>
+                                @if (isActive) {
+                                    Activo
+                                } @else {
+                                    Inactivo
+                                }
+                            </span>
+                            </label>
+                        </div>
+                    }
 
                     <app-password-input
                         label="Contraseña"
@@ -81,10 +102,8 @@
     <div class="flex w-full justify-end">
         <app-button
             [label]="isUpdateUser() ? 'Actualizar usuario' : 'Crear usuario'"
-            [disabled]="!createOrUpdateUserForm.valid ||
-            uploadImageProfileMutation.isPending() ||
-            createUserCompleteMutation.isPending()"
-            [loading]="createUserCompleteMutation.isPending()"
+            [disabled]="isDiabled()"
+            [loading]="isLoading()"
             (onClick)="onSubmit()">
         </app-button>
     </div>
