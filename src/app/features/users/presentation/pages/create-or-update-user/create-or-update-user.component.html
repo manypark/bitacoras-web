@@ -7,9 +7,9 @@
     <div class="flex w-full justify-end">
         <app-button
             [label]="createUpdateUserFormServices.idUserParam() !== 0 ? 'Actualizar usuario' : 'Crear usuario'"
-            [disabled]="isDiabled()"
+            [disabled]="isDisabled()"
             [loading]="isLoading()"
-            (onClick)="createUpdateUserFormServices.onSubmit()">
+            (onClick)="onSubmit()">
         </app-button>
     </div>
 </div>

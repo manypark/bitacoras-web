@@ -1,3 +1,4 @@
+export * from './create-update-user-facade.service';
 export * from './create-update-user-form.service';
 export * from './select-filters-users.service';
 export * from './uploadImageManagmente.service';

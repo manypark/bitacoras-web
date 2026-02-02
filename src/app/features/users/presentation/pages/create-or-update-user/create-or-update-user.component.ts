@@ -1,10 +1,11 @@
 import { ActivatedRoute } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
-import { Component, inject, OnInit } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormControlStatus, ReactiveFormsModule } from '@angular/forms';
+import { Component, computed, inject, OnInit, Signal } from '@angular/core';
 
 import { SubmitButtonComponent } from "@app/shared";
 import { CreateUpdateUserComponent, RolesListSelectComponent } from '@app/users/presentation/components';
-import { CreateUpdateUserFormService, SelectFiltersUsersService, UploadImageManagmenteService } from '@app/users/presentation/services';
+import { CreateOrUpdateUserFacade, CreateUpdateUserFormService, SelectFiltersUsersService, UploadImageManagmenteService } from '@app/users/presentation/services';
 
 @Component({
   selector    : 'create-or-update-user',
@@ -21,6 +22,7 @@ export default class CreateOrUpdateUserComponent implements OnInit {
   readonly activatedRoute = inject(ActivatedRoute);
   readonly selectAndFilterServices = inject(SelectFiltersUsersService);
   readonly uploadImageManagment = inject(UploadImageManagmenteService);
+  readonly createUpdateFacade = inject(CreateOrUpdateUserFacade);
   readonly createUpdateUserFormServices = inject(CreateUpdateUserFormService);
 
   // #=============== ciclo de vida ===============#
@@ -28,8 +30,9 @@ export default class CreateOrUpdateUserComponent implements OnInit {
     this.createUpdateUserFormServices.initForm();
 
     this.activatedRoute.params.subscribe( ({id}) => {
+      this.createUpdateFacade.resetStateForCreate();
       if(id) {
-        this.createUpdateUserFormServices.getUserInfo.mutate(id);
+        this.createUpdateFacade.loadUser(id);
         this.createUpdateUserFormServices.idUserParam.set(id);
       } else {
         this.createUpdateUserFormServices.addPasswordValidate(true);
@@ -38,16 +41,19 @@ export default class CreateOrUpdateUserComponent implements OnInit {
   }
   
   // #=============== funciones ===============#
-  isDiabled() : boolean {
-    return !this.createUpdateUserFormServices.createOrUpdateUserForm.valid || 
-    this.uploadImageManagment.uploadImageProfileMutation.isPending() ||
-    this.createUpdateUserFormServices.updateUserMutation.isPending() ||
-    this.createUpdateUserFormServices.createUserCompleteMutation.isPending();
+  async onSubmit() {
+    await this.createUpdateFacade.submit();
   }
 
-  isLoading() : boolean {
+  readonly isDisabled = computed(() => {
+    return  this.uploadImageManagment.uploadImageProfileMutation.isPending() ||
+      this.createUpdateUserFormServices.updateUserMutation.isPending() ||
+      this.createUpdateUserFormServices.createUserCompleteMutation.isPending();
+  });
+
+  readonly isLoading = computed(() => {
     return this.uploadImageManagment.uploadImageProfileMutation.isPending() ||
-    this.createUpdateUserFormServices.updateUserMutation.isPending() ||
-    this.createUpdateUserFormServices.createUserCompleteMutation.isPending();
-  }
+      this.createUpdateUserFormServices.updateUserMutation.isPending() ||
+      this.createUpdateUserFormServices.createUserCompleteMutation.isPending();
+  });
 }

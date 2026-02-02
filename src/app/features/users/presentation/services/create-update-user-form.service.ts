@@ -5,8 +5,8 @@ import { injectMutation } from '@tanstack/angular-query-experimental';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { EmailVO, PasswordVO } from '@app/auth/login/domain';
+import { SelectFiltersUsersService } from '@app/users/presentation/services';
 import { GetUserInfoUsecase, UpdateUserEntity, UpdateUserUsecase } from '@app/users/domain';
-import { SelectFiltersUsersService, UploadImageManagmenteService } from '@app/users/presentation/services';
 import { firstNameVOValidator, lastNameVOValidator, emailVOValidator, passwordVOValidator } from '@app/shared';
 import { FirstNameVO, LastNameVO, RegisterCompleteEntity, RegisterCompleteUsecase } from '@app/auth/register/domain';
 
@@ -22,7 +22,6 @@ export class CreateUpdateUserFormService {
   readonly fb  = inject(FormBuilder);
   private readonly updateUserUsecase = inject(UpdateUserUsecase);
   private readonly getUserInfoUsecase = inject(GetUserInfoUsecase);
-  private readonly uploadImageServices = inject(UploadImageManagmenteService);
   private readonly creteUserCompleteUsecase = inject(RegisterCompleteUsecase);
   private readonly selectAndFilterServices = inject(SelectFiltersUsersService);
 
@@ -87,22 +86,7 @@ export class CreateUpdateUserFormService {
   }));
   
   getUserInfo = injectMutation( () => ({
-      mutationFn  : async ( idUser:number ) => await this.getUserInfoUsecase.execute( idUser ),
-      onSuccess   : ( { data: { user : { firstName, lastName }, email, rolesList, active,  avatarUrl } } ) => {
-  
-        this.createOrUpdateUserForm.patchValue({
-          firstName : firstName,
-          lastName  : lastName,
-          email     : email,
-          active    : active,
-        });
-  
-        this.uploadImageServices.imagePreview.set(avatarUrl);
-  
-        rolesList.map( ({ idRoles }) => this.onRoleToggle( idRoles, true ) );
-  
-        this.isRolChecked.set( rolesList.map( rol => rol.idRoles ) );
-      },
+      mutationFn  : async ( idUser:number ) => await this.getUserInfoUsecase.execute( idUser )
   }));
   
   updateUserMutation = injectMutation( () => ({
@@ -114,16 +98,28 @@ export class CreateUpdateUserFormService {
     },
   }));
 
-  async onSubmit() {
-    if (this.createOrUpdateUserForm.valid) {
-      this.idUserParam() !== 0 ? this.onUpdateUser() : this.onCreateUser();
-    }
+  hydrateForm(userData: any) {
+    const { user: { firstName, lastName }, email, rolesList, active } = userData;
+
+    this.createOrUpdateUserForm.patchValue({
+      firstName,
+      lastName,
+      email,
+      active,
+    });
+
+    rolesList.forEach(({ idRoles }: any) => this.onRoleToggle(idRoles, true) );
+
+    this.isRolChecked.set(rolesList.map((rol: any) => rol.idRoles));
   }
 
-  async onUpdateUser() {
+  create(data: RegisterCompleteEntity) {
+    this.createUserCompleteMutation.mutate(data);
+  }
 
-    if( this.uploadImageServices.selectedFile() ) await this.uploadImageServices.uploadImage();
-    const { firstName, lastName, email, password, idRoles, imageUrl } = this.getUserFormInfo();
+  update(data: RegisterCompleteEntity) {
+
+    const { firstName, lastName, email, password, idRoles, imageUrl } = data;
     const dataUpdateUser = {
       user    : {
         active    : this.createOrUpdateUserForm.value.active,
@@ -137,42 +133,40 @@ export class CreateUpdateUserFormService {
       },
       idRoles : idRoles
     };
-    
+
     this.updateUserMutation.mutate({
       idUser: this.idUserParam(),
       data  : dataUpdateUser
     });
   }
 
-  async onCreateUser() {
-    if( this.uploadImageServices.selectedFile() ) await this.uploadImageServices.uploadImage();
-      const dataUserNew = this.getUserFormInfo();
-      this.createUserCompleteMutation.mutate( dataUserNew );
-  }
+  buildUserEntity( uploadedImageUrl: string, previewUrl: string ): RegisterCompleteEntity {
 
-  getUserFormInfo() {
-    let passwordVO;
+    const idRoles = this.rolesArray.value;
 
-    const idRoles = this.createOrUpdateUserForm.value.rolesArray;
-    const emailVO     = new EmailVO(this.createOrUpdateUserForm.value.email);
-    const lastNameVO  = new LastNameVO(this.createOrUpdateUserForm.value.lastName);
+    const emailVO = new EmailVO(this.createOrUpdateUserForm.value.email);
+    const lastNameVO = new LastNameVO(this.createOrUpdateUserForm.value.lastName);
     const firstNameVO = new FirstNameVO(this.createOrUpdateUserForm.value.firstName);
 
-    if( this.createOrUpdateUserForm.value.password ) {
-      passwordVO  = new PasswordVO(this.createOrUpdateUserForm.value.password);
+    let passwordVO;
+    if (this.createOrUpdateUserForm.value.password) {
+      passwordVO = new PasswordVO(this.createOrUpdateUserForm.value.password);
     }
 
-    const dataUserNewComplete:RegisterCompleteEntity = {
-      email     : emailVO,
-      firstName : firstNameVO,
-      lastName  : lastNameVO,
-      password  : passwordVO,
-      idRoles   : idRoles,
-      imageUrl  : this.uploadImageServices.avatarUrlImageProfile().length === 0 ? 
-      this.uploadImageServices.imagePreview() : 
-      this.uploadImageServices.avatarUrlImageProfile(),
+    return {
+      email: emailVO,
+      firstName: firstNameVO,
+      lastName: lastNameVO,
+      password: passwordVO,
+      idRoles,
+      imageUrl: uploadedImageUrl || previewUrl,
     };
+  }
 
-    return dataUserNewComplete;
+  resetForm() {
+    this.createOrUpdateUserForm.reset();
+    this.rolesArray.clear();
+    this.isRolChecked.set([]);
+    this.idUserParam.set(0);
   }
 }
