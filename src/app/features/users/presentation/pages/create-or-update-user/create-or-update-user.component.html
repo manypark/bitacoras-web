@@ -1,119 +1,15 @@
 <div class="flex flex-col gap-y-10 w-2/4">
 
-    <div class="card w-full shadow-md border border-gray-200">
-        <form class="flex flex-row" [formGroup]="createOrUpdateUserForm" autocomplete="off">
-            <div class="flex-1 w-full">
+    <create-update-user />
 
-                <div class="card-body"> <h1 class="text-2xl font-bold"> Creación de usuario </h1> </div>
-        
-                <div class="flex flex-col gap-y-8 px-6 pb-8">
-
-                    <app-generic-input
-                        label="Nombre(s)"
-                        id="firstName"
-                        controlName="firstName"
-                        [formGroup]="createOrUpdateUserForm">
-                    </app-generic-input>
-
-                    <app-generic-input
-                        label="Apellidos"
-                        id="lastName"
-                        controlName="lastName"
-                        [formGroup]="createOrUpdateUserForm">
-                    </app-generic-input>
-
-                    <app-generic-input
-                        label="Correo"
-                        id="email"
-                        controlName="email"
-                        [formGroup]="createOrUpdateUserForm">
-                    </app-generic-input>
-
-                    @if (isUpdateUser()) {
-                        <div class="flex flex-col gap-4">
-                            <label class="font-semibold">Estatus</label>
-                            <label class="flex items-center gap-3 cursor-pointer w-12">
-                            <input 
-                                type="checkbox"
-                                formControlName="active"
-                                class="toggle toggle-primary w-12 border rounded-2xl"
-                                [checked]="isActive"
-                                (change)="($event)"/>
-                            <span>
-                                @if (isActive) {
-                                    Activo
-                                } @else {
-                                    Inactivo
-                                }
-                            </span>
-                            </label>
-                        </div>
-                    }
-
-                    <app-password-input
-                        label="Contraseña"
-                        id="password"
-                        controlName="password"
-                        [formGroup]="createOrUpdateUserForm">
-                    </app-password-input>
-                </div>
-            </div>
-
-            <div class="p-20 flex flex-col gap-y-8 flex-1 items-start">
-
-                <input type="file" accept="image/png,image/jpeg" class="file-input file-input-lg w-2/3" #fileInput (change)="onFileSelected($event)"/>
-
-                @if ( imagePreview() ) {
-                    <div class="flex flex-col gap-y-8 items-center">
-                        
-                        @if(imagePreview().includes('blob') ) {
-                            <img [src]="imagePreview()" alt="Preview" class="w-60 h-60 rounded-full border-none"/>
-                        } @else {
-                            <div class="avatar">
-                                <div class="w-56">
-                                    <img ngSrc="{{imagePreview()}}" fill alt="Log image" class="rounded-full border-none" priority/>
-                                </div>
-                            </div>
-                        }
-    
-                        <button type="button" class="btn btn-error text-white btn-sm w-fit" (click)="removeImage()">
-                            Eliminar imagen
-                        </button>
-                    </div>
-                }
-            </div>
-        </form>
-    </div>
-
-    <div class="flex flex-row gap-x-8 w-2/5">
-
-        @if ( rolesList.isLoading() ) {
-            <div class="card flex-1 shadow-md p-8 border border-gray-200 justify-center items-center">
-                <span class="loading loading-ring loading-xl"></span>
-            </div>
-        } @else {
-            <div class="card flex-1 shadow-md p-8 border border-gray-200">
-                <div class="flex gap-x-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 text-blue-700" fill="currentColor"><path d="M3.78307 2.82598L12 1L20.2169 2.82598C20.6745 2.92766 21 3.33347 21 3.80217V13.7889C21 15.795 19.9974 17.6684 18.3282 18.7812L12 23L5.6718 18.7812C4.00261 17.6684 3 15.795 3 13.7889V3.80217C3 3.33347 3.32553 2.92766 3.78307 2.82598ZM5 4.60434V13.7889C5 15.1263 5.6684 16.3752 6.7812 17.1171L12 20.5963L17.2188 17.1171C18.3316 16.3752 19 15.1263 19 13.7889V4.60434L12 3.04879L5 4.60434ZM12 11C10.6193 11 9.5 9.88071 9.5 8.5C9.5 7.11929 10.6193 6 12 6C13.3807 6 14.5 7.11929 14.5 8.5C14.5 9.88071 13.3807 11 12 11ZM7.52746 16C7.77619 13.75 9.68372 12 12 12C14.3163 12 16.2238 13.75 16.4725 16H7.52746Z"></path></svg>
-                    <p class="text-2xl"> Selección de Roles </p>
-                </div>
-                @for (item of rolesList.data()?.data; track item.idRoles) {
-                    <label class="label mt-6 w-1/4">
-                        <input type="checkbox" class="checkbox checkbox-primary" [checked]="isRolChecked().includes(item.idRoles)" (change)="onRoleToggle(item.idRoles, $event.target.checked)"/>
-                         {{ item.name }}
-                    </label>
-                }
-            </div>
-        }
-
-    </div>
+    <roles-list-select />
 
     <div class="flex w-full justify-end">
         <app-button
-            [label]="isUpdateUser() ? 'Actualizar usuario' : 'Crear usuario'"
+            [label]="createUpdateUserFormServices.idUserParam() !== 0 ? 'Actualizar usuario' : 'Crear usuario'"
             [disabled]="isDiabled()"
             [loading]="isLoading()"
-            (onClick)="onSubmit()">
+            (onClick)="createUpdateUserFormServices.onSubmit()">
         </app-button>
     </div>
 </div>
