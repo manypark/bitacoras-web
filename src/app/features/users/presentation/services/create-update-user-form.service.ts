@@ -1,14 +1,16 @@
 import { toast } from 'ngx-sonner';
 import { Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { inject, Injectable, signal } from '@angular/core';
 import { injectMutation } from '@tanstack/angular-query-experimental';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControlStatus, FormGroup, Validators } from '@angular/forms';
 
 import { EmailVO, PasswordVO } from '@app/auth/login/domain';
 import { SelectFiltersUsersService } from '@app/users/presentation/services';
 import { GetUserInfoUsecase, UpdateUserEntity, UpdateUserUsecase } from '@app/users/domain';
 import { firstNameVOValidator, lastNameVOValidator, emailVOValidator, passwordVOValidator } from '@app/shared';
 import { FirstNameVO, LastNameVO, RegisterCompleteEntity, RegisterCompleteUsecase } from '@app/auth/register/domain';
+import { distinctUntilChanged } from 'rxjs';
 
 interface UpdateUserDataEntity {
   idUser:number;
@@ -29,6 +31,7 @@ export class CreateUpdateUserFormService {
   readonly toast = toast;
   idUserParam = signal<number>(0);
   createOrUpdateUserForm!:FormGroup;
+  statusChangesForm = signal<boolean>(false);
   isRolChecked = signal<number[]>([]);
   isUpdateUser = signal<boolean>(false);
   get isActive() {
@@ -56,6 +59,10 @@ export class CreateUpdateUserFormService {
       active    : [false, [] ],
       rolesArray: this.fb.array<number>([], { validators: [ Validators.required ] }),
     });
+
+    this.createOrUpdateUserForm.statusChanges.pipe(
+      distinctUntilChanged()
+    ).subscribe( value => this.statusChangesForm.set(value == 'VALID') );
   }
 
   addPasswordValidate( canAddValidator:boolean = false) {

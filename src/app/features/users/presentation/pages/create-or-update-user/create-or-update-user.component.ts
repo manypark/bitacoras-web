@@ -46,14 +46,15 @@ export default class CreateOrUpdateUserComponent implements OnInit {
   }
 
   readonly isDisabled = computed(() => {
-    return  this.uploadImageManagment.uploadImageProfileMutation.isPending() ||
-      this.createUpdateUserFormServices.updateUserMutation.isPending() ||
-      this.createUpdateUserFormServices.createUserCompleteMutation.isPending();
+    return !this.createUpdateUserFormServices.statusChangesForm() ||
+    this.uploadImageManagment.uploadImageProfileMutation.isPending() ||
+    this.createUpdateUserFormServices.updateUserMutation.isPending() ||
+    this.createUpdateUserFormServices.createUserCompleteMutation.isPending();
   });
 
   readonly isLoading = computed(() => {
     return this.uploadImageManagment.uploadImageProfileMutation.isPending() ||
-      this.createUpdateUserFormServices.updateUserMutation.isPending() ||
-      this.createUpdateUserFormServices.createUserCompleteMutation.isPending();
+    this.createUpdateUserFormServices.updateUserMutation.isPending() ||
+    this.createUpdateUserFormServices.createUserCompleteMutation.isPending();
   });
 }
