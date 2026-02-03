@@ -1,7 +1,14 @@
 export interface RolesEntity {
-    idRoles : number;
-    name    : string;
-    active  : boolean;
+    idRoles: number;
+    name:    string;
+    active:  boolean;
+    menus:   MenuEntity[];
 }
 
-export const ROLES_KEYS: (keyof RolesEntity)[] = ['idRoles', 'name', 'active'];
+export interface MenuEntity {
+    idMenu: number;
+    name:   string;
+    route:  string;
+    icon:   string;
+    active: boolean;
+}

@@ -53,6 +53,24 @@ export const routes: Routes = [
                 canActivate: [checkAuthGuard]
             },
             { 
+                path            : 'users',
+                loadComponent   : () => import('./features/users/presentation/pages/users-list/users-list.component'),
+                title           : 'Usuarios',
+                canActivate     : [checkAuthGuard],
+            },
+            {
+                path            : 'users/create-update',
+                loadComponent   : () => import('./features/users/presentation/pages/create-or-update-user/create-or-update-user.component'),
+                title           : 'Crear - Actualizar Usuario',
+                canActivate     : [checkAuthGuard],
+            },
+            {
+                path            : 'users/create-update/:id',
+                loadComponent   : () => import('./features/users/presentation/pages/create-or-update-user/create-or-update-user.component'),
+                title           : 'Crear - Actualizar Usuario',
+                canActivate     : [checkAuthGuard],
+            },
+            { 
                 path: '**',
                 redirectTo: '/dashboard',
             },

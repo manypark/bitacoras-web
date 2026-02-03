@@ -1,27 +1,30 @@
 export interface SignInResponseEntity {
-  token: string;
-  idUser: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  active: boolean;
+  token:     string;
+  idUser:    number;
+  user:      User;
+  email:     string;
+  active:    boolean;
   avatarUrl: string;
-  lastLogin: string;
-  createdAt: string;
-  updatedAt: string;
-
-  menuList: MenuItem[];
-  rolesList: Role[];
+  lastLogin: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  menuList:  MenuList[];
+  rolesList: RolesList[];
 }
 
-export interface MenuItem {
+export interface MenuList {
   idMenu: number;
-  name: string;
-  route: string;
-  icon: string;
+  name:   string;
+  route:  string;
+  icon:   string;
 }
 
-export interface Role {
+export interface RolesList {
   idRoles: number;
-  name: string;
+  name:    string;
+}
+
+export interface User {
+  firstName: string;
+  lastName:  string;
 }

@@ -16,6 +16,7 @@ import { RegisterPayload } from '@app/auth/register/infrastructure/dtos';
 import { RegisterService } from '@app/auth/register/presentation/signals';
 import { EmailVO, PasswordVO } from '@app/auth/login/domain/value-objects';
 import { FirstNameVO, LastNameVO } from '@app/auth/register/domain/value-objects';
+import { RegisterEntity } from '@app/auth/register/domain/entities';
 
 @Component({
   selector    : 'app-register',
@@ -40,7 +41,13 @@ export default class RegisterComponent implements OnInit {
     params: () => this.registerTrigger(),
     loader: async ({ params }) => {
       if (!params) return undefined;
-      return this.registerServices.register( params.firstName!, params.lastName!, params.email!, params.password!);
+      const userNew:RegisterEntity = {
+        firstName: params.firstName!, 
+        lastName: params.lastName!,
+        email: params.email!, 
+        password: params.password!,
+      };
+      return this.registerServices.register( userNew );
     },
   });
   

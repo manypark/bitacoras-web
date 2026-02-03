@@ -4,7 +4,7 @@ import { catchError, firstValueFrom, map, throwError } from "rxjs";
 import { ApiResponse } from "@utils/api_response";
 import { HttpClientService } from "../../../../core/services";
 import { UserMapper } from "@app/tasks/infrastructure/mappers/user-mapper";
-import { TaskEntity, TaskListEntity, TaskParamsEntity, TaskResponseEntity, UpdateTaskEntity, UsersEntity } from "@app/tasks/domain";
+import { TaskEntity, TaskListEntity, TaskParamsEntity, TaskResponseEntity, UpdateTaskEntity, UsersEntity, UsersFilterEntity } from "@app/tasks/domain";
 
 @Injectable({ providedIn: 'root'})
 export class TaskDatasource {
@@ -24,7 +24,15 @@ export class TaskDatasource {
     }
 
     async getAllUsers():Promise<ApiResponse<UsersEntity[]>> {
-        return await firstValueFrom( this.http.get<ApiResponse<UsersEntity[]>>('/users').pipe(
+        return await firstValueFrom( this.http.get<ApiResponse<UsersEntity[]>>(`/users`).pipe(
+                map( response => { return { ...response, data: response.data.map( UserMapper.fromDto ) } } ),
+                catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
+            ) 
+        )
+    }
+
+    async getAllUsersFiltered( {limit, offset, idRoles, idUsers }:UsersFilterEntity  ):Promise<ApiResponse<UsersEntity[]>> {
+        return await firstValueFrom( this.http.get<ApiResponse<UsersEntity[]>>(`/users/filtered?limit=${limit}&offset=${offset}&idUsers=${idUsers}&idRoles=${idRoles}`).pipe(
                 map( response => { return { ...response, data: response.data.map( UserMapper.fromDto ) } } ),
                 catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
             ) 

@@ -1,9 +1,12 @@
+import { Observable } from "rxjs";
 import { ApiResponse } from "@utils/api_response";
-import { CreateUserMenuRolesEntity, MenuListResponseEntity, UsersMenuRolesEntity } from "@app/users/domain/entities";
+
+import { UsersEntity } from "@app/tasks/domain/entities";
+import { UpdateUserEntity, UsersMenuRolesEntity } from "@app/users/domain/entities";
 
 export abstract class UsersMenuRolesRepository {
     abstract getUsersRolesList():Promise<ApiResponse<UsersMenuRolesEntity[]>>;
-    abstract getMenuList():Promise<ApiResponse<MenuListResponseEntity[]>>;
-    abstract createUserMenuRoles( data:CreateUserMenuRolesEntity ):Promise<ApiResponse<any[]>>;
-    abstract updateUserMenuRoles( data:CreateUserMenuRolesEntity ):Promise<ApiResponse<any[]>>;
+    abstract getUserInfo( idUser:number ):Promise<ApiResponse<UsersEntity>>;
+    abstract updateUser( idUser:number, data:UpdateUserEntity ):Promise<ApiResponse<any>>;
+    abstract deleteUser( idUser:number ):Observable<ApiResponse<void>>;
 }

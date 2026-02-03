@@ -2,9 +2,10 @@ import { inject, Injectable } from "@angular/core";
 import { catchError, firstValueFrom, throwError } from "rxjs";
 
 import { ApiResponse } from "@utils/api_response";
+import { UpdateUserEntity } from "@app/users/domain";
 import { HttpClientService } from "../../../../core/services";
-import { CreateUserMenuRolesDto } from "@app/users/infrastructure/dtos";
-import { MenuListResponseDto, UsersMenuRolesDto } from "@app/users/infrastructure/dtos/responses";
+import { UsersMenuRolesDto } from "@app/users/infrastructure/dtos/responses";
+import { UserResponseDto } from "@app/tasks/infrastructure/dtos/response/user_response.dto";
 
 @Injectable({ providedIn: 'root'})
 export class UserMenuRolesDatasource {
@@ -19,27 +20,31 @@ export class UserMenuRolesDatasource {
         );
     }
 
-    async getMenuList(limit: number = 5, offset: number):Promise<ApiResponse<MenuListResponseDto[]>> {
+    async getUserInfo( idUser : number ) : Promise<ApiResponse<UserResponseDto>> {
         return await firstValueFrom(
-            this.httpClient.get<ApiResponse<MenuListResponseDto[]>>(`/menu?limit=${limit}&offset=${offset}`).pipe(
+            this.httpClient.get<ApiResponse<UserResponseDto>>(`/users/${idUser}`).pipe(
                 catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
             )
         );
     }
 
-    async createUserMenuRoles( data:CreateUserMenuRolesDto ):Promise<ApiResponse<any[]>> {
+    async updateUser( idUser:number, data:UpdateUserEntity ):Promise<ApiResponse<any>> {
         return await firstValueFrom(
-            this.httpClient.post<ApiResponse<any[]>>(`/menu-roles`, { ...data }).pipe(
-                catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
-            )
+            this.httpClient.patch<ApiResponse<any>>(`/users/${idUser}`,{
+                firstName   : data.user.user?.firstName ?? '',
+                lastName    : data.user.user?.lastName ?? '',
+                email       : data.user.email,
+                password    : data.user.password,
+                active      : data.user.active,
+                avatarUrl   : data.user.avatarUrl,
+                idRoles     : data.idRoles 
+            }).pipe( catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ) )
         );
     }
 
-    async updateUserMenuRoles( data:CreateUserMenuRolesDto ):Promise<ApiResponse<any[]>> {
-        return await firstValueFrom(
-            this.httpClient.patch<ApiResponse<any[]>>( `/menu-roles/${data.idUser}`, { ...data } ).pipe(
-                catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
-            )
+    deleteUser( idUser:number  ) {
+        return this.httpClient.delete<ApiResponse<void>>(`/users/${idUser}`).pipe(
+            catchError(error =>  throwError( () => new Error(error.error.message[0]) ) ),
         );
     }
 }

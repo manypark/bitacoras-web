@@ -4,3 +4,4 @@ export * from './task-response-entity';
 export * from './tasks-list-entity';
 export * from './update-task-entity';
 export * from './users-entity';
+export * from './users-filter.entity';

@@ -1,4 +1,4 @@
-import { Component, effect, inject, output } from '@angular/core';
+import { Component, computed, effect, inject, output } from '@angular/core';
 import { injectQuery } from '@tanstack/angular-query-experimental';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -30,7 +30,7 @@ export class UpdateTaskComponent extends CustomDialogBaseComponent<ApiResponse<a
     assignedUser: [this.selectedTaskServices.selectedTask()?.userAssigned.idUser, Validators.required ],
     active      : [this.selectedTaskServices.selectedTask()?.active, Validators.required],
   });
-  
+
   // #=============== ciclos de vida ===============#
   constructor() {
     super();

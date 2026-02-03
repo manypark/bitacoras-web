@@ -30,19 +30,31 @@ import { LogsListRepositoryImpl } from '@app/logs/infrastructure/repositories';
 import { GeneralInfoRepository } from '@app/dashboards/domain';
 import { GeneralInfoRepositoryImpl } from '@app/dashboards/infrastructure';
 
+import { UsersMenuRolesRepository } from '@app/users/domain';
+import { UsersMenuRolesRepositoryImpl } from '@app/users/infrastructure';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideRouter( routes, withViewTransitions() ),
     provideHttpClient( withInterceptors([authInterceptor]), ),
-    provideTanStackQuery( new QueryClient() ),
+    provideTanStackQuery( new QueryClient({
+      defaultOptions: {
+        queries: {
+          refetchOnMount: false,
+          refetchOnWindowFocus: false,
+        },
+      }
+    }) ),
     provideCloudinaryLoader('https://res.cloudinary.com/dev9hfkoh/'),
+
+    { provide: TaskRepository, useClass: TaskRespoitoryImpl },
     { provide: RolesRepository, useClass: RolesRepositoryImpl },
+    { provide: LogsRepository, useClass: LogsListRepositoryImpl },
     { provide: SignInRepository,  useClass: SignInRepositoryImpl },
     { provide: ConceptRepository, useClass: ConceptRepositoryImpl },
     { provide: RegisterRepository, useClass: RegsiterRepositoryImpl },
-    { provide: TaskRepository, useClass: TaskRespoitoryImpl },
-    { provide: LogsRepository, useClass: LogsListRepositoryImpl },
     { provide: GeneralInfoRepository, useClass: GeneralInfoRepositoryImpl },
+    { provide: UsersMenuRolesRepository, useClass: UsersMenuRolesRepositoryImpl },
   ]
 };

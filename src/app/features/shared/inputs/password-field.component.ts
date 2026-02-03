@@ -47,7 +47,7 @@ export class PasswordInputComponent {
     
   @Input() label!: string;
   @Input() id!: string;
-  @Input() placeholder!: string;
+  @Input() placeholder: string = '';
   @Input() controlName!: string;
   @Input() formGroup!: FormGroup;
 

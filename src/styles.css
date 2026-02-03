@@ -1,5 +1,5 @@
-@plugin "daisyui";
 @import "tailwindcss";
+@plugin "daisyui";
 
 @keyframes shimmer {
   0% {

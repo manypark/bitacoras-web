@@ -6,22 +6,24 @@ export class UserMapper {
   static fromDto(dto: UserResponseDto): UsersEntity {
     return new UsersEntity(
       dto.idUser,
-      dto.firstName,
-      dto.lastName,
+      dto.user,
       dto.email,
       dto.active,
       dto.avatarUrl,
+      dto.menuList,
+      dto.rolesList,
     );
   }
 
   static toDto(entity: UsersEntity): UserResponseDto {
     return {
       idUser: entity.idUser,
-      firstName: entity.firstName,
-      lastName: entity.lastName,
+      user: entity.user,
       email: entity.email,
       active: entity.active,
       avatarUrl: entity.avatarUrl,
+      menuList: entity.menuList,
+      rolesList: entity.rolesList,
     };
   }
 }

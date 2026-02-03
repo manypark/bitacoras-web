@@ -2,7 +2,7 @@
   id="custom-edit-role"
   class="modal modal-middle w-full"
   (cancel)="$event.preventDefault()">
-  <div class="modal-box">
+  <div class="modal-box h-2/4">
     <h3 class="text-lg font-bold mb-2">Editar Rol</h3>
     <p class="text-sm opacity-70 mb-4">
       Haz tus cambios del Rol aquí. Da click en editar cuando hayas terminado.
@@ -28,17 +28,26 @@
         </label>
       </div>
 
-      <div class="flex flex-col gap-2">
-        <label for="edit-role-name" class="font-semibold">Rol</label>
-        <input
-          type="text"
-          id="edit-role-name"
-          class="input input-primary border w-full"
-          [value]="roleSelectedServices.selectedRole()?.name"
-          (input)="onNameChange($any($event.target).value)"
-          [disabled]="isLoading()"
-          autofocus
-        />
+      <div class="flex flex-col gap-2 gap-y-6">
+        <div class="flex flex-col gap-y-4">
+          <label for="edit-role-name" class="font-semibold">Rol</label>
+          <input
+            type="text"
+            id="edit-role-name"
+            class="input input-primary border w-full"
+            [value]="roleSelectedServices.selectedRole()?.name"
+            (input)="onNameChange($any($event.target).value)"
+            [disabled]="isLoading()"
+            autofocus/>
+        </div>
+        <div>
+          <custom-select-menus
+          class="flex flex-col gap-2 basis-1/2"
+          [menus]="menuList.data()?.data || []"
+          [selected]="roleSelectedServices.selectedRole()?.menus ?? []"
+          (selectionChange)="onMenusChange($event)"
+          placeholder="Selecciona menus"/>
+        </div>
       </div>
     </form>
 

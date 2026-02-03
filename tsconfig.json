@@ -3,11 +3,12 @@
   "compilerOptions": {
     "paths": {
       "@app/*": ["./src/app/features/*"],
+      "@utils/*": ["./src/app/core/utils/*"],
       "@features/*": ["./src/app/features/*"],
       "@core/*": ["./src/app/features/core/*"],
       "@domain/*": ["./src/app/features/domain/*"],
       "@shared/*": ["./src/app/features/shared/*"],
-      "@utils/*": ["./src/app/core/utils/*"],
+      "@environment/*": ["./src/environments/*"],
     },
     "strict": true,
     "noImplicitOverride": true,

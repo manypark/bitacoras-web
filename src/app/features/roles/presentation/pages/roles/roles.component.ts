@@ -4,7 +4,7 @@ import { Component, computed, inject, resource, signal } from '@angular/core';
 import { ColumnConfig, CustomTableComponent } from "@app/shared";
 import { PaginationComponent } from "../../components/pagination";
 import { RoleSelectionService } from '@app/roles/presentation/signals';
-import { GetAllRoles, GetAllRolesInfo, RolesEntity } from '@app/roles/domain';
+import { GetAllRolesUsecase, GetAllRolesInfo, RolesEntity } from '@app/roles/domain';
 import { TitleDescriptionCustomButtonComponent, TotalsInfoComponent } from '@app/shared/containers';
 import { 
   EditDialogComponent, 
@@ -25,12 +25,11 @@ import {
     TitleDescriptionCustomButtonComponent,
 ],
   templateUrl : './roles.component.html',
-  styleUrl    : './roles.component.css',
 })
 export default class RolesComponent {
 
   // #=============== dependencias ===============#
-  private getAllRolesUsecase = inject(GetAllRoles);
+  private getAllRolesUsecase = inject(GetAllRolesUsecase);
   private getAllRolesUSecaseInfo = inject(GetAllRolesInfo);
   private roleSelectedServices = inject(RoleSelectionService);
 
@@ -41,6 +40,7 @@ export default class RolesComponent {
   columns:ColumnConfig[] = [
     { key: 'idRoles', header: 'ID', type: 'text' },
     { key: 'name', header: 'Nombre', type: 'text' },
+    { key: 'menus', header: 'Menus', type: 'array' },
     { key: 'active', header: 'Estatus', type: 'booleanBadge' }
   ];
   filteredRoles = computed( () => {

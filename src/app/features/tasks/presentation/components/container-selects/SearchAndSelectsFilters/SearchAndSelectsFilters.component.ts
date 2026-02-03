@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms';
 import { injectQuery } from '@tanstack/angular-query-experimental';
-import { Component, inject, Input, output, signal, WritableSignal } from '@angular/core';
+import { Component, computed, inject, Input, output, signal, WritableSignal } from '@angular/core';
 
 import { CustomSelectComponent } from "@app/shared";
 import { GetAllUsersUsecase } from '@app/tasks/domain';

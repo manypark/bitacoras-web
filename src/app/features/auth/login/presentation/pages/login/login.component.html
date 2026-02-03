@@ -14,7 +14,7 @@
             </header>
     
             <section>
-                <form class="form grid gap-6" [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+                <form class="form grid gap-6" [formGroup]="signInForm" (ngSubmit)="onSubmit()" autocomplete="off">
 
                     <app-generic-input
                         label="Correo"

@@ -1,0 +1,15 @@
+<div class="flex flex-col gap-y-10 w-2/4">
+
+    <create-update-user />
+
+    <roles-list-select />
+
+    <div class="flex w-full justify-end">
+        <app-button
+            [label]="createUpdateUserFormServices.idUserParam() !== 0 ? 'Actualizar usuario' : 'Crear usuario'"
+            [disabled]="isDisabled()"
+            [loading]="isLoading()"
+            (onClick)="onSubmit()">
+        </app-button>
+    </div>
+</div>

@@ -43,18 +43,25 @@
         <tr class="border-y border-gray-200">
           @for (col of columns(); track $index) {
             @let cell = getValueByPath(row, col.key);
-
             <td>
               @switch (col.type) {
                 @case ('date') {
                   <span class="badge badge-ghost p-4">{{ cell | date:'mediumDate' }}</span>
                 }
                 @case ('image') {
-                  <div class="avatar">
-                    <div class="w-24">
-                      <img ngSrc="{{cell}}" fill alt="Log image" class="rounded-xl" priority/>
+                  @if (cell != '' ) {
+                    <div class="avatar">
+                      <div class="w-24">
+                        <img ngSrc="{{cell}}" fill alt="Log image" class="rounded-xl" priority/>
+                      </div>
                     </div>
-                  </div>
+                  } @else {
+                    <div class="avatar avatar-placeholder">
+                      <div class="bg-neutral text-neutral-content w-24 rounded-full">
+                        <span class="text-3xl"> U </span>
+                      </div>
+                    </div>
+                  }
                 }
                 @case ('link') {
                   @if (cell > 0) {
@@ -70,6 +77,13 @@
                     <span class="text-red-600">Inactivo</span>
                   }
                 }
+
+                @case ('array') {
+                  @for (item of cell; track $index) {
+                    <span class="badge badge-ghost p-4 mr-2">{{ item.name }}</span>
+                  }
+                }
+
                 @default {
                   <span class="ml-2">{{ formatDisplay(cell) }}</span>
                 }
