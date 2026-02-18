@@ -83,6 +83,7 @@ export class CreateUpdateUserFormService {
       mutationFn  : async ( newUserComplete:RegisterCompleteEntity ) => await this.creteUserCompleteUsecase.execute(newUserComplete),
       onSuccess   : () => {
         this.toast.success( 'Usuario creado correctamente' , { description: 'Felicidades creaste un usuario nuevo' });
+        this.selectAndFilterServices.usersListSelect.refetch();
         this.router.navigate(['/home/users']);
       },
       onError : (error: any) => {
